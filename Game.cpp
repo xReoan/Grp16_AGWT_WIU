@@ -294,6 +294,8 @@ void Game::draw()
 
         std::cout << std::endl;
 
+        shopkeeper.ShopMenu();
+        
         std::cout
             << "Q - Leave Shop"
             << std::endl;
