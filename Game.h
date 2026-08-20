@@ -5,6 +5,7 @@
 #include "RunMap.h"
 #include "Interactable.h"
 #include "Puzzle.h"
+#include "inv.h"
 
 enum GameState
 {
@@ -14,6 +15,7 @@ enum GameState
     CARD_BATTLE_STATE,
     SHOP_STATE,
     BACKPACK_STATE,
+    INVENTORY_STATE,
 
     PUZZLE_STATE
 };
@@ -25,9 +27,16 @@ private:
     Player player;
     Map map;
 
+    // Player's inventory.
+    inv inventory;
+
     GameState currentState;
 
     Puzzle* activePuzzle;
+
+    // Inventory slot currently selected.
+    // Uses values from 0 to 15.
+    int selectedInventorySlot;
 
     bool screenNeedsClear;
     bool running;
@@ -47,6 +56,7 @@ private:
     void handleCardBattleInput(char input);
     void handleShopInput(char input);
     void handleBackpackInput(char input);
+    void handleInventoryInput(char input);
     void handlePuzzleInput(char input);
 
     // Returns Interactable directly
@@ -56,7 +66,6 @@ private:
     // Activates F / S / B node.
     void activateCurrentMapNode();
 
-    // NEW:
     // Handles Room 1 -> Room 2 etc.
     void goToNextRoom();
 

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <cstdlib>
 #include <iostream>
 #ifdef _WIN32
 #include <conio.h>
@@ -27,6 +28,8 @@ Game::Game()
     currentState = ROOM_STATE;
 
     activePuzzle = nullptr;
+
+    selectedInventorySlot = 0;
 
     screenNeedsClear = true;
     running = true;
@@ -227,6 +230,10 @@ void Game::draw()
             << std::endl;
 
         std::cout
+            << "N     - Inventory"
+            << std::endl;
+
+        std::cout
             << "Q     - Stand Up"
             << std::endl;
     }
@@ -317,6 +324,40 @@ void Game::draw()
             << std::endl;
     }
 
+    // Inventory
+    else if (currentState ==
+        INVENTORY_STATE)
+        {
+            std::cout
+                << "================ INVENTORY ================"
+                << std::endl;
+
+            std::cout << std::endl;
+
+            inventory.OpenInv();
+
+            std::cout << std::endl;
+
+            std::cout
+                << "Selected Slot: "
+                << selectedInventorySlot + 1
+                << std::endl;
+
+            std::cout << std::endl;
+
+            std::cout
+                << "W / S - Select Slot"
+                << std::endl;
+
+            std::cout
+                << "E     - Use Item"
+                << std::endl;
+
+            std::cout
+                << "N / Q - Close Inventory"
+                << std::endl;
+                }
+
     // PUZZLE
     else if (
         currentState ==
@@ -371,6 +412,12 @@ void Game::handleInput(
         BACKPACK_STATE)
     {
         handleBackpackInput(input);
+    }
+
+    else if (currentState ==
+        INVENTORY_STATE)
+    {
+        handleInventoryInput(input);
     }
 
     else if (currentState ==
@@ -584,20 +631,18 @@ void Game::handleMapInput(
     }
 
     // Select right path.
-    else if (
-        input == 'D' ||
+    else if (input == 'D' ||
         input == 'd')
     {
         map.selectRight();
     }
 
-    // Confirm path.
-    else if (
-        input == 'E' ||
+    // Confirm selected path.
+    else if (input == 'E' ||
         input == 'e')
     {
-        if (map.travelSelected()
-            == true)
+        if (map.travelSelected() ==
+            true)
         {
             activateCurrentMapNode();
 
@@ -606,9 +651,24 @@ void Game::handleMapInput(
         }
     }
 
-    // Stand up.
-    else if (
-        input == 'Q' ||
+    // Open inventory.
+    //
+    // This exists only inside MAP_STATE.
+    else if (input == 'N' ||
+        input == 'n')
+    {
+        selectedInventorySlot =
+            0;
+
+        currentState =
+            INVENTORY_STATE;
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Stand up from the table.
+    else if (input == 'Q' ||
         input == 'q')
     {
         std::cout << std::endl;
@@ -616,7 +676,8 @@ void Game::handleMapInput(
         std::cout
             << "Are you sure you want to stand up? [Y/N] ";
 
-        char choice = readKey();
+        char choice =
+            readKey();
 
         if (choice == 'Y' ||
             choice == 'y')
@@ -774,14 +835,31 @@ void Game::handleBackpackInput(
     if (input == 'E' ||
         input == 'e')
     {
+        // Choose one of the ten items
+        // from itemDatabase.
+        int itemIndex =
+            std::rand() % 10;
+
+        // Store it in the first
+        // available inventory slot.
+        inventory.RecivedInv(
+            itemIndex);
+
         std::cout << std::endl;
 
         std::cout
-            << "You take the item from the backpack."
+            << "You store the item in your inventory."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to continue."
             << std::endl;
 
         readKey();
 
+        // Return to the board-game map.
         currentState =
             MAP_STATE;
 
@@ -789,10 +867,79 @@ void Game::handleBackpackInput(
             true;
     }
 
-    else if (
+    else if (input == 'Q' ||
+        input == 'q')
+    {
+        currentState =
+            MAP_STATE;
+
+        screenNeedsClear =
+            true;
+    }
+}
+
+// INVENTORY
+
+void Game::handleInventoryInput(
+    char input)
+{
+    // Previous inventory slot.
+    if (input == 'W' ||
+        input == 'w')
+    {
+        selectedInventorySlot--;
+
+        if (selectedInventorySlot <
+            0)
+        {
+            selectedInventorySlot =
+                15;
+        }
+    }
+
+    // Next inventory slot.
+    else if (input == 'S' ||
+        input == 's')
+    {
+        selectedInventorySlot++;
+
+        if (selectedInventorySlot >
+            15)
+        {
+            selectedInventorySlot =
+                0;
+        }
+    }
+
+    // Use selected item.
+    else if (input == 'E' ||
+        input == 'e')
+    {
+        std::cout << std::endl;
+
+        inventory.UsedInv(
+            selectedInventorySlot);
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to continue."
+            << std::endl;
+
+        readKey();
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Close inventory.
+    else if (input == 'N' ||
+        input == 'n' ||
         input == 'Q' ||
         input == 'q')
     {
+        // Always return to the board-game map,
+        // never to the room.
         currentState =
             MAP_STATE;
 
