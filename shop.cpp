@@ -154,10 +154,8 @@ void shop::BuyItem(int itemSlot) const
         return;
     }
 
-    // Purchase the item
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
-    // In a real implementation, you'd add to inventory here
-    // coins -= price; // Uncomment when ready to deduct coins
+    // add to inventory here
 }
 
 void shop::BuyWeapon(int weaponSlot) const
@@ -182,8 +180,7 @@ void shop::BuyWeapon(int weaponSlot) const
 
     // Purchase the weapon
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
-    // In a real implementation, you'd add to inventory here
-    // coins -= price; // Uncomment when ready to deduct coins
+    // add to inventory here
 }
 
 void shop::AddCoins(int amount)
