@@ -185,7 +185,44 @@ void Room::createRoomObjects()
 
         addInteractable(cardTable);
     }
+
+// =====================================
+// ROOM 3
+// =====================================
+
+    else if (roomNumber == 3)
+    {
+        // ROTATING SYMBOL SAFE
+        puzzle =
+            new SymbolPuzzle(
+                3,
+                2);
+
+        addInteractable(puzzle);
+
+        // EXIT DOOR
+        exitDoor =
+            new Door(
+                39,
+                2);
+
+        exitDoor->setUnlocked(false);
+
+        addInteractable(exitDoor);
+
+        // CARD TABLE
+        cardTable =
+            new CardTable(
+                15,
+                8,
+                20,
+                5);
+
+        addInteractable(cardTable);
+    }
+
 }
+
 
 // =====================================
 // CLEAR UI
@@ -410,6 +447,59 @@ void Room::drawPuzzle()
 
         const char line4[] =
             "|         |         |";
+
+        const char line5[] =
+            "+-------------------+";
+
+        for (int i = 0;
+            line1[i] != '\0';
+            i++)
+        {
+            roomLayout[startY]
+                [startX + i]
+                = line1[i];
+
+            roomLayout[startY + 1]
+                [startX + i]
+                = line2[i];
+
+            roomLayout[startY + 2]
+                [startX + i]
+                = line3[i];
+
+            roomLayout[startY + 3]
+                [startX + i]
+                = line4[i];
+
+            roomLayout[startY + 4]
+                [startX + i]
+                = line5[i];
+        }
+    }
+
+// =====================================
+// ROOM 3 - ROTATING SYMBOL SAFE
+// =====================================
+
+    else if (roomNumber == 3)
+    {
+        int startX =
+            puzzle->getX();
+
+        int startY =
+            puzzle->getY();
+
+        const char line1[] =
+            "+-------------------+";
+
+        const char line2[] =
+            "|   STRANGE LOCK    |";
+
+        const char line3[] =
+            "|   [ ? ? ? ? ]     |";
+
+        const char line4[] =
+            "|       SAFE        |";
 
         const char line5[] =
             "+-------------------+";

@@ -6,6 +6,7 @@
 #include "KeypadPuzzle.h"
 #include "ClockPuzzle.h"
 #include "Door.h"
+#include "SymbolPuzzle.h"
 
 class Room
 {

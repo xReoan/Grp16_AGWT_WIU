@@ -1082,30 +1082,82 @@ void Game::goToNextRoom()
     // ROOM 2 -> ROOM 3
     // ============================
 
+ // ============================
+// ROOM 2 -> ROOM 3
+// ============================
+
     else if (currentRoomNumber == 2)
+    {
+        // Turn existing Room object
+        // into Room 3.
+        room.loadRoom(3);
+
+        // Reset player position.
+        player.resetPosition();
+
+        // Generate Room 3's map.
+        map.generateMap();
+
+        activePuzzle =
+            nullptr;
+
+        currentState =
+            ROOM_STATE;
+
+        clearScreen();
+
+        std::cout
+            << "You step through the doorway..."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "A strange safe waits in the darkness."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 3."
+            << std::endl;
+
+        readKey();
+    }
+    
+// ============================
+// ROOM 3 COMPLETE
+// ============================
+
+    else if (currentRoomNumber == 3)
     {
         clearScreen();
 
         std::cout
-            << "Room 2 complete!"
+            << "Room 3 complete!"
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "Room 3 has not been created yet."
+            << "The final door opens."
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "Press any key to continue."
+            << "You escaped!"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to finish."
             << std::endl;
 
         readKey();
 
-        currentState =
-            ROOM_STATE;
+        running = false;
     }
 
 }
