@@ -6,6 +6,7 @@
 #include "Interactable.h"
 #include "Puzzle.h"
 #include "inv.h"
+#include "shop.h"
 
 enum GameState
 {
@@ -29,6 +30,8 @@ private:
 
     // Player's inventory.
     inv inventory;
+
+    shop shopkeeper;
 
     GameState currentState;
 
