@@ -9,5 +9,3 @@ private:
 	item* items[10];
 };
 
-
-

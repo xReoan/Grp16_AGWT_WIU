@@ -18,16 +18,23 @@ CardDatabase::CardDatabase() {
 	cards[10] = new Card("Mirror Trap", "Hate traps? This is your chance to get revenge!", Card::cardtype::trap, item::combattype::none, Card::effecttype::trap_counter, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 0);
 
 	//advanced ranged
-	cards[11] = new Card("Multifire", "Fires 5 rounds in quick succesion.", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::deal_damage, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 5, 0);
+	cards[11] = new Card("Multifire", "Fires 5 rounds in quick succession.", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::deal_damage, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 5, 0);
 	cards[12] = new Card("Charge!!!", "Charges straight to the enemy like a bull for one turn, reducing defense and then dealing massive damage the next.", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::deal_damage, Card::effecttype::lower_defense, Card::effecttype::prepare_upclose, 0, 2.0f, 1, 1);
 	cards[13] = new Card("The Big Bang", "If used with Multifire, deals all the damage at once. Else, increase attack by 10 for the next turn", Card::cardtype::hybrid, item::combattype::projectile, Card::effecttype::increase_attack, Card::effecttype::deal_damage, Card::effecttype::none, 0, 1.0f, 1, 0);
 	cards[14] = new Card("Poison-Tipped Bullets", "Do poison tipped bullets actually make a difference?? Pair attack cards with this one to poison the enemy", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::poison_tip, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 0, 1);
 	cards[15] = new Card("Rat Trap", "Trap that catches anything but rats.", Card::cardtype::trap, item::combattype::projectile, Card::effecttype::melee_trap, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 1, 0);
 
 	//advanced mdef
-	cards[16] = new Card("Bubblewrap Shield", "Nice to pop. But if you do, you probably get hurt more. Gives a one-time 30hp shield", Card::cardtype::defense, item::combattype::none, Card::effecttype::shield, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 0);
+	cards[16] = new Card("Bubblewrap Shield", "Nice to pop. But if you do, you probably get hurt more. Gives a one-time 30hp shield", Card::cardtype::defense, item::combattype::none, Card::effecttype::shield, Card::effecttype::none, Card::effecttype::none, 30, 1.0f, 0, 0);
 	cards[17] = new Card("Phalanxing", "Phalanxing solo might not be the best move... Increases defense and attack. Increases even more if enemy deals 10 damage to you in the next turn", Card::cardtype::hybrid, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::increase_attack, Card::effecttype::none, 0, 1.0f, 0, 1);
-	cards[18] = new Card("Rat Trap", "Trap that catches anything but rats.", Card::cardtype::trap, item::combattype::melee, Card::effecttype::melee_trap, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 1, 0);
+	cards[18] = new Card("From The Trenches", "Being weaker makes you stronger. Or something like that.", Card::cardtype::defense, item::combattype::none, Card::effecttype::defense_from_hp_lost, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 0, 0);
+	cards[19] = new Card("Fight Me Like A Man (or woman)", "Converts the next projectile attack into melee.", Card::cardtype::hybrid, item::combattype::flexible, Card::effecttype::projectile_to_melee, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 0, 1);
+	
+	//advanced pdef
+	cards[20] = new Card("Unstoppable", "Can't stop the A-train. Become unstoppable to any obstacles! (except maybe a banana peel)", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::skip_immunity, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 0, 1);
+	cards[21] = new Card("Mats", "Like the thing from fortnite", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::increase_defense, Card::effecttype::cannot_attack, Card::effecttype::none, 10, 1.0f, 0, 1);
+
+
 
 }
 

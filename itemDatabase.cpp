@@ -13,3 +13,5 @@ itemDatabase::itemDatabase() {
 	items[8] = new item("oooh Shiny Armor", "so shiny you could die", item::itemtype::armor, item::combattype::melee, 0, 12, 0, 0, 7);
 	items[9] = new item("Leftover Jelly", "leftover jelly left since (year the lab was abandoned idk). goes well with milk.", item::itemtype::armor, item::combattype::projectile, 0, 10, 0, 0, 7);
 }
+
+
