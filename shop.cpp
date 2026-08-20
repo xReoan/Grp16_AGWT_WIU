@@ -1,6 +1,7 @@
 #include "shop.h"
 #include "item.h"
 #include "itemDatabase.h"
+#include "inv.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -9,7 +10,7 @@ int shop::shopItems[4] = { 6, 7, 8, 9 };
 // Initialize weapons (slot 0 has weapon 5 as an example, rest empty)
 int shop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-shop::shop() : coins()
+shop::shop() : coins(100)
 {
     // Initialize regular items
     for (int i = 0; i < 10; i++) {
@@ -155,6 +156,7 @@ void shop::BuyItem(int itemSlot) const
     }
 
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
+    inv2.RecivedInv(shopItems[itemSlot]);
 }
 
 void shop::BuyWeapon(int weaponSlot) const
@@ -179,7 +181,7 @@ void shop::BuyWeapon(int weaponSlot) const
 
     // Purchase the weapon
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
-    // add to inventory here
+    inv2.RecivedInv(weaponItems[weaponSlot]);
 }
 
 void shop::AddCoins(int amount)
