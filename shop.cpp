@@ -7,7 +7,7 @@
 // Initialize shop items (slot 0 has item 0, rest empty)
 int shop::shopItems[4] = { 6, 7, 8, 9 };
 // Initialize weapons (slot 0 has weapon 5 as an example, rest empty)
-int shop::weaponItems[6] = { 0, 1, 2, 3, 4, 5 };
+int shop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 shop::shop() : coins()
 {
@@ -122,7 +122,7 @@ void shop::OpenWeaponShop() const
     std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
     std::cout << "----------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << weaponItemPtrs[i]->getname()
                 << " - " << weaponItemPtrs[i]->getprice() << " coins" << std::endl;
