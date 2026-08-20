@@ -6,6 +6,7 @@
 #include "Interactable.h"
 #include "Puzzle.h"
 #include "inv.h"
+#include <string>
 
 enum GameState
 {
@@ -26,6 +27,11 @@ private:
     Room room;
     Player player;
     Map map;
+    // Backpack UI selection.
+    int selectedBackpackItem;
+
+    std::string getBackpackItemName(
+        int itemIndex) const;
 
     // Player's inventory.
     inv inventory;

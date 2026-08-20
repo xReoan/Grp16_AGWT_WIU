@@ -1,6 +1,10 @@
 #include "Game.h"
 #include "InspectableObject.h"
 
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <cstdlib>
 #include <iostream>
 #ifdef _WIN32
@@ -30,6 +34,7 @@ Game::Game()
 
     activePuzzle = nullptr;
 
+    selectedBackpackItem = 0;
     selectedInventorySlot = 0;
 
     screenNeedsClear = true;
@@ -200,6 +205,24 @@ void Game::run()
     }
 }
 
+// 
+std::string Game::getBackpackItemName(
+    int itemIndex) const
+{
+    if (itemIndex == 0)
+    {
+        return "Pliers";
+    }
+    else if (itemIndex == 1)
+    {
+        return "Bottle";
+    }
+    else
+    {
+        return "Candle";
+    }
+}
+
 // =====================================
 // DRAW
 // =====================================
@@ -299,29 +322,79 @@ void Game::draw()
             << std::endl;
     }
 
-    // BACKPACK
+    // ABANDONED BACKPACK EVENT
+
     else if (
         currentState ==
         BACKPACK_STATE)
     {
+        // Draws one padded line inside
+        // the backpack border.
+        auto drawBackpackLine =
+            [](const std::string& text)
+            {
+                std::cout
+                    << "| "
+                    << std::left
+                    << std::setw(44)
+                    << text
+                    << " |"
+                    << std::endl;
+            };
+
         std::cout
-            << "================ BACKPACK ================"
+            << "+----------------------------------------------+"
             << std::endl;
 
-        std::cout << std::endl;
+        drawBackpackLine(
+            "A weathered backpack lies abandoned.");
+
+        drawBackpackLine("");
+
+        drawBackpackLine(
+            "               CHOOSE ONE");
+
+        drawBackpackLine("");
+
+        // Build the item-selection line.
+        std::ostringstream itemLine;
+
+        for (int i = 0;
+            i < 3;
+            i++)
+        {
+            // Selected item.
+            if (i ==
+                selectedBackpackItem)
+            {
+                itemLine
+                    << ">["
+                    << getBackpackItemName(i)
+                    << "]<";
+            }
+
+            // Unselected item.
+            else
+            {
+                itemLine
+                    << " ["
+                    << getBackpackItemName(i)
+                    << "] ";
+            }
+
+            itemLine << "  ";
+        }
+
+        drawBackpackLine(
+            itemLine.str());
+
+        drawBackpackLine("");
+
+        drawBackpackLine(
+            "A/D Select          E Take");
 
         std::cout
-            << "You find an abandoned backpack."
-            << std::endl;
-
-        std::cout << std::endl;
-
-        std::cout
-            << "E - Take Item"
-            << std::endl;
-
-        std::cout
-            << "Q - Leave"
+            << "+----------------------------------------------+"
             << std::endl;
     }
 
@@ -743,7 +816,8 @@ void Game::activateCurrentMapNode()
     MapNode* node =
         map.getCurrentNode();
 
-    if (node == nullptr)
+    if (node ==
+        nullptr)
     {
         return;
     }
@@ -751,22 +825,32 @@ void Game::activateCurrentMapNode()
     NodeType type =
         node->getType();
 
-    if (type == FIGHT)
+    if (type ==
+        FIGHT)
     {
         currentState =
             CARD_BATTLE_STATE;
     }
 
-    else if (type == SHOP)
+    else if (type ==
+        SHOP)
     {
         currentState =
             SHOP_STATE;
     }
 
-    else if (type == BACKPACK)
+    else if (type ==
+        BACKPACK)
     {
+        // Always begin with Pliers selected.
+        selectedBackpackItem =
+            0;
+
         currentState =
             BACKPACK_STATE;
+
+        screenNeedsClear =
+            true;
     }
 }
 
@@ -875,23 +959,62 @@ void Game::handleShopInput(
 void Game::handleBackpackInput(
     char input)
 {
-    if (input == 'E' ||
+    // =====================================
+    // A = PREVIOUS ITEM
+    // =====================================
+
+    if (input == 'A' ||
+        input == 'a')
+    {
+        selectedBackpackItem--;
+
+        // Wrap from Pliers to Candle.
+        if (selectedBackpackItem <
+            0)
+        {
+            selectedBackpackItem =
+                2;
+        }
+    }
+
+    // =====================================
+    // D = NEXT ITEM
+    // =====================================
+
+    else if (input == 'D' ||
+        input == 'd')
+    {
+        selectedBackpackItem++;
+
+        // Wrap from Candle to Pliers.
+        if (selectedBackpackItem >
+            2)
+        {
+            selectedBackpackItem =
+                0;
+        }
+    }
+
+    // =====================================
+    // E = TAKE PLACEHOLDER ITEM
+    // =====================================
+
+    else if (input == 'E' ||
         input == 'e')
     {
-        // Choose one of the ten items
-        // from itemDatabase.
-        int itemIndex =
-            std::rand() % 10;
+        clearScreen();
 
-        // Store it in the first
-        // available inventory slot.
-        inventory.RecivedInv(
-            itemIndex);
+        std::cout
+            << "You take the "
+            << getBackpackItemName(
+                selectedBackpackItem)
+            << "."
+            << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "You store the item in your inventory."
+            << "This is a placeholder item."
             << std::endl;
 
         std::cout << std::endl;
@@ -903,16 +1026,6 @@ void Game::handleBackpackInput(
         readKey();
 
         // Return to the board-game map.
-        currentState =
-            MAP_STATE;
-
-        screenNeedsClear =
-            true;
-    }
-
-    else if (input == 'Q' ||
-        input == 'q')
-    {
         currentState =
             MAP_STATE;
 
