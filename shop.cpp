@@ -155,7 +155,7 @@ void shop::BuyItem(int itemSlot) const
     }
 
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
-    // add to inventory here
+    inventory.RecivedInv[itemSlot]
 }
 
 void shop::BuyWeapon(int weaponSlot) const
