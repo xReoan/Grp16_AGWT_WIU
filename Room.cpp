@@ -145,6 +145,28 @@ void Room::createRoomObjects()
                 39,
                 4);
 
+        // CABINET
+        addInteractable(
+            new InspectableObject(
+                6,
+                14,
+                9,
+                1,
+                "Cabinet",
+                "Placeholder: The cabinet is locked. "
+                "Something may be hidden inside later."));
+
+        // CHAIR
+        addInteractable(
+            new InspectableObject(
+                35,
+                14,
+                7,
+                1,
+                "Chair",
+                "Placeholder: An old chair. "
+                "It may become important later."));
+
         exitDoor->setUnlocked(false);
 
         addInteractable(exitDoor);
@@ -174,6 +196,28 @@ void Room::createRoomObjects()
         exitDoor->setUnlocked(false);
 
         addInteractable(exitDoor);
+
+        // BOOKSHELF
+        addInteractable(
+            new InspectableObject(
+                5,
+                15,
+                11,
+                1,
+                "Bookshelf",
+                "Placeholder: Most of the books "
+                "are too damaged to read."));
+
+        // BROKEN LAMP
+        addInteractable(
+            new InspectableObject(
+                34,
+                15,
+                13,
+                1,
+                "Broken Lamp",
+                "Placeholder: The lamp no longer works. "
+                "Its bulb has turned completely black."));
 
         // CARD TABLE
         cardTable =
@@ -209,6 +253,28 @@ void Room::createRoomObjects()
         exitDoor->setUnlocked(false);
 
         addInteractable(exitDoor);
+
+        // PORTRAIT
+        addInteractable(
+            new InspectableObject(
+                5,
+                15,
+                10,
+                1,
+                "Portrait",
+                "Placeholder: The portrait's face "
+                "has been scratched away."));
+
+        // CRATE
+        addInteractable(
+            new InspectableObject(
+                37,
+                15,
+                7,
+                1,
+                "Crate",
+                "Placeholder: The crate is sealed shut. "
+                "Something is moving inside."));
 
         // CARD TABLE
         cardTable =
@@ -585,7 +651,10 @@ void Room::drawDoor()
 
 void Room::drawFurniture()
 {
-    // Room 1 furniture.
+    // =====================================
+    // ROOM 1
+    // =====================================
+
     if (roomNumber == 1)
     {
         const char cabinet[] =
@@ -598,16 +667,74 @@ void Room::drawFurniture()
             cabinet[i] != '\0';
             i++)
         {
-            roomLayout[14][6 + i]
-                = cabinet[i];
+            roomLayout[14][6 + i] =
+                cabinet[i];
         }
 
         for (int i = 0;
             chair[i] != '\0';
             i++)
         {
-            roomLayout[14][35 + i]
-                = chair[i];
+            roomLayout[14][35 + i] =
+                chair[i];
+        }
+    }
+
+    // =====================================
+    // ROOM 2
+    // =====================================
+
+    else if (roomNumber == 2)
+    {
+        const char bookshelf[] =
+            "[BOOKSHELF]";
+
+        const char brokenLamp[] =
+            "[BROKEN LAMP]";
+
+        for (int i = 0;
+            bookshelf[i] != '\0';
+            i++)
+        {
+            roomLayout[15][5 + i] =
+                bookshelf[i];
+        }
+
+        for (int i = 0;
+            brokenLamp[i] != '\0';
+            i++)
+        {
+            roomLayout[15][34 + i] =
+                brokenLamp[i];
+        }
+    }
+
+    // =====================================
+    // ROOM 3
+    // =====================================
+
+    else if (roomNumber == 3)
+    {
+        const char portrait[] =
+            "[PORTRAIT]";
+
+        const char crate[] =
+            "[CRATE]";
+
+        for (int i = 0;
+            portrait[i] != '\0';
+            i++)
+        {
+            roomLayout[15][5 + i] =
+                portrait[i];
+        }
+
+        for (int i = 0;
+            crate[i] != '\0';
+            i++)
+        {
+            roomLayout[15][37 + i] =
+                crate[i];
         }
     }
 }

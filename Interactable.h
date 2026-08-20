@@ -8,6 +8,7 @@ enum InteractionResult
     OPEN_MAP,
     OPEN_PUZZLE,
     OPEN_DOOR,
+    SHOW_DIALOGUE,
     LOCKED
 };
 

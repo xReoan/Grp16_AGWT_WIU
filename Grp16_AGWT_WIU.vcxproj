@@ -91,6 +91,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InspectableObject.cpp" />
     <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemDatabase.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InspectableObject.h" />
     <ClInclude Include="Interactable.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="itemDatabase.h" />

@@ -22,6 +22,7 @@
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
+    <ClCompile Include="InspectableObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
     <ClInclude Include="SymbolPuzzle.h" />
+    <ClInclude Include="InspectableObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

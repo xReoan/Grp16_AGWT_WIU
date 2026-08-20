@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "InspectableObject.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -571,6 +572,48 @@ void Game::handleRoomInput(
                 screenNeedsClear =
                     true;
             }
+
+           // ========================
+           // INSPECTABLE OBJECT
+           // ========================
+
+            else if (
+                result ==
+                SHOW_DIALOGUE)
+                {
+                    InspectableObject* inspectedObject =
+                        dynamic_cast<InspectableObject*>(
+                            object);
+
+                    if (inspectedObject !=
+                        nullptr)
+                    {
+                        clearScreen();
+
+                        std::cout
+                            << "================ "
+                            << inspectedObject->getName()
+                            << " ================"
+                            << std::endl;
+
+                        std::cout << std::endl;
+
+                        std::cout
+                            << inspectedObject->getDialogue()
+                            << std::endl;
+
+                        std::cout << std::endl;
+
+                        std::cout
+                            << "Press any key to continue."
+                            << std::endl;
+
+                        readKey();
+
+                        screenNeedsClear =
+                            true;
+                    }
+                    }
         }
     }
 }
