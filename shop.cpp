@@ -10,7 +10,7 @@ int shop::shopItems[4] = { 6, 7, 8, 9 };
 // Initialize weapons (slot 0 has weapon 5 as an example, rest empty)
 int shop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-shop::shop() : coins(100)
+shop::shop() : coins()
 {
     // Initialize regular items
     for (int i = 0; i < 10; i++) {
