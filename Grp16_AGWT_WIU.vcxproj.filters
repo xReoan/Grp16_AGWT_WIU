@@ -69,6 +69,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="itemDatabase.cpp">
+    <ClCompile Include="inv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,6 +126,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemDatabase.h">
+    <ClInclude Include="inv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
