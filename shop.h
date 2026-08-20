@@ -1,5 +1,6 @@
 #pragma once
 #include "itemDatabase.h"
+#include "inv.h"
 #include <iostream>
 
 class shop
@@ -8,9 +9,11 @@ private:
     static int shopItems[4];
     static int weaponItems[5];
     item* shopItemPtrs[4];
-    item* weaponItemPtrs[6];
+    item* weaponItemPtrs[5];
     itemDatabase database;
     int coins;
+
+    inv inv2;
 
 public:
     shop();
