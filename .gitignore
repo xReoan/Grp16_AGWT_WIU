@@ -1,0 +1,31 @@
+# Visual Studio local state
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+out/
+bin/
+obj/
+
+# Compiler and linker output
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.ipch
+*.tlog
+*.lastbuildstate
+*.VC.db
+*.VC.opendb
+
+# Operating-system files
+.DS_Store
+Thumbs.db

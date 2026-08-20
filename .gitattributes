@@ -1,0 +1,8 @@
+* text=auto
+
+# Keep Visual Studio and C++ text files consistent on Windows clones.
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.filters text eol=crlf
+*.cpp text eol=crlf
+*.h text eol=crlf
