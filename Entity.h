@@ -23,7 +23,6 @@ public:
 
 private:
 	int hp;
-	int shield;
 	int maxhp;
 
 	//new code (pharrell)

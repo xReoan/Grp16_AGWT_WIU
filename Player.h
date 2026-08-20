@@ -1,16 +1,10 @@
 #pragma once
-#include "Entity.h"
-#include "item.h"
-#include "inv.h"
+
 #include "Room.h"
-class Player : public Entity
+
+class Player
 {
 private:
-    inv inventory;
-    int money;
-    item* equippedweapon;
-    item* equippedarmor;
-    // Player's current position inside the room.
     int x;
     int y;
 
@@ -19,19 +13,9 @@ private:
     // S = Down
     // D = Right
     char facingDirection;
-public:
-    // Constructor.
-    Player();
 
-    int getmoney();
-    void addmoney(int amount);
-    bool spendmoney(int amount);
-    item* getweapon();
-    item* getarmor();
-    void unequipweapon();
-    void unequiparmor();
-    void equipweapon(item* weapon);
-    void equiparmor(item* armor);
+public:
+    Player();
 
     // Moves the player if the new position
     // is walkable.
