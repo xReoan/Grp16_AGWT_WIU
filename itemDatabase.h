@@ -6,6 +6,6 @@ public:
 	itemDatabase();
 	item* getitem(int index);
 private:
-	item* items[10];
+	item* items[15];
 };
 
