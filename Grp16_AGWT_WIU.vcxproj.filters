@@ -62,6 +62,9 @@
     <ClCompile Include="RunMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h">
@@ -107,6 +110,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RunMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

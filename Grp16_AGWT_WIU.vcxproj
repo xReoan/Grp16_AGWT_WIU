@@ -91,6 +91,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Interactable.cpp" />
+    <ClCompile Include="inv.cpp" />
     <ClCompile Include="KeypadPuzzle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapNode.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Interactable.h" />
+    <ClInclude Include="inv.h" />
     <ClInclude Include="KeypadPuzzle.h" />
     <ClInclude Include="MapNode.h" />
     <ClInclude Include="MapRNG.h" />
