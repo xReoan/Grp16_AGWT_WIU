@@ -15,3 +15,6 @@ itemDatabase::itemDatabase() {
 }
 
 
+item* itemDatabase::getitem(int index) {
+	return items[index];
+}
