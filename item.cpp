@@ -10,6 +10,7 @@ item::item(std::string name, std::string description, itemtype itemcategory, com
 	this->healvalue = healvalue;
 	this->duration = duration;
 	this->price = price;
+	this->passiveeffect = passive::none;
 }
 
 std::string item::getname() {
@@ -48,3 +49,7 @@ item::combattype item::getcombatcategory() {
 	return combatcategory;
 }
 
+item::passive item::getpassiveeffect()
+{
+	return passiveeffect;
+}
