@@ -62,6 +62,13 @@
     <ClCompile Include="RunMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CardDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itemDatabase.cpp">
     <ClCompile Include="inv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -112,6 +119,13 @@
     <ClInclude Include="RunMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CardDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itemDatabase.h">
     <ClInclude Include="inv.h">
       <Filter>Header Files</Filter>
     </ClInclude>

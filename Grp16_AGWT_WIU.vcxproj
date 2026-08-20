@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
+    <ClCompile Include="CardDatabase.cpp" />
     <ClCompile Include="CardTable.cpp" />
     <ClCompile Include="ClockPuzzle.cpp" />
     <ClCompile Include="Door.cpp" />
@@ -91,6 +92,8 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Interactable.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="itemDatabase.cpp" />
     <ClCompile Include="inv.cpp" />
     <ClCompile Include="KeypadPuzzle.cpp" />
     <ClCompile Include="main.cpp" />
@@ -103,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
+    <ClInclude Include="CardDatabase.h" />
     <ClInclude Include="CardTable.h" />
     <ClInclude Include="ClockPuzzle.h" />
     <ClInclude Include="Door.h" />
@@ -110,6 +114,8 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Interactable.h" />
+    <ClInclude Include="item.h" />
+    <ClInclude Include="itemDatabase.h" />
     <ClInclude Include="inv.h" />
     <ClInclude Include="KeypadPuzzle.h" />
     <ClInclude Include="MapNode.h" />
