@@ -9,7 +9,7 @@ inv::inv() {
 }
 
 //saves the number of the number base on the item database, -1 is none
-int inv::invinside[16] = {0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int inv::invinside[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 void inv::OpenInv() const
 {
