@@ -217,9 +217,13 @@ std::string Game::getBackpackItemName(
     {
         return "Bottle";
     }
-    else
+    else if (itemIndex == 2)
     {
         return "Candle";
+    }
+    else
+    {
+        return "5 Coins";
     }
 }
 
@@ -324,14 +328,12 @@ void Game::draw()
             << std::endl;
     }
 
-    // ABANDONED BACKPACK EVENT
+    // Abandoned Backpack Event
 
     else if (
         currentState ==
         BACKPACK_STATE)
     {
-        // Draws one padded line inside
-        // the backpack border.
         auto drawBackpackLine =
             [](const std::string& text)
             {
@@ -358,14 +360,12 @@ void Game::draw()
 
         drawBackpackLine("");
 
-        // Build the item-selection line.
         std::ostringstream itemLine;
 
-        for (int i = 0;
-            i < 3;
-            i++)
+        // Four possible rewards:
+        // Pliers, Bottle, Candle and 5 Coins.
+        for (int i = 0; i < 4; i++)
         {
-            // Selected item.
             if (i ==
                 selectedBackpackItem)
             {
@@ -374,17 +374,18 @@ void Game::draw()
                     << getBackpackItemName(i)
                     << "]<";
             }
-
-            // Unselected item.
             else
             {
                 itemLine
-                    << " ["
+                    << "["
                     << getBackpackItemName(i)
-                    << "] ";
+                    << "]";
             }
 
-            itemLine << "  ";
+            if (i < 3)
+            {
+                itemLine << " ";
+            }
         }
 
         drawBackpackLine(
@@ -962,7 +963,7 @@ void Game::handleBackpackInput(
     char input)
 {
     // =====================================
-    // A = PREVIOUS ITEM
+    // A = PREVIOUS REWARD
     // =====================================
 
     if (input == 'A' ||
@@ -970,17 +971,15 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem--;
 
-        // Wrap from Pliers to Candle.
-        if (selectedBackpackItem <
-            0)
+        // Wrap from Pliers to 5 Coins.
+        if (selectedBackpackItem < 0)
         {
-            selectedBackpackItem =
-                2;
+            selectedBackpackItem = 3;
         }
     }
 
     // =====================================
-    // D = NEXT ITEM
+    // D = NEXT REWARD
     // =====================================
 
     else if (input == 'D' ||
@@ -988,17 +987,15 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem++;
 
-        // Wrap from Candle to Pliers.
-        if (selectedBackpackItem >
-            2)
+        // Wrap from 5 Coins to Pliers.
+        if (selectedBackpackItem > 3)
         {
-            selectedBackpackItem =
-                0;
+            selectedBackpackItem = 0;
         }
     }
 
     // =====================================
-    // E = TAKE PLACEHOLDER ITEM
+    // E = TAKE SELECTED REWARD
     // =====================================
 
     else if (input == 'E' ||
@@ -1006,18 +1003,35 @@ void Game::handleBackpackInput(
     {
         clearScreen();
 
-        std::cout
-            << "You take the "
-            << getBackpackItemName(
-                selectedBackpackItem)
-            << "."
-            << std::endl;
+        // Index 3 is the coin reward.
+        if (selectedBackpackItem == 3)
+        {
+            std::cout
+                << "You find a small pouch containing "
+                << "5 coins."
+                << std::endl;
 
-        std::cout << std::endl;
+            std::cout << std::endl;
 
-        std::cout
-            << "This is a placeholder item."
-            << std::endl;
+            // Add the coins to the same shop object
+            // used by the game's shop.
+            shopkeeper.AddCoins(5);
+        }
+        else
+        {
+            std::cout
+                << "You take the "
+                << getBackpackItemName(
+                    selectedBackpackItem)
+                << "."
+                << std::endl;
+
+            std::cout << std::endl;
+
+            std::cout
+                << "This is a placeholder item."
+                << std::endl;
+        }
 
         std::cout << std::endl;
 
@@ -1027,7 +1041,6 @@ void Game::handleBackpackInput(
 
         readKey();
 
-        // Return to the board-game map.
         currentState =
             MAP_STATE;
 
