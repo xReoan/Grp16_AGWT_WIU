@@ -45,7 +45,7 @@ void shop::ShopMenu()
 
         std::cin >> choice;
 
-        // Convert to uppercase 
+        // Convert to uppercase automatically
         choice = toupper(choice);
 
         switch (choice) {
