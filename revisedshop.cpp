@@ -106,6 +106,17 @@ void revisedshop::OpenShop() const
         if (shopItems[i] != -1 && shopItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << shopItemPtrs[i]->getname()
                 << " - " << shopItemPtrs[i]->getprice() << " coins" << std::endl;
+			std::cout << "     " << shopItemPtrs[i]->getdescription() << std::endl;
+            if (shopItemPtrs[i]->getdefensevalue() != 0) {
+                std::cout << "    Defense Value: " << shopItemPtrs[i]->getdefensevalue() << std::endl;
+            }
+            if (shopItemPtrs[i]->gethealvalue() != 0) {
+                std::cout << "    Health Value: " << shopItemPtrs[i]->gethealvalue() << std::endl;
+            }
+			if (shopItemPtrs[i]->getduration() != 0) {
+					std::cout << "    Duration: " << shopItemPtrs[i]->getduration() << " turns" << std::endl;
+				
+			}
         }
         else {
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
@@ -124,6 +135,10 @@ void revisedshop::OpenWeaponShop() const
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << weaponItemPtrs[i]->getname()
                 << " - " << weaponItemPtrs[i]->getprice() << " coins" << std::endl;
+            std::cout << "    " << weaponItemPtrs[i]->getdescription() << std::endl;
+            if (weaponItemPtrs[i]->getattackvalue() != 0) {
+                std::cout << "    Attack Value: " << weaponItemPtrs[i]->getattackvalue() << std::endl;
+            }
         }
         else {
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
