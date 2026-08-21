@@ -6,7 +6,7 @@
 class revisedshop
 {
 private:
-    static int shopItems[4];
+    static int shopItems[9];
     static int weaponItems[5];
     item* shopItemPtrs[4];
     item* weaponItemPtrs[5];

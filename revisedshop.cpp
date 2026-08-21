@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 
-int revisedshop::shopItems[4] = { 6, 7, 8, 9 };
+int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 revisedshop::revisedshop() : coins()
@@ -102,7 +102,7 @@ void revisedshop::OpenShop() const
     std::cout << "                    ITEMS FOR SALE                  " << std::endl;
     std::cout << "----------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 9; i++) {
         if (shopItems[i] != -1 && shopItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << shopItemPtrs[i]->getname()
                 << " - " << shopItemPtrs[i]->getprice() << " coins" << std::endl;
