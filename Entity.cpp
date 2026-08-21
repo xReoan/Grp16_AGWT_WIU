@@ -50,11 +50,6 @@ bool Entity::isalive()
 
 void Entity::takeDamage(int damage)
 {
-	hp -= damage;
-    if (damage < 0){
-        damage = 0; // Prevent negative damage
-    }
-
     hp -= damage;
     if (hp < 0){
         hp = 0; // Prevent negative health
