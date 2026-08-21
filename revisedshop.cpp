@@ -1,14 +1,14 @@
-#include "shop.h"
+#include "revisedshop.h"
 #include "item.h"
 #include "itemDatabase.h"
 #include "inv.h"
 #include <iostream>
 #include <cstdlib>
 
-int shop::shopItems[4] = { 6, 7, 8, 9 };
-int shop::weaponItems[5] = { 1, 2, 3, 4, 5 };
+int revisedshop::shopItems[4] = { 6, 7, 8, 9 };
+int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-shop::shop() : coins()
+revisedshop::revisedshop() : coins()
 {
     for (int i = 0; i < 10; i++) {
         if (shopItems[i] != -1) {
@@ -29,7 +29,7 @@ shop::shop() : coins()
     }
 }
 
-void shop::ShopMenu()
+void revisedshop::ShopMenu()
 {
     char choice;
     int slotChoice;
@@ -95,7 +95,7 @@ void shop::ShopMenu()
     }
 }
 
-void shop::OpenShop() const
+void revisedshop::OpenShop() const
 {
     std::cout << "----------------------------------------------------" << std::endl;
     std::cout << "                    ITEMS FOR SALE                  " << std::endl;
@@ -113,7 +113,7 @@ void shop::OpenShop() const
     std::cout << "----------------------------------------------------" << std::endl;
 }
 
-void shop::OpenWeaponShop() const
+void revisedshop::OpenWeaponShop() const
 {
     std::cout << "----------------------------------------------------" << std::endl;
     std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
@@ -131,7 +131,7 @@ void shop::OpenWeaponShop() const
     std::cout << "----------------------------------------------------" << std::endl;
 }
 
-void shop::BuyItem(int itemSlot) const
+void revisedshop::BuyItem(int itemSlot) const
 {
     if (itemSlot < 0 || itemSlot >= 10) {
         std::cout << "Invalid slot number!" << std::endl;
@@ -155,7 +155,7 @@ void shop::BuyItem(int itemSlot) const
     inv2.RecivedInv(shopItems[itemSlot]);
 }
 
-void shop::BuyWeapon(int weaponSlot) const
+void revisedshop::BuyWeapon(int weaponSlot) const
 {
     if (weaponSlot < 0 || weaponSlot >= 10) {
         std::cout << "Invalid weapon slot number!" << std::endl;
@@ -179,7 +179,7 @@ void shop::BuyWeapon(int weaponSlot) const
     inv2.RecivedInv(weaponItems[weaponSlot]);
 }
 
-void shop::AddCoins(int amount)
+void revisedshop::AddCoins(int amount)
 {
     if (amount > 0) {
         coins += amount;
@@ -187,12 +187,12 @@ void shop::AddCoins(int amount)
     }
 }
 
-int shop::GetCoins() const
+int revisedshop::GetCoins() const
 {
     return coins;
 }
 
-bool shop::IsItemAvailable(int itemSlot) const
+bool revisedshop::IsItemAvailable(int itemSlot) const
 {
     if (itemSlot >= 0 && itemSlot < 10) {
         return shopItems[itemSlot] != -1;
@@ -200,7 +200,7 @@ bool shop::IsItemAvailable(int itemSlot) const
     return false;
 }
 
-bool shop::IsWeaponAvailable(int weaponSlot) const
+bool revisedshop::IsWeaponAvailable(int weaponSlot) const
 {
     if (weaponSlot >= 0 && weaponSlot < 10) {
         return weaponItems[weaponSlot] != -1;
