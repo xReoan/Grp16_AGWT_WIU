@@ -6,7 +6,7 @@
 #include "Interactable.h"
 #include "Puzzle.h"
 #include "inv.h"
-#include "shop.h"
+#include "revisedshop.h"
 #include <string>
 
 enum GameState
@@ -37,7 +37,7 @@ private:
     // Player's inventory.
     inv inventory;
 
-    shop shopkeeper;
+    revisedshop shopkeeper;
 
     GameState currentState;
 
