@@ -8,7 +8,7 @@ class revisedshop
 private:
     static int shopItems[9];
     static int weaponItems[5];
-    item* shopItemPtrs[4];
+    item* shopItemPtrs[9];
     item* weaponItemPtrs[5];
     itemDatabase database;
     int coins;
