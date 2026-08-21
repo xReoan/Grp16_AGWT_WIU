@@ -5,17 +5,18 @@
 #include <iostream>
 #include <cstdlib>
 
+// static is for this
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 revisedshop::revisedshop() : coins()
 {
-    for (int i = 0; i < 10; i++) {
-        if (shopItems[i] != -1) {
-            shopItemPtrs[i] = database.getitem(shopItems[i]);
+    for (int i = 0; i < 10; i++) { // process each index in the shopItems + shopItemPtrs arrays
+        if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty "
+            shopItemPtrs[i] = database.getitem(shopItems[i]); 
         }
         else {
-            shopItemPtrs[i] = nullptr;
+            shopItemPtrs[i] = nullptr; // to say "don't add item/don't use it"
         }
     }
 

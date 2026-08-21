@@ -6,7 +6,7 @@
 class revisedshop
 {
 private:
-    static int shopItems[9];
+    static int shopItems[9]; // static = available when the class is not instantiated
     static int weaponItems[5];
     item* shopItemPtrs[9];
     item* weaponItemPtrs[5];
