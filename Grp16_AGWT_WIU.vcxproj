@@ -107,6 +107,7 @@
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
+    <ClCompile Include="TricksterPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleManager.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
     <ClInclude Include="SymbolPuzzle.h" />
+    <ClInclude Include="TricksterPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

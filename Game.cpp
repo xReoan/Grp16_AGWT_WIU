@@ -416,9 +416,14 @@ void Game::draw()
             std::cout << std::endl;
 
             std::cout
-                << "Selected Slot: "
-                << selectedInventorySlot + 1
-                << std::endl;
+                << "Selected Slot: ";
+                if (selectedInventorySlot + 1 < 10) {
+                    std::cout << selectedInventorySlot + 1<< " ";
+                }
+                else {
+                    std::cout << selectedInventorySlot + 1;
+                }
+                std::cout<< std::endl;
 
             std::cout << std::endl;
 
@@ -1296,22 +1301,51 @@ void Game::goToNextRoom()
         readKey();
     }
     
-// ============================
-// ROOM 3 COMPLETE
-// ============================
+    // ============================
+    // ROOM 3 -> ROOM 4
+    // ============================
 
     else if (currentRoomNumber == 3)
     {
+        room.loadRoom(4);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
         clearScreen();
 
         std::cout
-            << "Room 3 complete!"
+            << "You step through the doorway..."
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "The final door opens."
+            << "Someone seems to be waiting for you."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 4."
+            << std::endl;
+
+        readKey();
+    }
+    // ============================
+    // ENDING
+    // ============================
+    else if (currentRoomNumber == 4)
+    {
+        clearScreen();
+
+        std::cout
+            << "Room 4 complete!"
             << std::endl;
 
         std::cout << std::endl;
@@ -1329,6 +1363,6 @@ void Game::goToNextRoom()
         readKey();
 
         running = false;
-    }
+        }
 
 }

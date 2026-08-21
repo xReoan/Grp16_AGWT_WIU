@@ -286,7 +286,41 @@ void Room::createRoomObjects()
 
         addInteractable(cardTable);
     }
+// =====================================
+// ROOM 4
+// =====================================
+    else if (roomNumber == 4)
+    {
+        // TRICKSTER CUP PUZZLE
+        puzzle =
+            new TricksterPuzzle(
+                3,
+                2);
 
+        puzzle->setUnlocked(true); 
+
+        addInteractable(puzzle);
+
+        // EXIT DOOR
+        exitDoor =
+            new Door(
+                39,
+                2);
+
+        exitDoor->setUnlocked(false);
+
+        addInteractable(exitDoor);
+
+        // CARD TABLE
+        cardTable =
+            new CardTable(
+                15,
+                8,
+                20,
+                5);
+
+        addInteractable(cardTable);
+    }
 }
 
 
@@ -593,6 +627,47 @@ void Room::drawPuzzle()
             roomLayout[startY + 4]
                 [startX + i]
                 = line5[i];
+        }
+    }
+
+    else if (roomNumber == 4)
+    {
+        int startX =
+            puzzle->getX();
+
+        int startY =
+            puzzle->getY();
+
+        const char line1[] =
+            "|-------------------|";
+
+        const char line2[] =
+            "|  TRICKSTER GAME   |";
+
+        const char line3[] =
+            "|  [_]   [_]   [_]  |";
+
+        const char line4[] =
+            "|      3 CUPS       |";
+
+        const char line5[] =
+            "|-------------------|";
+
+        for (int i = 0; line1[i] != '\0'; i++){
+            roomLayout[startY]
+                [startX + i] = line1[i];
+
+            roomLayout[startY + 1]
+                [startX + i] = line2[i];
+
+            roomLayout[startY + 2]
+                [startX + i] = line3[i];
+
+            roomLayout[startY + 3]
+                [startX + i] = line4[i];
+
+            roomLayout[startY + 4]
+                [startX + i] = line5[i];
         }
     }
 }
