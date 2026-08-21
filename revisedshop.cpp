@@ -43,6 +43,7 @@ void revisedshop::ShopMenu()
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
         std::cout << "                Press Enter to refresh" << std::endl;
 
+
         std::cin >> choice;
 
         // Convert to uppercase automatically
