@@ -3,7 +3,7 @@
 #include "inv.h"
 #include <iostream>
 
-class shop
+class revisedshop
 {
 private:
     static int shopItems[4];
@@ -16,7 +16,7 @@ private:
     inv inv2;
 
 public:
-    shop();
+    revisedshop();
     void OpenShop() const;
     void OpenWeaponShop() const;
     void BuyItem(int itemSlot) const;
