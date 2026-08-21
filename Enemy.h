@@ -19,20 +19,23 @@ public:
 
 private:
 	ENEMY_TYPE enemytype;
-	int attack;
+	int meleeattack;
+	int projectileattack;
 
 public:
 	Enemy();
-	Enemy(ENEMY_TYPE type, int hp, int enemyAttack, int enemyMeleeDefense, int enemyProjectileDefense);
+	Enemy(ENEMY_TYPE type, int hp, int enemyMeleeAttack, int enemyProjectileAttack, int enemyMeleeDefense, int enemyProjectileDefense);
 	~Enemy();
 
 
 	// getters
     ENEMY_TYPE getEnemyType() const;
-    int getAttack() const;
+	int getMeleeAttack() const;
+	int getProjectileAttack() const;
 
     // setters
     void setEnemyType(ENEMY_TYPE type);
-    void setAttack(int enemyAttack);
+    void setMeleeAttack(int enemyMeleeAttack);
+	void setProjectileAttack(int enemyProjectileAttack);
 };
 

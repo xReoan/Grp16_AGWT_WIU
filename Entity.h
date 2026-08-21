@@ -3,20 +3,24 @@
 class Entity
 {
 public:
-	Entity(int hp, int meleeDef, int projectileDef);
+	Entity(int hp, int meleeAtk, int projectileAtk, int meleeDef, int projectileDef);
 
 	int gethp();
 	int getmaxhp();
 	
 	//new code (pharrell) getter 
+	int getMeleeAttack();
+	int getProjectileAttack();
 	int getMeleeDefense();
 	int getProjectileDefense();
 
 	bool isalive();
-	void takeDamage(int damage, bool isProjectile); //check for projectile or melee damage
+	void takeDamage(int damage); 
 
 
 	//new code(pharrell) setters
+	void setMeleeAttack(int meleeAtk);
+	void setProjectileAttack(int projectileAtk);
 	void setMeleeDefense(int meleeDef);
 	void setProjectileDefense(int projectileDef);
 
@@ -26,6 +30,8 @@ private:
 	int maxhp;
 
 	//new code (pharrell)
+	int meleeAttack;
+	int projectileAttack;
 	int meleeDefense;
 	int projectileDefense;
 };
