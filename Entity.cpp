@@ -1,12 +1,14 @@
 #include "Entity.h"
 
-Entity::Entity(int hp, int meleeDef, int projectileDef)
+Entity::Entity(int hp, int meleeAtk, int projectileAtk, int meleeDef, int projectileDef)
 {
     this->hp = hp;
-    maxhp = hp;
+    this->meleeAttack = meleeAtk;
+    this->projectileAttack = projectileAtk;
+    this->meleeDefense = meleeAtk;
+    this->projectileDefense = projectileAtk;
 
-    meleeDefense = meleeDef;
-    projectileDefense = projectileDef;
+    maxhp = hp;
 }
 
 //getter
@@ -18,6 +20,16 @@ int Entity::gethp()
 int Entity::getmaxhp()
 {
     return maxhp;
+}
+
+int Entity::getMeleeAttack()
+{
+    return meleeAttack;
+}
+
+int Entity::getProjectileAttack()
+{
+    return projectileAttack;
 }
 
 int Entity::getMeleeDefense()
@@ -36,14 +48,9 @@ bool Entity::isalive()
     return hp > 0;
 }
 
-void Entity::takeDamage(int damage, bool isProjectile)
+void Entity::takeDamage(int damage)
 {
-    if (isProjectile){
-        damage -= projectileDefense;
-    }
-    else{
-        damage -= meleeDefense;
-    }
+	hp -= damage;
     if (damage < 0){
         damage = 0; // Prevent negative damage
     }
@@ -55,6 +62,16 @@ void Entity::takeDamage(int damage, bool isProjectile)
 }
 
 //setter
+void Entity::setMeleeAttack(int meleeAtk)
+{
+    meleeAttack= meleeAtk;
+}
+
+void Entity::setProjectileAttack(int projectileAtk)
+{
+    projectileAttack = projectileAtk;
+}
+
 void Entity::setMeleeDefense(int meleeDef)
 {
     meleeDefense = meleeDef;
