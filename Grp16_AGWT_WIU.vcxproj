@@ -84,7 +84,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BattleManager.cpp" />
-    <ClCompile Include="..\..\..\Downloads\shop.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDatabase.cpp" />
     <ClCompile Include="CardTable.cpp" />
@@ -106,12 +105,11 @@
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
-    <ClCompile Include="shop.cpp" />
+    <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleManager.h" />
-    <ClInclude Include="..\..\..\Downloads\shop.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDatabase.h" />
     <ClInclude Include="CardTable.h" />
@@ -132,7 +130,7 @@
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
-    <ClInclude Include="shop.h" />
+    <ClInclude Include="revisedshop.h" />
     <ClInclude Include="SymbolPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
