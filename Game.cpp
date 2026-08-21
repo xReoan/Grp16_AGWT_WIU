@@ -1,5 +1,11 @@
 #include "Game.h"
+#include "InspectableObject.h"
 
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <cstdlib>
 #include <iostream>
 #ifdef _WIN32
 #include <conio.h>
@@ -27,6 +33,9 @@ Game::Game()
     currentState = ROOM_STATE;
 
     activePuzzle = nullptr;
+
+    selectedBackpackItem = 0;
+    selectedInventorySlot = 0;
 
     screenNeedsClear = true;
     running = true;
@@ -196,6 +205,28 @@ void Game::run()
     }
 }
 
+// 
+std::string Game::getBackpackItemName(
+    int itemIndex) const
+{
+    if (itemIndex == 0)
+    {
+        return "Pliers";
+    }
+    else if (itemIndex == 1)
+    {
+        return "Bottle";
+    }
+    else if (itemIndex == 2)
+    {
+        return "Candle";
+    }
+    else
+    {
+        return "5 Coins";
+    }
+}
+
 // =====================================
 // DRAW
 // =====================================
@@ -224,6 +255,10 @@ void Game::draw()
 
         std::cout
             << "E     - Confirm Path"
+            << std::endl;
+
+        std::cout
+            << "N     - Inventory"
             << std::endl;
 
         std::cout
@@ -286,36 +321,119 @@ void Game::draw()
 
         std::cout << std::endl;
 
+        shopkeeper.ShopMenu();
+        
         std::cout
             << "Q - Leave Shop"
             << std::endl;
     }
 
-    // BACKPACK
+    // Abandoned Backpack Event
+
     else if (
         currentState ==
         BACKPACK_STATE)
     {
+        auto drawBackpackLine =
+            [](const std::string& text)
+            {
+                std::cout
+                    << "| "
+                    << std::left
+                    << std::setw(44)
+                    << text
+                    << " |"
+                    << std::endl;
+            };
+
         std::cout
-            << "================ BACKPACK ================"
+            << "+----------------------------------------------+"
             << std::endl;
 
-        std::cout << std::endl;
+        drawBackpackLine(
+            "A weathered backpack lies abandoned.");
+
+        drawBackpackLine("");
+
+        drawBackpackLine(
+            "               CHOOSE ONE");
+
+        drawBackpackLine("");
+
+        std::ostringstream itemLine;
+
+        // Four possible rewards:
+        // Pliers, Bottle, Candle and 5 Coins.
+        for (int i = 0; i < 4; i++)
+        {
+            if (i ==
+                selectedBackpackItem)
+            {
+                itemLine
+                    << ">["
+                    << getBackpackItemName(i)
+                    << "]<";
+            }
+            else
+            {
+                itemLine
+                    << "["
+                    << getBackpackItemName(i)
+                    << "]";
+            }
+
+            if (i < 3)
+            {
+                itemLine << " ";
+            }
+        }
+
+        drawBackpackLine(
+            itemLine.str());
+
+        drawBackpackLine("");
+
+        drawBackpackLine(
+            "A/D Select          E Take");
 
         std::cout
-            << "You find an abandoned backpack."
-            << std::endl;
-
-        std::cout << std::endl;
-
-        std::cout
-            << "E - Take Item"
-            << std::endl;
-
-        std::cout
-            << "Q - Leave"
+            << "+----------------------------------------------+"
             << std::endl;
     }
+
+    // Inventory
+    else if (currentState ==
+        INVENTORY_STATE)
+        {
+            std::cout
+                << "================ INVENTORY ================"
+                << std::endl;
+
+            std::cout << std::endl;
+
+            inventory.OpenInv();
+
+            std::cout << std::endl;
+
+            std::cout
+                << "Selected Slot: "
+                << selectedInventorySlot + 1
+                << std::endl;
+
+            std::cout << std::endl;
+
+            std::cout
+                << "W / S - Select Slot"
+                << std::endl;
+
+            std::cout
+                << "E     - Use Item"
+                << std::endl;
+
+            std::cout
+                << "N / Q - Close Inventory"
+                << std::endl;
+                }
 
     // PUZZLE
     else if (
@@ -371,6 +489,12 @@ void Game::handleInput(
         BACKPACK_STATE)
     {
         handleBackpackInput(input);
+    }
+
+    else if (currentState ==
+        INVENTORY_STATE)
+    {
+        handleInventoryInput(input);
     }
 
     else if (currentState ==
@@ -524,6 +648,48 @@ void Game::handleRoomInput(
                 screenNeedsClear =
                     true;
             }
+
+           // ========================
+           // INSPECTABLE OBJECT
+           // ========================
+
+            else if (
+                result ==
+                SHOW_DIALOGUE)
+                {
+                    InspectableObject* inspectedObject =
+                        dynamic_cast<InspectableObject*>(
+                            object);
+
+                    if (inspectedObject !=
+                        nullptr)
+                    {
+                        clearScreen();
+
+                        std::cout
+                            << "================ "
+                            << inspectedObject->getName()
+                            << " ================"
+                            << std::endl;
+
+                        std::cout << std::endl;
+
+                        std::cout
+                            << inspectedObject->getDialogue()
+                            << std::endl;
+
+                        std::cout << std::endl;
+
+                        std::cout
+                            << "Press any key to continue."
+                            << std::endl;
+
+                        readKey();
+
+                        screenNeedsClear =
+                            true;
+                    }
+                    }
         }
     }
 }
@@ -584,20 +750,18 @@ void Game::handleMapInput(
     }
 
     // Select right path.
-    else if (
-        input == 'D' ||
+    else if (input == 'D' ||
         input == 'd')
     {
         map.selectRight();
     }
 
-    // Confirm path.
-    else if (
-        input == 'E' ||
+    // Confirm selected path.
+    else if (input == 'E' ||
         input == 'e')
     {
-        if (map.travelSelected()
-            == true)
+        if (map.travelSelected() ==
+            true)
         {
             activateCurrentMapNode();
 
@@ -606,9 +770,24 @@ void Game::handleMapInput(
         }
     }
 
-    // Stand up.
-    else if (
-        input == 'Q' ||
+    // Open inventory.
+    //
+    // This exists only inside MAP_STATE.
+    else if (input == 'N' ||
+        input == 'n')
+    {
+        selectedInventorySlot =
+            0;
+
+        currentState =
+            INVENTORY_STATE;
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Stand up from the table.
+    else if (input == 'Q' ||
         input == 'q')
     {
         std::cout << std::endl;
@@ -616,7 +795,8 @@ void Game::handleMapInput(
         std::cout
             << "Are you sure you want to stand up? [Y/N] ";
 
-        char choice = readKey();
+        char choice =
+            readKey();
 
         if (choice == 'Y' ||
             choice == 'y')
@@ -639,7 +819,8 @@ void Game::activateCurrentMapNode()
     MapNode* node =
         map.getCurrentNode();
 
-    if (node == nullptr)
+    if (node ==
+        nullptr)
     {
         return;
     }
@@ -647,22 +828,32 @@ void Game::activateCurrentMapNode()
     NodeType type =
         node->getType();
 
-    if (type == FIGHT)
+    if (type ==
+        FIGHT)
     {
         currentState =
             CARD_BATTLE_STATE;
     }
 
-    else if (type == SHOP)
+    else if (type ==
+        SHOP)
     {
         currentState =
             SHOP_STATE;
     }
 
-    else if (type == BACKPACK)
+    else if (type ==
+        BACKPACK)
     {
+        // Always begin with Pliers selected.
+        selectedBackpackItem =
+            0;
+
         currentState =
             BACKPACK_STATE;
+
+        screenNeedsClear =
+            true;
     }
 }
 
@@ -771,13 +962,81 @@ void Game::handleShopInput(
 void Game::handleBackpackInput(
     char input)
 {
-    if (input == 'E' ||
+    // =====================================
+    // A = PREVIOUS REWARD
+    // =====================================
+
+    if (input == 'A' ||
+        input == 'a')
+    {
+        selectedBackpackItem--;
+
+        // Wrap from Pliers to 5 Coins.
+        if (selectedBackpackItem < 0)
+        {
+            selectedBackpackItem = 3;
+        }
+    }
+
+    // =====================================
+    // D = NEXT REWARD
+    // =====================================
+
+    else if (input == 'D' ||
+        input == 'd')
+    {
+        selectedBackpackItem++;
+
+        // Wrap from 5 Coins to Pliers.
+        if (selectedBackpackItem > 3)
+        {
+            selectedBackpackItem = 0;
+        }
+    }
+
+    // =====================================
+    // E = TAKE SELECTED REWARD
+    // =====================================
+
+    else if (input == 'E' ||
         input == 'e')
     {
+        clearScreen();
+
+        // Index 3 is the coin reward.
+        if (selectedBackpackItem == 3)
+        {
+            std::cout
+                << "You find a small pouch containing "
+                << "5 coins."
+                << std::endl;
+
+            std::cout << std::endl;
+
+            // Add the coins to the same shop object
+            // used by the game's shop.
+            shopkeeper.AddCoins(5);
+        }
+        else
+        {
+            std::cout
+                << "You take the "
+                << getBackpackItemName(
+                    selectedBackpackItem)
+                << "."
+                << std::endl;
+
+            std::cout << std::endl;
+
+            std::cout
+                << "This is a placeholder item."
+                << std::endl;
+        }
+
         std::cout << std::endl;
 
         std::cout
-            << "You take the item from the backpack."
+            << "Press any key to continue."
             << std::endl;
 
         readKey();
@@ -788,11 +1047,70 @@ void Game::handleBackpackInput(
         screenNeedsClear =
             true;
     }
+}
 
-    else if (
+// INVENTORY
+
+void Game::handleInventoryInput(
+    char input)
+{
+    // Previous inventory slot.
+    if (input == 'W' ||
+        input == 'w')
+    {
+        selectedInventorySlot--;
+
+        if (selectedInventorySlot <
+            0)
+        {
+            selectedInventorySlot =
+                15;
+        }
+    }
+
+    // Next inventory slot.
+    else if (input == 'S' ||
+        input == 's')
+    {
+        selectedInventorySlot++;
+
+        if (selectedInventorySlot >
+            15)
+        {
+            selectedInventorySlot =
+                0;
+        }
+    }
+
+    // Use selected item.
+    else if (input == 'E' ||
+        input == 'e')
+    {
+        std::cout << std::endl;
+
+        inventory.UsedInv(
+            selectedInventorySlot);
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to continue."
+            << std::endl;
+
+        readKey();
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Close inventory.
+    else if (input == 'N' ||
+        input == 'n' ||
         input == 'Q' ||
         input == 'q')
     {
+        // Always return to the board-game map,
+        // never to the room.
         currentState =
             MAP_STATE;
 
@@ -935,30 +1253,82 @@ void Game::goToNextRoom()
     // ROOM 2 -> ROOM 3
     // ============================
 
+ // ============================
+// ROOM 2 -> ROOM 3
+// ============================
+
     else if (currentRoomNumber == 2)
+    {
+        // Turn existing Room object
+        // into Room 3.
+        room.loadRoom(3);
+
+        // Reset player position.
+        player.resetPosition();
+
+        // Generate Room 3's map.
+        map.generateMap();
+
+        activePuzzle =
+            nullptr;
+
+        currentState =
+            ROOM_STATE;
+
+        clearScreen();
+
+        std::cout
+            << "You step through the doorway..."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "A strange safe waits in the darkness."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 3."
+            << std::endl;
+
+        readKey();
+    }
+    
+// ============================
+// ROOM 3 COMPLETE
+// ============================
+
+    else if (currentRoomNumber == 3)
     {
         clearScreen();
 
         std::cout
-            << "Room 2 complete!"
+            << "Room 3 complete!"
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "Room 3 has not been created yet."
+            << "The final door opens."
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "Press any key to continue."
+            << "You escaped!"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to finish."
             << std::endl;
 
         readKey();
 
-        currentState =
-            ROOM_STATE;
+        running = false;
     }
 
 }

@@ -19,3 +19,6 @@ itemDatabase::itemDatabase() {
 	items[13] = new item("Instant Ramen", "quick and easy meal. cleanses your bowels too, contrary to popular belief.", item::itemtype::consumable, item::combattype::none, 0, 0, 10, 0, 10);
 	items[14] = new item("Cheese", "takes the form of your favourite cheese. yum!", item::itemtype::consumable, item::combattype::none, 0, 0, 20, 0, 15);
 }
+item* itemDatabase::getitem(int index) {
+	return items[index];
+}

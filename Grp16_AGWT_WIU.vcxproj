@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Downloads\shop.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDatabase.cpp" />
     <ClCompile Include="CardTable.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InspectableObject.cpp" />
     <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemDatabase.cpp" />
@@ -103,8 +105,11 @@
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
+    <ClCompile Include="shop.cpp" />
+    <ClCompile Include="SymbolPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Downloads\shop.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDatabase.h" />
     <ClInclude Include="CardTable.h" />
@@ -113,6 +118,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InspectableObject.h" />
     <ClInclude Include="Interactable.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="itemDatabase.h" />
@@ -124,6 +130,8 @@
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
+    <ClInclude Include="shop.h" />
+    <ClInclude Include="SymbolPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
