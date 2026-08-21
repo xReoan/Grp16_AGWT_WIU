@@ -39,9 +39,10 @@ void revisedshop::ShopMenu()
         std::cout << "            What would you like to buy?" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
-        std::cout << "----------------------------------------------------" << std::endl;     
+        std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
         std::cout << "                Press Enter to refresh" << std::endl;
+
 
         std::cin >> choice;
 
@@ -88,7 +89,7 @@ void revisedshop::ShopMenu()
         default: {
             std::cout << "Invalid choice! Please enter I, W, C, or E." << std::endl;
             std::cin.ignore();
-            std::cin.get();     
+            std::cin.get();
             break;
         }
         }

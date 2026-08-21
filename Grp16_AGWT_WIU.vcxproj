@@ -103,9 +103,9 @@
     <ClCompile Include="MapRNG.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Puzzle.cpp" />
+    <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
-    <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +128,9 @@
     <ClInclude Include="MapRNG.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Puzzle.h" />
+    <ClInclude Include="revisedshop.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
-    <ClInclude Include="revisedshop.h" />
     <ClInclude Include="SymbolPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
