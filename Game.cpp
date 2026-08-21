@@ -416,9 +416,14 @@ void Game::draw()
             std::cout << std::endl;
 
             std::cout
-                << "Selected Slot: "
-                << selectedInventorySlot + 1
-                << std::endl;
+                << "Selected Slot: ";
+                if (selectedInventorySlot + 1 < 10) {
+                    std::cout << selectedInventorySlot + 1<< " ";
+                }
+                else {
+                    std::cout << selectedInventorySlot + 1;
+                }
+                std::cout<< std::endl;
 
             std::cout << std::endl;
 
@@ -1249,10 +1254,6 @@ void Game::goToNextRoom()
         readKey();
     }
 
-    // ============================
-    // ROOM 2 -> ROOM 3
-    // ============================
-
  // ============================
 // ROOM 2 -> ROOM 3
 // ============================
@@ -1296,22 +1297,87 @@ void Game::goToNextRoom()
         readKey();
     }
     
-// ============================
-// ROOM 3 COMPLETE
-// ============================
+    // ============================
+    // ROOM 3 -> ROOM 4
+    // ============================
 
     else if (currentRoomNumber == 3)
     {
+        room.loadRoom(4);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
         clearScreen();
 
         std::cout
-            << "Room 3 complete!"
+            << "You step through the doorway..."
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "The final door opens."
+            << "this room feels... weird"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 4."
+            << std::endl;
+
+        readKey();
+    }
+    // ============================
+  // ROOM 4 -> ROOM 5
+  // ============================
+
+    else if (currentRoomNumber == 4)
+    {
+        room.loadRoom(5);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
+        clearScreen();
+
+        std::cout
+            << "Watch out!"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "There's trap everywhere"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 5."
+            << std::endl;
+
+        readKey();
+        }
+    // ============================
+    // ENDING
+    // ============================
+    else if (currentRoomNumber == 5)
+    {
+        clearScreen();
+
+        std::cout
+            << "Room 5 complete!"
             << std::endl;
 
         std::cout << std::endl;
@@ -1329,6 +1395,6 @@ void Game::goToNextRoom()
         readKey();
 
         running = false;
-    }
+        }
 
 }

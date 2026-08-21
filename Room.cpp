@@ -229,12 +229,83 @@ void Room::createRoomObjects()
 
         addInteractable(cardTable);
     }
-
 // =====================================
 // ROOM 3
 // =====================================
-
     else if (roomNumber == 3)
+    {
+        // TRICKSTER CUP PUZZLE
+        puzzle =
+            new TricksterPuzzle(
+                3,
+                2);
+
+        puzzle->setUnlocked(true);
+
+        addInteractable(puzzle);
+
+        // EXIT DOOR
+        exitDoor =
+            new Door(
+                39,
+                2);
+
+        exitDoor->setUnlocked(false);
+
+        addInteractable(exitDoor);
+
+        // CARD TABLE
+        cardTable =
+            new CardTable(
+                15,
+                8,
+                20,
+                5);
+
+        addInteractable(cardTable);
+    }
+
+    // =====================================
+    // ROOM 4
+    // =====================================
+    else if (roomNumber == 4)
+    {
+        // TRICKSTER CUP PUZZLE
+        puzzle =
+            new SurvivorPuzzle(
+                3,
+                2);
+
+        puzzle->setUnlocked(true);
+
+        addInteractable(puzzle);
+
+        // EXIT DOOR
+        exitDoor =
+            new Door(
+                39,
+                2);
+
+        exitDoor->setUnlocked(false);
+
+        addInteractable(exitDoor);
+
+        // CARD TABLE
+        cardTable =
+            new CardTable(
+                15,
+                8,
+                20,
+                5);
+
+        addInteractable(cardTable);
+        }
+
+// =====================================
+// ROOM 4
+// =====================================
+
+    else if (roomNumber == 5)
     {
         // ROTATING SYMBOL SAFE
         puzzle =
@@ -286,7 +357,6 @@ void Room::createRoomObjects()
 
         addInteractable(cardTable);
     }
-
 }
 
 
@@ -544,10 +614,95 @@ void Room::drawPuzzle()
     }
 
 // =====================================
-// ROOM 3 - ROTATING SYMBOL SAFE
+// ROOM 3 - TRICKSTER
 // =====================================
-
     else if (roomNumber == 3)
+    {
+        int startX =
+            puzzle->getX();
+
+        int startY =
+            puzzle->getY();
+
+        const char line1[] =
+            "|-------------------|";
+
+        const char line2[] =
+            "|  TRICKSTER GAME   |";
+
+        const char line3[] =
+            "|  [_]   [_]   [_]  |";
+
+        const char line4[] =
+            "|      3 CUPS       |";
+
+        const char line5[] =
+            "|-------------------|";
+
+        for (int i = 0; line1[i] != '\0'; i++) {
+            roomLayout[startY]
+                [startX + i] = line1[i];
+
+            roomLayout[startY + 1]
+                [startX + i] = line2[i];
+
+            roomLayout[startY + 2]
+                [startX + i] = line3[i];
+
+            roomLayout[startY + 3]
+                [startX + i] = line4[i];
+
+            roomLayout[startY + 4]
+                [startX + i] = line5[i];
+        }
+    }
+    // =====================================
+    // ROOM 4 - SURVIVOR
+    // =====================================
+    else if (roomNumber == 4)
+    {
+        int startX =
+            puzzle->getX();
+
+        int startY =
+            puzzle->getY();
+
+        const char line1[] =
+            "+-------------------+";
+
+        const char line2[] =
+            "|                   |";
+
+        const char line3[] =
+            "| SUBJECT RECORDS   |";
+
+        const char line4[] =
+            "|                   |";
+
+        const char line5[] =
+            "+-------------------+";
+
+        for (int i = 0; line1[i] != '\0'; i++) {
+            roomLayout[startY]
+                [startX + i] = line1[i];
+
+            roomLayout[startY + 1]
+                [startX + i] = line2[i];
+
+            roomLayout[startY + 2]
+                [startX + i] = line3[i];
+
+            roomLayout[startY + 3]
+                [startX + i] = line4[i];
+
+            roomLayout[startY + 4]
+                [startX + i] = line5[i];
+        }
+        }
+    // =====================================
+    // ROOM 5 - PASSCODE
+    // =====================================
+    else if (roomNumber == 5)
     {
         int startX =
             puzzle->getX();

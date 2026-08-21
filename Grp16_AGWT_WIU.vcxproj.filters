@@ -23,8 +23,9 @@
     <ClCompile Include="RunMap.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
     <ClCompile Include="InspectableObject.cpp" />
-    <ClCompile Include="..\..\..\Downloads\shop.cpp" />
-    <ClCompile Include="shop.cpp" />
+    <ClCompile Include="BattleManager.cpp" />
+    <ClCompile Include="revisedshop.cpp" />
+    <ClCompile Include="TricksterPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
@@ -48,8 +49,10 @@
     <ClInclude Include="RunMap.h" />
     <ClInclude Include="SymbolPuzzle.h" />
     <ClInclude Include="InspectableObject.h" />
-    <ClInclude Include="..\..\..\Downloads\shop.h" />
-    <ClInclude Include="shop.h" />
+    <ClInclude Include="BattleManager.h" />
+    <ClInclude Include="revisedshop.h" />
+    <ClInclude Include="TricksterPuzzle.h" />
+    <ClInclude Include="SurvivorPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
