@@ -83,7 +83,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="..\..\..\Downloads\shop.cpp" />
+    <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDatabase.cpp" />
     <ClCompile Include="CardTable.cpp" />
@@ -109,7 +111,9 @@
     <ClCompile Include="SymbolPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattleManager.h" />
     <ClInclude Include="..\..\..\Downloads\shop.h" />
+    <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDatabase.h" />
     <ClInclude Include="CardTable.h" />

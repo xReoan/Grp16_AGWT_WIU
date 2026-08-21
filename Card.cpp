@@ -22,6 +22,10 @@ Card::cardtype Card::gettype() {
 	return type;
 }
 
+item::combattype Card::getcombatcategory() {
+	return combattype;
+}
+
 std::string Card::getitemname() {
 	return name;
 }
