@@ -1,6 +1,6 @@
 #include "player.h"
 #include <iostream>
-Player::Player() : Entity(100, 100, 100) {
+Player::Player() : Entity(100, 100, 100, 1, 1) {
     money = 0;
     equippedweapon = nullptr;
     equippedarmor = nullptr;
