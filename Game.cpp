@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include <iostream>
+
 #ifdef _WIN32
 #include <conio.h>
 #include <Windows.h>
