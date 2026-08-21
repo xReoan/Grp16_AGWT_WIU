@@ -5,14 +5,11 @@
 #include <iostream>
 #include <cstdlib>
 
-// Initialize shop items (slot 0 has item 0, rest empty)
 int shop::shopItems[4] = { 6, 7, 8, 9 };
-// Initialize weapons (slot 0 has weapon 5 as an example, rest empty)
 int shop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 shop::shop() : coins()
 {
-    // Initialize regular items
     for (int i = 0; i < 10; i++) {
         if (shopItems[i] != -1) {
             shopItemPtrs[i] = database.getitem(shopItems[i]);
@@ -22,7 +19,6 @@ shop::shop() : coins()
         }
     }
 
-    // Initialize weapons
     for (int i = 0; i < 10; i++) {
         if (weaponItems[i] != -1) {
             weaponItemPtrs[i] = database.getitem(weaponItems[i]);
@@ -49,7 +45,7 @@ void shop::ShopMenu()
 
         std::cin >> choice;
 
-        // Convert to uppercase for case-insensitive comparison
+        // Convert to uppercase 
         choice = toupper(choice);
 
         switch (choice) {
@@ -179,7 +175,6 @@ void shop::BuyWeapon(int weaponSlot) const
         return;
     }
 
-    // Purchase the weapon
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
     inv2.RecivedInv(weaponItems[weaponSlot]);
 }
