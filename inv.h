@@ -4,7 +4,7 @@ class inv
 {
 private:
 	static int invinside[16];
-	item* invitem[10];
+	item* invitem[15];
 	itemDatabase database;
 
 public:
