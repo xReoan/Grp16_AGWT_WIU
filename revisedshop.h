@@ -6,8 +6,8 @@
 class revisedshop
 {
 private:
-    int shopItems[9]; // item id
-    int weaponItems[5]; 
+    static int shopItems[9]; // item id + shop instances share the same inventory data
+    static int weaponItems[5]; //static is there because they are both using the same shop and they share the same inventory
     item* shopItemPtrs[9]; // pointer; item object
     item* weaponItemPtrs[5];
     itemDatabase database;

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 
-// static is for this
+// initialize the arrays + they are using the same array so static would make sense here
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
