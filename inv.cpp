@@ -91,32 +91,35 @@ void inv::inspecting(int itemSlot)
 
         //item type
         if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::weapon) {
-            std::cout << "Item type: weapon" << std::endl;
+            std::cout << "Item type: weapon"<< "      ";
         }
         else if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::armor) {
-            std::cout << "Item type: armor" << std::endl;
+            std::cout << "Item type: armor" << "      ";
         }
         else if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::consumable) {
-            std::cout << "Item type: consumable" << std::endl;
+            std::cout << "Item type: consumable" << "      ";
         }
 
         //combat type
         if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::none) {
-            std::cout << "Combat type: none" << std::endl;
+            std::cout << "Combat type: none" << "      ";
         }
         else if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::melee) {
-            std::cout << "Combat type: melee" << std::endl;
+            std::cout << "Combat type: melee" << "      ";
         }
         else if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::projectile) {
-            std::cout << "Combat type: projectile" << std::endl;
+            std::cout << "Combat type: projectile" << "      ";
         }
 
         //Tier
         if (invitem[invinside[itemSlot]]->getequipmenttier() == item::equipment::basic) {
-            std::cout << "Tier: basic" << std::endl;
+            std::cout << "Tier: basic" << "      ";
         }
         else if (invitem[invinside[itemSlot]]->getequipmenttier() == item::equipment::advanced) {
-            std::cout << "Tier type: advanced" << std::endl;
+            std::cout << "Tier type: advanced" << "      ";
+        }
+        else if (invitem[invinside[itemSlot]]->getequipmenttier() == item::equipment::none) {
+            std::cout << "Tier type: none" << "      ";
         }
 
         //std::cout << "Name: " << invitem[invinside[itemSlot]]->getpassiveeffect() << std::endl; according to item.h but theres none
