@@ -1094,7 +1094,7 @@ void Game::handleInventoryInput(
         std::cout << std::endl;
 
         inventory.UsedInv(
-            selectedInventorySlot);
+            selectedInventorySlot, player.getarmor(), player.getweapon());
 
         std::cout << std::endl;
 

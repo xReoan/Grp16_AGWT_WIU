@@ -5,8 +5,8 @@ Entity::Entity(int hp, int meleeAtk, int projectileAtk, int meleeDef, int projec
     this->hp = hp;
     this->meleeAttack = meleeAtk;
     this->projectileAttack = projectileAtk;
-    this->meleeDefense = meleeAtk;
-    this->projectileDefense = projectileAtk;
+    this->meleeDefense = meleeDef;
+    this->projectileDefense = projectileDef;
 
     maxhp = hp;
 }
@@ -50,6 +50,10 @@ bool Entity::isalive()
 
 void Entity::takeDamage(int damage)
 {
+    if (damage < 0){
+        damage = 0; // Prevent negative damage
+    }
+
     hp -= damage;
     if (hp < 0){
         hp = 0; // Prevent negative health
@@ -59,7 +63,7 @@ void Entity::takeDamage(int damage)
 //setter
 void Entity::setMeleeAttack(int meleeAtk)
 {
-    meleeAttack= meleeAtk;
+    meleeAttack = meleeAtk;
 }
 
 void Entity::setProjectileAttack(int projectileAtk)

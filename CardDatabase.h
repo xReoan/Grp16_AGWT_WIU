@@ -7,7 +7,7 @@ public:
 	~CardDatabase();
 	Card* getcard(int index);
 private:
-	static const int cardcount = 50;
+	static const int cardcount = 54;
 	Card* cards[cardcount];
 };
 
