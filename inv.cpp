@@ -1,6 +1,5 @@
 #include "inv.h"
-#include "item.h"
-#include "itemDatabase.h"
+#include "Game.h"
 #include <iostream>
 
 //#include <conio.h>//int input = _getch();
@@ -35,7 +34,7 @@ void inv::RecivedInv(int thing) const
         if (invinside[i] == -1) {
             invinside[i] = thing;
             changed = 'Y';
-            return;
+            break;
         }
     }
     if (changed != 'Y') {
@@ -44,13 +43,22 @@ void inv::RecivedInv(int thing) const
 }
 
 //like which of the 16 items slot is the item they used is from, can be changed
-void inv::UsedInv(int itemSlot) const
+void inv::UsedInv(int itemSlot, item* armorSlot, item* weaponSlot) const
 {
+    if (armorSlot != nullptr && invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::armor) {
+        std::cout << "Used " << invitem[invinside[itemSlot]]->getname() << std::endl;
+        //Player::player.equiparmor(invitem[invinside[itemSlot]]);
+    }
     if (invinside[itemSlot] != -1) {
-        std::cout << "Used " << invitem[invinside[itemSlot]]->getname() << std::endl;;
+        std::cout << "Used " << invitem[invinside[itemSlot]]->getname() << std::endl;
         invinside[itemSlot] = -1;
     }
     else {//if it is emepty
         std::cout << "no item to use"<<std::endl;
     }
 }
+
+//can do
+//equipping(base on the database number), its basically use
+//unequppingggg 
+//inspect()desciptions and stuff
