@@ -468,7 +468,7 @@ void Game::draw()
                 << std::endl;
 
             std::cout
-                << "R      - Unequip weapon/armor"
+                << "R     - Unequip weapon/armor"
                 << std::endl;
 
             std::cout
