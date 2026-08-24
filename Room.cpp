@@ -344,7 +344,7 @@ void Room::createRoomObjects()
                 7,
                 1,
                 "Crate",
-                "Placeholder: The crate is sealed shut. "
+                "Placeholder: The crate is sealed shut. " 
                 "Something is moving inside."));
 
         // CARD TABLE

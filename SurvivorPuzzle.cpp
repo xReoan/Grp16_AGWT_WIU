@@ -239,7 +239,7 @@ void SurvivorPuzzle::handleInput(char input) {
             return;
         }
 
-        if (checkSolution() == true){
+        if (checkSolution() == true){ 
             if (stage < 3){
                 stage++;
                 selectedChoice = 1;
