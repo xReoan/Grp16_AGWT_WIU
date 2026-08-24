@@ -5,17 +5,18 @@
 #include <iostream>
 #include <cstdlib>
 
-int revisedshop::shopItems[4] = { 6, 7, 8, 9 };
+// static is for this
+int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 revisedshop::revisedshop() : coins()
 {
-    for (int i = 0; i < 10; i++) {
-        if (shopItems[i] != -1) {
-            shopItemPtrs[i] = database.getitem(shopItems[i]);
+    for (int i = 0; i < 10; i++) { // process each index in the shopItems + shopItemPtrs arrays
+        if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty "
+            shopItemPtrs[i] = database.getitem(shopItems[i]); 
         }
         else {
-            shopItemPtrs[i] = nullptr;
+            shopItemPtrs[i] = nullptr; // to say "don't add item/don't use it"
         }
     }
 
@@ -102,10 +103,21 @@ void revisedshop::OpenShop() const
     std::cout << "                    ITEMS FOR SALE                  " << std::endl;
     std::cout << "----------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 9; i++) {
         if (shopItems[i] != -1 && shopItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << shopItemPtrs[i]->getname()
                 << " - " << shopItemPtrs[i]->getprice() << " coins" << std::endl;
+			std::cout << "     " << shopItemPtrs[i]->getdescription() << std::endl;
+            if (shopItemPtrs[i]->getdefensevalue() != 0) {
+                std::cout << "    Defense Value: " << shopItemPtrs[i]->getdefensevalue() << std::endl;
+            }
+            if (shopItemPtrs[i]->gethealvalue() != 0) {
+                std::cout << "    Health Value: " << shopItemPtrs[i]->gethealvalue() << std::endl;
+            }
+			if (shopItemPtrs[i]->getduration() != 0) {
+					std::cout << "    Duration: " << shopItemPtrs[i]->getduration() << " turns" << std::endl;
+				
+			}
         }
         else {
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
@@ -124,6 +136,10 @@ void revisedshop::OpenWeaponShop() const
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << weaponItemPtrs[i]->getname()
                 << " - " << weaponItemPtrs[i]->getprice() << " coins" << std::endl;
+            std::cout << "    " << weaponItemPtrs[i]->getdescription() << std::endl;
+            if (weaponItemPtrs[i]->getattackvalue() != 0) {
+                std::cout << "    Attack Value: " << weaponItemPtrs[i]->getattackvalue() << std::endl;
+            }
         }
         else {
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;

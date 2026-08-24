@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include <iostream>
+
 #ifdef _WIN32
 #include <conio.h>
 #include <Windows.h>
@@ -416,9 +416,14 @@ void Game::draw()
             std::cout << std::endl;
 
             std::cout
-                << "Selected Slot: "
-                << selectedInventorySlot + 1
-                << std::endl;
+                << "Selected Slot: ";
+                if (selectedInventorySlot + 1 < 10) {
+                    std::cout << selectedInventorySlot + 1<< " ";
+                }
+                else {
+                    std::cout << selectedInventorySlot + 1;
+                }
+                std::cout<< std::endl;
 
             std::cout << std::endl;
 
