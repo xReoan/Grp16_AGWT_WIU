@@ -207,25 +207,72 @@ void Game::run()
 }
 
 // 
-std::string Game::getBackpackItemName(
-    int itemIndex) const
+// =====================================
+// GENERATE BACKPACK REWARDS
+// =====================================
+
+void Game::generateBackpackItems()
 {
-    if (itemIndex == 0)
+    int itemCount =
+        backpackDatabase.getItemCount();
+
+    for (int i = 0; i < 3; i++)
     {
-        return "Pliers";
+        bool duplicateItem;
+
+        do
+        {
+            backpackItemIndices[i] =
+                std::rand() % itemCount;
+
+            duplicateItem = false;
+
+            // Check the previously generated choices.
+            for (int j = 0; j < i; j++)
+            {
+                if (backpackItemIndices[i] ==
+                    backpackItemIndices[j])
+                {
+                    duplicateItem = true;
+                }
+            }
+
+        } while (duplicateItem == true);
     }
-    else if (itemIndex == 1)
-    {
-        return "Bottle";
-    }
-    else if (itemIndex == 2)
-    {
-        return "Candle";
-    }
-    else
+}
+
+// =====================================
+// GET BACKPACK REWARD NAME
+// =====================================
+
+std::string Game::getBackpackItemName(
+    int choiceIndex) const
+{
+    // Choice 3 is not a database item.
+    if (choiceIndex == 3)
     {
         return "5 Coins";
     }
+
+    if (choiceIndex < 0 ||
+        choiceIndex >= 3)
+    {
+        return "Unknown";
+    }
+
+    int databaseIndex =
+        backpackItemIndices[choiceIndex];
+
+    item* selectedItem =
+        backpackDatabase.getitem(
+            databaseIndex);
+
+    if (selectedItem == nullptr)
+    {
+        return "Unknown";
+    }
+
+    return selectedItem->getname();
 }
 
 // =====================================
@@ -335,20 +382,29 @@ void Game::draw()
         currentState ==
         BACKPACK_STATE)
     {
+        // A larger width is needed because
+        // database item names may be longer.
+        const int backpackWidth = 72;
+
         auto drawBackpackLine =
-            [](const std::string& text)
+            [backpackWidth](
+                const std::string& text)
             {
                 std::cout
                     << "| "
                     << std::left
-                    << std::setw(44)
+                    << std::setw(backpackWidth)
                     << text
                     << " |"
                     << std::endl;
             };
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
 
         drawBackpackLine(
@@ -357,14 +413,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "               CHOOSE ONE");
+            "                         CHOOSE ONE");
 
         drawBackpackLine("");
 
         std::ostringstream itemLine;
 
-        // Four possible rewards:
-        // Pliers, Bottle, Candle and 5 Coins.
+        // Choices 0 to 2 are random items.
+        // Choice 3 is always 5 Coins.
         for (int i = 0; i < 4; i++)
         {
             if (i ==
@@ -385,7 +441,7 @@ void Game::draw()
 
             if (i < 3)
             {
-                itemLine << " ";
+                itemLine << "  ";
             }
         }
 
@@ -395,10 +451,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "A/D Select          E Take");
+            "A/D Select                         E Take");
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
     }
 
@@ -886,7 +946,11 @@ void Game::activateCurrentMapNode()
     else if (type ==
         BACKPACK)
     {
-        // Always begin with Pliers selected.
+        // Generate the choices only once
+        // when entering this event.
+        generateBackpackItems();
+
+        // Begin with the first reward selected.
         selectedBackpackItem =
             0;
 
@@ -1012,7 +1076,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem--;
 
-        // Wrap from Pliers to 5 Coins.
         if (selectedBackpackItem < 0)
         {
             selectedBackpackItem = 3;
@@ -1028,7 +1091,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem++;
 
-        // Wrap from 5 Coins to Pliers.
         if (selectedBackpackItem > 3)
         {
             selectedBackpackItem = 0;
@@ -1044,7 +1106,7 @@ void Game::handleBackpackInput(
     {
         clearScreen();
 
-        // Index 3 is the coin reward.
+        // Choice 3 is always 5 Coins.
         if (selectedBackpackItem == 3)
         {
             std::cout
@@ -1054,24 +1116,45 @@ void Game::handleBackpackInput(
 
             std::cout << std::endl;
 
-            // Add the coins to the same shop object
-            // used by the game's shop.
             shopkeeper.AddCoins(5);
         }
         else
         {
-            std::cout
-                << "You take the "
-                << getBackpackItemName(
-                    selectedBackpackItem)
-                << "."
-                << std::endl;
+            int databaseIndex =
+                backpackItemIndices[
+                    selectedBackpackItem];
 
-            std::cout << std::endl;
+            item* selectedItem =
+                backpackDatabase.getitem(
+                    databaseIndex);
 
-            std::cout
-                << "This is a placeholder item."
-                << std::endl;
+            if (selectedItem != nullptr)
+            {
+                std::cout
+                    << "You take the "
+                    << selectedItem->getname()
+                    << "."
+                    << std::endl;
+
+                std::cout << std::endl;
+
+                // Store the actual database index
+                // inside the player's inventory.
+                inventory.ReceivedInv(
+                    databaseIndex);
+
+                std::cout
+                    << "The item was placed "
+                    << "in your inventory."
+                    << std::endl;
+            }
+            else
+            {
+                std::cout
+                    << "The selected item could "
+                    << "not be found."
+                    << std::endl;
+            }
         }
 
         std::cout << std::endl;
@@ -1089,7 +1172,6 @@ void Game::handleBackpackInput(
             true;
     }
 }
-
 // INVENTORY
 
 void Game::handleInventoryInput(
