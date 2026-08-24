@@ -532,6 +532,10 @@ void Game::draw()
                 << std::endl;
 
             std::cout
+                << "I     - Inspect"
+                << std::endl;
+
+            std::cout
                 << "N / Q - Close Inventory"
                 << std::endl;
                 }
@@ -1252,6 +1256,19 @@ void Game::handleInventoryInput(
         }
     }
 
+    else if (input == 'I' ||
+        input == 'i') {
+        inventory.inspecting(selectedInventorySlot);
+
+        std::cout
+            << "Press any key to continue."
+            << std::endl;
+
+        readKey();
+
+        screenNeedsClear =
+            true;
+    }
 
     // Close inventory.
     else if (input == 'N' ||

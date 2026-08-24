@@ -15,6 +15,7 @@ public:
 	item* getweaponInv(int itemSlot);
 	item* geteatInv(int itemSlot);
 	int checkingType(int itemSlot);
+	void inspecting(int itemSlot);
 
 };
 

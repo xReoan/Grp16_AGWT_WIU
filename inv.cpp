@@ -10,7 +10,7 @@ inv::inv() {
 }
 
 //saves the number of the number base on the item database, -1 is none
-int inv::invinside[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int inv::invinside[16] = {7,2,14,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 void inv::OpenInv() const
 {  
@@ -83,7 +83,66 @@ int inv::checkingType(int itemSlot)
     }
 }
 
+void inv::inspecting(int itemSlot)
+{
+    if (invinside[itemSlot] != -1) {
+        std::cout << "Name: " << invitem[invinside[itemSlot]]->getname() << std::endl;
+        std::cout << "description: " << invitem[invinside[itemSlot]]->getdescription() << std::endl;
 
+        //item type
+        if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::weapon) {
+            std::cout << "Item type: weapon" << std::endl;
+        }
+        else if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::armor) {
+            std::cout << "Item type: armor" << std::endl;
+        }
+        else if (invitem[invinside[itemSlot]]->getitemcategory() == item::itemtype::consumable) {
+            std::cout << "Item type: consumable" << std::endl;
+        }
+
+        //combat type
+        if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::none) {
+            std::cout << "Combat type: none" << std::endl;
+        }
+        else if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::melee) {
+            std::cout << "Combat type: melee" << std::endl;
+        }
+        else if (invitem[invinside[itemSlot]]->getcombatcategory() == item::combattype::projectile) {
+            std::cout << "Combat type: projectile" << std::endl;
+        }
+
+        //Tier
+        if (invitem[invinside[itemSlot]]->getequipmenttier() == item::equipment::basic) {
+            std::cout << "Tier: basic" << std::endl;
+        }
+        else if (invitem[invinside[itemSlot]]->getequipmenttier() == item::equipment::advanced) {
+            std::cout << "Tier type: advanced" << std::endl;
+        }
+
+        //std::cout << "Name: " << invitem[invinside[itemSlot]]->getpassiveeffect() << std::endl; according to item.h but theres none
+        if (invitem[invinside[itemSlot]]->getattackvalue() != 0) {
+            std::cout << "Attack: " << invitem[invinside[itemSlot]]->getattackvalue() << std::endl;
+        }
+        
+        
+        if (invitem[invinside[itemSlot]]->getdefensevalue() != 0) {
+            std::cout << "Defense: " << invitem[invinside[itemSlot]]->getdefensevalue() << std::endl;
+        }
+
+
+        if (invitem[invinside[itemSlot]]->gethealvalue() != 0) {
+            std::cout << "Healing: " << invitem[invinside[itemSlot]]->gethealvalue() << std::endl;
+        }
+        
+
+        if (invitem[invinside[itemSlot]]->getduration() != 0) {
+            std::cout << "Duration: " << invitem[invinside[itemSlot]]->getduration() << std::endl;
+        }
+    }
+    else {
+        std::cout << "theres nothing to inspect" << std::endl;
+    }
+}
 
 //can do
 //inspect()desciptions and stuff
