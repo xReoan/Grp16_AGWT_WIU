@@ -86,6 +86,7 @@
     <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDatabase.cpp" />
+    <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="CardTable.cpp" />
     <ClCompile Include="ClockPuzzle.cpp" />
     <ClCompile Include="Door.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDatabase.h" />
+    <ClInclude Include="CardDeck.h" />
     <ClInclude Include="CardTable.h" />
     <ClInclude Include="ClockPuzzle.h" />
     <ClInclude Include="Door.h" />

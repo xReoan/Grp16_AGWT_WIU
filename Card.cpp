@@ -26,11 +26,11 @@ item::combattype Card::getcombatcategory() {
 	return combattype;
 }
 
-std::string Card::getitemname() {
+std::string Card::getcardname() {
 	return name;
 }
 
-std::string Card::getdescription() {
+std::string Card::getcarddescription() {
 	return description;
 }
 

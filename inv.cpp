@@ -2,6 +2,9 @@
 #include "item.h"
 #include "itemDatabase.h"
 #include <iostream>
+
+//#include <conio.h>//int input = _getch();
+
 inv::inv() {
     for (int i = 0; i < 15;i++) {
         invitem[i] = database.getitem(i);
@@ -13,6 +16,7 @@ int inv::invinside[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 void inv::OpenInv() const
 {
+
     for (int i = 0; i < 16; i++) {
         if (inv::invinside[i] != -1 ) {
             std::cout << i + 1<<". " << invitem[inv::invinside[i]]->getname() << std::endl;

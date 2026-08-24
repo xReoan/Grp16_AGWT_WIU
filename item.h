@@ -14,6 +14,11 @@ public:
 		flexible,
 		none
 	};
+	enum class equipment {
+		basic,
+		advanced,
+		none
+	};
 	enum class passive {
 		none,
 		dot_on_hit,
@@ -21,11 +26,12 @@ public:
 		skip_enemy_first_turn,
 		absorb_projectile_heal
 	};
-	item(std::string name, std::string description, itemtype itemcategory, combattype combatcategory, int attackvalue, int defensevalue, int healvalue, int duration, int price);
+	item(std::string name, std::string description, itemtype itemcategory, equipment tier, combattype combatcategory, int attackvalue, int defensevalue, int healvalue, int duration, int price);
 	std::string getname();
 	std::string getdescription();
 	itemtype getitemcategory();
 	combattype getcombatcategory();
+	equipment getequipmenttier();
 	passive getpassiveeffect();
 	int getattackvalue();
 	int getdefensevalue();
@@ -37,6 +43,7 @@ private:
 	std::string itemdescription;
 	itemtype itemcategory;
 	combattype combatcategory;
+	equipment equipmenttier;
 	passive passiveeffect;
 	int attackvalue;
 	int defensevalue;
