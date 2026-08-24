@@ -27,6 +27,7 @@
 //
 // tells C++:
 // "Construct room as Room 1."
+
 Game::Game()
     : room(1)
 {
@@ -415,6 +416,37 @@ void Game::draw()
 
             std::cout << std::endl;
 
+            //prints out armor and weapon epuipped status
+            if (player.getequippedbasicweapon() == nullptr) {
+                std::cout << "You have no basic weapon" << std::endl;
+            }
+            else {
+                std::cout<<"You have basic weapon "<<(player.getequippedbasicweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedweapon() == nullptr) {
+                std::cout << "You have no advanced weapon" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced weapon " << (player.getequippedadvancedweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedbasicarmor() == nullptr) {
+                std::cout << "You have no basic armor" << std::endl;
+            }
+            else {
+                std::cout << "You have basic armor " << (player.getequippedbasicarmor())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedarmor() == nullptr) {
+                std::cout << "You have no advanced armor" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced armor " << (player.getequippedadvancedarmor())->getname() << " equipped" << std::endl;
+            }
+
+            std::cout << std::endl;
+
             std::cout
                 << "Selected Slot: ";
                 if (selectedInventorySlot + 1 < 10) {
@@ -433,6 +465,10 @@ void Game::draw()
 
             std::cout
                 << "E     - Use Item"
+                << std::endl;
+
+            std::cout
+                << "R      - Unequip weapon/armor"
                 << std::endl;
 
             std::cout
@@ -1093,8 +1129,18 @@ void Game::handleInventoryInput(
     {
         std::cout << std::endl;
 
-        inventory.UsedInv(
-            selectedInventorySlot, player.getarmor(), player.getweapon());
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.equiparmor(inventory.getarmorInv(selectedInventorySlot));
+            std::cout << "Equipped armor " << inventory.getarmorInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        case 1:
+            player.equipweapon(inventory.getweaponInv(selectedInventorySlot));
+            std::cout << "Equipped weapon " << inventory.getweaponInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
 
         std::cout << std::endl;
 
@@ -1107,6 +1153,23 @@ void Game::handleInventoryInput(
         screenNeedsClear =
             true;
     }
+
+    // Unequipping
+    else if (input == 'R' ||
+        input == 'r') 
+    {
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.unequiparmor(inventory.getarmorInv(selectedInventorySlot));
+            break;
+        case 1:
+            player.unequipweapon(inventory.getweaponInv(selectedInventorySlot));
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
+    }
+
 
     // Close inventory.
     else if (input == 'N' ||

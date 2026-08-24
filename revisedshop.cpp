@@ -176,8 +176,7 @@ void revisedshop::BuyItem(int itemSlot)
     }
 
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
-    // put the item slot in the inventory
-    inv2.RecivedInv(shopItems[itemSlot]);
+    inv2.ReceivedInv(shopItems[itemSlot]);
 }
 
 void revisedshop::BuyWeapon(int weaponSlot)
@@ -201,7 +200,7 @@ void revisedshop::BuyWeapon(int weaponSlot)
     }
 
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
-    inv2.RecivedInv(weaponItems[weaponSlot]);
+    inv2.ReceivedInv(weaponItems[weaponSlot]);
 }
 
 // CURRENCY ---------------

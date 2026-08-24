@@ -28,7 +28,7 @@ int main()
                  ##     ##    ##  ##        ## "" ## 
                  ##     ##    ##  ##mmmmmm  ##    ##  ##
                  ""     ""    ""  """"""""  ""    ""  ""
-	)" << std::endl;;
+	)" << std::endl;
     system("pause");
     system("cls");
 

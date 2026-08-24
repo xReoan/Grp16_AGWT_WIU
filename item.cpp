@@ -4,6 +4,7 @@ item::item(std::string name, std::string description, itemtype itemcategory, equ
 	this->itemname = name;
 	this->itemdescription = description;
 	this->itemcategory = itemcategory;
+	this->equipmenttier = equipmenttier;
 	this->combatcategory = combatcategory;
 	this->attackvalue = attackvalue;
 	this->defensevalue = defensevalue;
