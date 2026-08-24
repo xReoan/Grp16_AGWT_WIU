@@ -23,6 +23,7 @@ public:
 	void setProjectileAttack(int projectileAtk);
 	void setMeleeDefense(int meleeDef);
 	void setProjectileDefense(int projectileDef);
+	void sethp(int newhp);
 
 
 private:
