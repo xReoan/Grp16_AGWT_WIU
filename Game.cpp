@@ -1285,7 +1285,7 @@ void Game::goToNextRoom()
         std::cout << std::endl;
 
         std::cout
-            << "A strange safe waits in the darkness."
+            << "This feels... weird. It feels like the room is spinning"
             << std::endl;
 
         std::cout << std::endl;
@@ -1316,13 +1316,13 @@ void Game::goToNextRoom()
         clearScreen();
 
         std::cout
-            << "You step through the doorway..."
+            << "Watch out!"
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "this room feels... weird"
+            << "There's a bunch of traps"
             << std::endl;
 
         std::cout << std::endl;
@@ -1352,13 +1352,13 @@ void Game::goToNextRoom()
         clearScreen();
 
         std::cout
-            << "Watch out!"
+            << "You walk in..."
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "There's trap everywhere"
+            << "There's someone waiting for you"
             << std::endl;
 
         std::cout << std::endl;
