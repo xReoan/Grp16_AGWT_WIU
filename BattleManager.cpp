@@ -91,6 +91,10 @@ void BattleManager::StartBattle() {
 		displaybattle(who::player, true);
 		inspectplayedcards();
 		resolveturn();
+		std::cout << std::endl;
+		std::cout << "Press any key to continue... Don't keep them waiting...";
+		_getch();
+
 		discardplayedcards();
 		checksurvivorphase();
 		updateeffects();
@@ -111,7 +115,11 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	std::cout << "                   BATTLE" << std::endl;
 	std::cout << "============================================" << std::endl;
 
-	std::cout << "Enemy HP: " << enemyhp << "/" << currentenemy->getmaxhp() << std::endl;
+	std::cout << "Enemy HP: " << enemyhp;
+	if (enemyshield > 0) {
+		std::cout << "(+" << enemyshield << ")";
+	}
+	std::cout << "/" << currentenemy->getmaxhp() << std::endl;
 	displayenemyeffects();
 
 	std::cout << std::endl;
@@ -122,7 +130,11 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 
 	std::cout << std::endl;
 
-	std::cout << "Player HP: " << currentplayer->gethp() << "/100" << std::endl;
+	std::cout << "Player HP: " << currentplayer->gethp();
+	if (playershield > 0) {
+		std::cout << "(+" << playershield << ")";
+	}
+	std::cout << "/100" << std::endl;
 	displayplayereffects();
 
 	std::cout << "============================================" << std::endl;
@@ -151,11 +163,71 @@ void BattleManager::displayplayereffects() {
 		std::cout << "[Jello Trampoline] ";
 	}
 
+	if (playerpoisonturns > 0) {
+		std::cout << "[Poisoned: "
+			<< playerpoisonturns
+			<< " turns] ";
+	}
+
+	if (playerhypnotismturns > 0) {
+		std::cout << "[Hypnotised: "
+			<< playerhypnotismturns
+			<< " turns] ";
+	}
+	else if (playercannotattack == true) {
+		std::cout << "[Muted: "
+			<< playercannotattackturns
+			<< " turns] ";
+	}
+
+	if (playertaunted == true) {
+		std::cout << "[Taunted: "
+			<< playertauntedturns
+			<< " turns] ";
+	}
+
+	if (playerupclose == true) {
+		std::cout << "[Charge: "
+			<< playerupcloseturns
+			<< " turns] ";
+	}
+
+	if (playerphalanxing == true) {
+		if (playerphalanxboosted == false) {
+			std::cout << "[Phalanxing: "
+				<< playerphalanxturns
+				<< " turns] ";
+		}
+		else {
+			std::cout << "[Phalanx Boosted: "
+				<< playerphalanxturns
+				<< " turns] ";
+		}
+	}
+	
+	if (playerprojectiletomelee == true) {
+		std::cout << "[Projectile to Melee] ";
+	}
+
+	if (playerhalfmelee == true) {
+		std::cout << "[Half Melee Damage] ";
+	}
+
+	if (playerhalfdamage == true) {
+		std::cout << "[Half Damage] ";
+	}
+
+	if (playerdamagemultiplier > 1.0f) {
+		std::cout << "[Chemical Booster]";
+	}
+
 	std::cout << std::endl;
 }
 
 void BattleManager::displayenemyeffects() {
 	std::cout << "Enemy effects: ";
+
+	bool haseffects = false;
 
 	int trapcount = 0;
 
@@ -163,12 +235,85 @@ void BattleManager::displayenemyeffects() {
 		trapcount++;
 	}
 
+	if (playernegateattacktrap > 0) {
+		trapcount++;
+	}
+
+	if (playernegatedefensetrap > 0) {
+		trapcount++;
+	}
+
+	if (meleecountertrap == true) {
+		trapcount++;
+	}
+
+	if (playermirrortrap == true) {
+		trapcount++;
+	}
+
+	if (playerdonation == true) {
+		trapcount++;
+	}
+
 	for (int i = 0; i < trapcount; i++) {
 		std::cout << "[??? Trap] ";
+		haseffects = true;
 	}
 
 	if (enemyreflectprojectile > 0) {
-		std::cout << "[Magic Ring: " << enemyreflectprojectile << " turns] ";
+		std::cout << "[Magic Ring: "
+			<< enemyreflectprojectile
+			<< " turns] ";
+		haseffects = true;
+	}
+
+	if (enemyreflectdamage == true) {
+		std::cout << "[Reflect Damage] ";
+		haseffects = true;
+	}
+
+	if (enemypoisonturns > 0) {
+		std::cout << "[Poisoned: "
+			<< enemypoisonturns
+			<< " turns] ";
+		haseffects = true;
+	}
+
+	if (enemycannotattack == true) {
+		std::cout << "[Cannot Attack] ";
+		haseffects = true;
+	}
+
+	if (enemymeleeattackbonus != 0) {
+		std::cout << "[Melee ATK "
+			<< (enemymeleeattackbonus > 0 ? "+" : "")
+			<< enemymeleeattackbonus << "] ";
+		haseffects = true;
+	}
+
+	if (enemyprojectileattackbonus != 0) {
+		std::cout << "[Projectile ATK "
+			<< (enemyprojectileattackbonus > 0 ? "+" : "")
+			<< enemyprojectileattackbonus << "] ";
+		haseffects = true;
+	}
+
+	if (enemymeleedefensebonus != 0) {
+		std::cout << "[Melee DEF "
+			<< (enemymeleedefensebonus > 0 ? "+" : "")
+			<< enemymeleedefensebonus << "] ";
+		haseffects = true;
+	}
+
+	if (enemyprojectiledefensebonus != 0) {
+		std::cout << "[Projectile DEF "
+			<< (enemyprojectiledefensebonus > 0 ? "+" : "")
+			<< enemyprojectiledefensebonus << "] ";
+		haseffects = true;
+	}
+
+	if (haseffects == false) {
+		std::cout << "None";
 	}
 
 	std::cout << std::endl;
@@ -176,7 +321,7 @@ void BattleManager::displayenemyeffects() {
 
 void BattleManager::displaycards(Card* cards[], int count) {
 	for (int i = 0; i < count; i++) {
-		std::cout << "+------------------+  ";
+		std::cout << "+----------------------+  ";
 	}
 	std::cout << std::endl;
 
@@ -186,16 +331,16 @@ void BattleManager::displaycards(Card* cards[], int count) {
 		std::string name = cards[i]->getcardname();
 		std::cout << name;
 
-		for (int a = name.length(); a < 16; a++) {
+		for (int a = displaylength(name); a < 20; a++) {
 			std::cout << " ";
 		}
 
-		std::cout << "|  ";
+		std::cout << " |  ";
 	}
 	std::cout << std::endl;
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "+------------------+  ";
+		std::cout << "+----------------------+  ";
 	}
 	std::cout << std::endl;
 }
@@ -580,10 +725,6 @@ void BattleManager::playcard(Card* card, who user) {
 	else {
 		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!");
 	}
-	std::cout << std::endl;
-	std::cout << "Press any key to continue... Don't keep them waiting...";
-	_getch();
-	system("cls");
 	for (int i = 0; i < 3; i++) {
 		Card::effecttype effect = card->getcardeffect(i);
 		if (effect != Card::effecttype::none) {
@@ -1638,6 +1779,7 @@ void BattleManager::inspectplayedcards() {
 	bool inspecting = true;
 
 	while (inspecting) {
+
 		std::cout << std::endl;
 		std::cout << "Inspect cards? " << std::endl;
 		std::cout << "1-" << selectedcount << ": Your cards" << std::endl;
@@ -1668,4 +1810,18 @@ void BattleManager::inspectplayedcards() {
 			}
 		}
 	}
+}
+
+int BattleManager::displaylength(std::string text) {
+	int length = 0;
+
+	for (int i = 0; i < text.length(); i++) {
+		unsigned char c = text[i];
+
+		if ((c & 0xC0) != 0x80) {
+			length++;
+		}
+	}
+
+	return length;
 }

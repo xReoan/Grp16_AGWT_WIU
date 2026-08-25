@@ -3,12 +3,15 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <Windows.h>
 
 int main()
 {
     // Gives rand() a different seed
     // based on the current time.
     srand(static_cast<unsigned int>(time(nullptr)));
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
 
     //start screen
     std::cout << R"(
