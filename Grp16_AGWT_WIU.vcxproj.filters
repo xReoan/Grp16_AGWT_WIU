@@ -26,6 +26,9 @@
     <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="TricksterPuzzle.cpp" />
+    <ClCompile Include="CardDeck.cpp" />
+    <ClCompile Include="revisedshop.cpp" />
+    <ClCompile Include="dialogue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
@@ -53,6 +56,9 @@
     <ClInclude Include="revisedshop.h" />
     <ClInclude Include="TricksterPuzzle.h" />
     <ClInclude Include="SurvivorPuzzle.h" />
+    <ClInclude Include="CardDeck.h" />
+    <ClInclude Include="revisedshop.h" />
+    <ClInclude Include="dialogue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

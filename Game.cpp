@@ -27,6 +27,7 @@
 //
 // tells C++:
 // "Construct room as Room 1."
+
 Game::Game()
     : room(1)
 {
@@ -206,25 +207,72 @@ void Game::run()
 }
 
 // 
-std::string Game::getBackpackItemName(
-    int itemIndex) const
+// =====================================
+// GENERATE BACKPACK REWARDS
+// =====================================
+
+void Game::generateBackpackItems()
 {
-    if (itemIndex == 0)
+    int itemCount =
+        backpackDatabase.getItemCount();
+
+    for (int i = 0; i < 3; i++)
     {
-        return "Pliers";
+        bool duplicateItem;
+
+        do
+        {
+            backpackItemIndices[i] =
+                std::rand() % itemCount;
+
+            duplicateItem = false;
+
+            // Check the previously generated choices.
+            for (int j = 0; j < i; j++)
+            {
+                if (backpackItemIndices[i] ==
+                    backpackItemIndices[j])
+                {
+                    duplicateItem = true;
+                }
+            }
+
+        } while (duplicateItem == true);
     }
-    else if (itemIndex == 1)
-    {
-        return "Bottle";
-    }
-    else if (itemIndex == 2)
-    {
-        return "Candle";
-    }
-    else
+}
+
+// =====================================
+// GET BACKPACK REWARD NAME
+// =====================================
+
+std::string Game::getBackpackItemName(
+    int choiceIndex) const
+{
+    // Choice 3 is not a database item.
+    if (choiceIndex == 3)
     {
         return "5 Coins";
     }
+
+    if (choiceIndex < 0 ||
+        choiceIndex >= 3)
+    {
+        return "Unknown";
+    }
+
+    int databaseIndex =
+        backpackItemIndices[choiceIndex];
+
+    item* selectedItem =
+        backpackDatabase.getitem(
+            databaseIndex);
+
+    if (selectedItem == nullptr)
+    {
+        return "Unknown";
+    }
+
+    return selectedItem->getname();
 }
 
 // =====================================
@@ -334,20 +382,29 @@ void Game::draw()
         currentState ==
         BACKPACK_STATE)
     {
+        // A larger width is needed because
+        // database item names may be longer.
+        const int backpackWidth = 72;
+
         auto drawBackpackLine =
-            [](const std::string& text)
+            [backpackWidth](
+                const std::string& text)
             {
                 std::cout
                     << "| "
                     << std::left
-                    << std::setw(44)
+                    << std::setw(backpackWidth)
                     << text
                     << " |"
                     << std::endl;
             };
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
 
         drawBackpackLine(
@@ -356,14 +413,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "               CHOOSE ONE");
+            "                         CHOOSE ONE");
 
         drawBackpackLine("");
 
         std::ostringstream itemLine;
 
-        // Four possible rewards:
-        // Pliers, Bottle, Candle and 5 Coins.
+        // Choices 0 to 2 are random items.
+        // Choice 3 is always 5 Coins.
         for (int i = 0; i < 4; i++)
         {
             if (i ==
@@ -384,7 +441,7 @@ void Game::draw()
 
             if (i < 3)
             {
-                itemLine << " ";
+                itemLine << "  ";
             }
         }
 
@@ -394,10 +451,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "A/D Select          E Take");
+            "A/D Select                         E Take");
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
     }
 
@@ -412,6 +473,37 @@ void Game::draw()
             std::cout << std::endl;
 
             inventory.OpenInv();
+
+            std::cout << std::endl;
+
+            //prints out armor and weapon epuipped status
+            if (player.getequippedbasicweapon() == nullptr) {
+                std::cout << "You have no basic weapon" << std::endl;
+            }
+            else {
+                std::cout<<"You have basic weapon "<<(player.getequippedbasicweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedweapon() == nullptr) {
+                std::cout << "You have no advanced weapon" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced weapon " << (player.getequippedadvancedweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedbasicarmor() == nullptr) {
+                std::cout << "You have no basic armor" << std::endl;
+            }
+            else {
+                std::cout << "You have basic armor " << (player.getequippedbasicarmor())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedarmor() == nullptr) {
+                std::cout << "You have no advanced armor" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced armor " << (player.getequippedadvancedarmor())->getname() << " equipped" << std::endl;
+            }
 
             std::cout << std::endl;
 
@@ -433,6 +525,14 @@ void Game::draw()
 
             std::cout
                 << "E     - Use Item"
+                << std::endl;
+
+            std::cout
+                << "R     - Unequip weapon/armor"
+                << std::endl;
+
+            std::cout
+                << "I     - Inspect"
                 << std::endl;
 
             std::cout
@@ -850,7 +950,11 @@ void Game::activateCurrentMapNode()
     else if (type ==
         BACKPACK)
     {
-        // Always begin with Pliers selected.
+        // Generate the choices only once
+        // when entering this event.
+        generateBackpackItems();
+
+        // Begin with the first reward selected.
         selectedBackpackItem =
             0;
 
@@ -976,7 +1080,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem--;
 
-        // Wrap from Pliers to 5 Coins.
         if (selectedBackpackItem < 0)
         {
             selectedBackpackItem = 3;
@@ -992,7 +1095,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem++;
 
-        // Wrap from 5 Coins to Pliers.
         if (selectedBackpackItem > 3)
         {
             selectedBackpackItem = 0;
@@ -1008,7 +1110,7 @@ void Game::handleBackpackInput(
     {
         clearScreen();
 
-        // Index 3 is the coin reward.
+        // Choice 3 is always 5 Coins.
         if (selectedBackpackItem == 3)
         {
             std::cout
@@ -1018,24 +1120,45 @@ void Game::handleBackpackInput(
 
             std::cout << std::endl;
 
-            // Add the coins to the same shop object
-            // used by the game's shop.
             shopkeeper.AddCoins(5);
         }
         else
         {
-            std::cout
-                << "You take the "
-                << getBackpackItemName(
-                    selectedBackpackItem)
-                << "."
-                << std::endl;
+            int databaseIndex =
+                backpackItemIndices[
+                    selectedBackpackItem];
 
-            std::cout << std::endl;
+            item* selectedItem =
+                backpackDatabase.getitem(
+                    databaseIndex);
 
-            std::cout
-                << "This is a placeholder item."
-                << std::endl;
+            if (selectedItem != nullptr)
+            {
+                std::cout
+                    << "You take the "
+                    << selectedItem->getname()
+                    << "."
+                    << std::endl;
+
+                std::cout << std::endl;
+
+                // Store the actual database index
+                // inside the player's inventory.
+                inventory.ReceivedInv(
+                    databaseIndex);
+
+                std::cout
+                    << "The item was placed "
+                    << "in your inventory."
+                    << std::endl;
+            }
+            else
+            {
+                std::cout
+                    << "The selected item could "
+                    << "not be found."
+                    << std::endl;
+            }
         }
 
         std::cout << std::endl;
@@ -1053,7 +1176,6 @@ void Game::handleBackpackInput(
             true;
     }
 }
-
 // INVENTORY
 
 void Game::handleInventoryInput(
@@ -1093,10 +1215,50 @@ void Game::handleInventoryInput(
     {
         std::cout << std::endl;
 
-        inventory.UsedInv(
-            selectedInventorySlot);
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.equiparmor(inventory.getarmorInv(selectedInventorySlot));
+            std::cout << "Equipped armor " << inventory.getarmorInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        case 1:
+            player.equipweapon(inventory.getweaponInv(selectedInventorySlot));
+            std::cout << "Equipped weapon " << inventory.getweaponInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
 
         std::cout << std::endl;
+
+        std::cout
+            << "Press any key to continue."
+            << std::endl;
+
+        readKey();
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Unequipping
+    else if (input == 'R' ||
+        input == 'r') 
+    {
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.unequiparmor(inventory.getarmorInv(selectedInventorySlot));
+            break;
+        case 1:
+            player.unequipweapon(inventory.getweaponInv(selectedInventorySlot));
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
+    }
+
+    else if (input == 'I' ||
+        input == 'i') {
+        inventory.inspecting(selectedInventorySlot);
 
         std::cout
             << "Press any key to continue."

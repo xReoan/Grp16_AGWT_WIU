@@ -46,12 +46,14 @@ public:
 		hypnotism,
 		illusioned,
 		taunted,
+		heal_hp,
+		donation,
 		none
 	};
 	Card(std::string name, std::string description, cardtype type, item::combattype combat, effecttype effect1, effecttype effect2, effecttype effect3, int value, float multiplier, int hits, int duration);
 	item::combattype getcombatcategory();
-	std::string getitemname();
-	std::string getdescription();
+	std::string getcardname();
+	std::string getcarddescription();
 	cardtype gettype();
 	effecttype getcardeffect(int index);
 	int getvalue();
