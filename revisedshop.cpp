@@ -234,21 +234,3 @@ int revisedshop::GetCoins() const // const=ensure func no change the shop's data
 {
     return coins; // sends back the coin value if called by diff func
 }
-
-// check if item available
-bool revisedshop::IsItemAvailable(int itemSlot) const
-{
-    if (itemSlot >= 0 && itemSlot < 10) {
-        return shopItems[itemSlot] != -1; // return true/false based on slot
-    }
-    return false;
-}
-
-//check if weapon available
-bool revisedshop::IsWeaponAvailable(int weaponSlot) const
-{
-    if (weaponSlot >= 0 && weaponSlot < 10) {
-        return weaponItems[weaponSlot] != -1;
-    }
-    return false;
-}

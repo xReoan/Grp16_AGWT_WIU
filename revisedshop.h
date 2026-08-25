@@ -23,7 +23,5 @@ public:
     void BuyWeapon(int weaponSlot);
     void AddCoins(int amount);
     int GetCoins() const;
-    bool IsItemAvailable(int itemSlot) const;
-    bool IsWeaponAvailable(int weaponSlot) const;
     void ShopMenu();
 };
