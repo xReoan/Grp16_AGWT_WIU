@@ -32,7 +32,7 @@ Game::Game()
     : room(1)
 {
     currentState = BATTLE_STATE;
-
+    player.setStarterEquipment(&itemdatabase);
     activePuzzle = nullptr;
 
     selectedBackpackItem = 0;
@@ -212,9 +212,6 @@ void Game::run()
     }
 }
 
-std::string Game::getBackpackItemName(
-    int itemIndex) const
-// 
 // =====================================
 // GENERATE BACKPACK REWARDS
 // =====================================
