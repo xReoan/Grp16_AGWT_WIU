@@ -60,7 +60,7 @@ private:
 	Enemy* currentenemy;
 	Card* selectedcards[3] = { nullptr, nullptr, nullptr };
 	bool selected[12];
-	int selectedcount = 0;
+	int selectedcount;
 	Card* enemyselectedcards[3] = { nullptr, nullptr, nullptr };
 	bool enemyselected[12];
 	int enemyselectedcount;

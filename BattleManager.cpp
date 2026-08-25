@@ -56,6 +56,46 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 
 	playerskip = false;
 	enemyskip = false;
+
+	selectedcount = 0;
+	enemyselectedcount = 0;
+	playerlastdamage = 0;
+
+	playerdamagemultiplierturns = 0;
+	enemydamagemultiplierturns = 0;
+
+	playerupclose = false;
+	playerupcloseturns = 0;
+	playerupclosedamage = 0;
+
+	playerhypnotismturns = 0;
+	playerhypnotismdamage = 0;
+
+	playerpoisonturns = 0;
+	enemypoisonturns = 0;
+
+	playerphalanxbonus = 0;
+	playerphalanxing = false;
+	playerphalanxturns = 0;
+	playerphalanxdamage = 0;
+	phalanxdonated = false;
+	playerphalanxboosted = false;
+
+	playerdonation = false;
+	playerdonationturns = 0;
+
+	playerpoisonjustapplied = false;
+	enemypoisonjustapplied = false;
+	playerhypnotismjustapplied = false;
+
+	playertauntedturns = 0;
+	playercannotattackturns = 0;
+	enemycannotattackturns = 0;
+
+	for (int i = 0; i < 12; i++) {
+		selected[i] = false;
+		enemyselected[i] = false;
+	}
 }
 
 void BattleManager::StartBattle() {
@@ -89,8 +129,12 @@ void BattleManager::StartBattle() {
 			}
 		}
 		displaybattle(who::player, true);
-		inspectplayedcards();
 		resolveturn();
+		inspectplayedcards();
+		std::cout << std::endl;
+		std::cout << "Press any key to continue... Don't keep them waiting...";
+		_getch();
+
 		discardplayedcards();
 		checksurvivorphase();
 		updateeffects();
@@ -108,10 +152,10 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	}
 
 	std::cout << "============================================" << std::endl;
-	std::cout << "                   BATTLE" << std::endl;
+	std::cout << "                    vs. " << currentenemy->getname() << std::endl;
 	std::cout << "============================================" << std::endl;
 
-	std::cout << "Enemy HP: " << enemyhp << "/" << currentenemy->getmaxhp() << std::endl;
+	std::cout << currentenemy->getname() << " HP: " << enemyhp << "/" << currentenemy->getmaxhp() << std::endl;
 	displayenemyeffects();
 
 	std::cout << std::endl;
@@ -155,7 +199,7 @@ void BattleManager::displayplayereffects() {
 }
 
 void BattleManager::displayenemyeffects() {
-	std::cout << "Enemy effects: ";
+	std::cout << currentenemy->getname() << "'s effects: ";
 
 	int trapcount = 0;
 
@@ -175,18 +219,22 @@ void BattleManager::displayenemyeffects() {
 }
 
 void BattleManager::displaycards(Card* cards[], int count) {
+	const int width = 20;
 	for (int i = 0; i < count; i++) {
-		std::cout << "+------------------+  ";
+		std::cout << "+";
+		for (int a = 0; a < width + 2; a++) {
+			std::cout << "-";
+		}
+		std::cout << "+  ";
 	}
 	std::cout << std::endl;
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "| ";
-
 		std::string name = cards[i]->getcardname();
-		std::cout << name;
 
-		for (int a = name.length(); a < 16; a++) {
+		std::cout << "| " << name;
+
+		for (int a = name.length(); a < width; a++) {
 			std::cout << " ";
 		}
 
@@ -195,7 +243,11 @@ void BattleManager::displaycards(Card* cards[], int count) {
 	std::cout << std::endl;
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "+------------------+  ";
+		std::cout << "+";
+		for (int a = 0; a < width + 2; a++) {
+			std::cout << "-";
+		}
+		std::cout << "+  ";
 	}
 	std::cout << std::endl;
 }
@@ -575,10 +627,10 @@ void BattleManager::resolveturn() {
 
 void BattleManager::playcard(Card* card, who user) {
 	if (user == who::player) {
-		displaymessage("You used " + card->getcardname() + "!");
+		displaymessage("You used " + card->getcardname() + "!\n");
 	}
 	else {
-		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!");
+		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!\n");
 	}
 	std::cout << std::endl;
 	std::cout << "Press any key to continue... Don't keep them waiting...";
@@ -1616,6 +1668,22 @@ void BattleManager::checksurvivorphase() {
 }
 
 void BattleManager::addtimedstat(int* stat, int amount, int duration) {
+	int cap = 20;
+	if (stat == &playermeleeattackbonus || stat == &playerprojectileattackbonus || stat == &enemymeleeattackbonus || stat == &enemyprojectileattackbonus) {
+		cap = 15;
+	}
+
+	int newamount = amount;
+	if (*stat + amount > cap) {
+		newamount = cap - *stat;
+	}
+	else if (*stat + amount < -cap) {
+		newamount = -cap - *stat;
+	}
+	if (newamount == 0) {
+		return;
+	}
+
 	*stat += amount;
 	if (duration > 0) {
 		for (int i = 0; i < 20; i++) {
@@ -1639,9 +1707,21 @@ void BattleManager::inspectplayedcards() {
 
 	while (inspecting) {
 		std::cout << std::endl;
-		std::cout << "Inspect cards? " << std::endl;
-		std::cout << "1-" << selectedcount << ": Your cards" << std::endl;
-		std::cout << "4-" << 3 + enemyselectedcount << ": Enemy cards" << std::endl;
+		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
+
+		if (enemyselectedcount > 0) {
+			std::cout << "4-" << 3 + enemyselectedcount
+				<< ": Inspect enemy cards" << std::endl;
+		}
+
+		std::cout << std::endl;
+		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
+
+		if (enemyselectedcount > 0) {
+			std::cout << "4-" << 3 + enemyselectedcount
+				<< ": Inspect enemy cards" << std::endl;
+		}
+
 		std::cout << "Enter: Continue" << std::endl;
 
 		char input = _getch();
@@ -1649,21 +1729,35 @@ void BattleManager::inspectplayedcards() {
 		if (input == 13) {
 			inspecting = false;
 		}
+
 		else if (input >= '1' && input <= '3') {
 			int index = input - '1';
 
 			if (index < selectedcount) {
+				system("cls");
+
 				std::cout << selectedcards[index]->getcardname() << std::endl;
+				std::cout << std::endl;
 				std::cout << selectedcards[index]->getcarddescription() << std::endl;
+
+				std::cout << std::endl;
+				std::cout << "Press any key to return...";
 				_getch();
 			}
 		}
+
 		else if (input >= '4' && input <= '6') {
 			int index = input - '4';
 
 			if (index < enemyselectedcount) {
+				system("cls");
+
 				std::cout << enemyselectedcards[index]->getcardname() << std::endl;
+				std::cout << std::endl;
 				std::cout << enemyselectedcards[index]->getcarddescription() << std::endl;
+
+				std::cout << std::endl;
+				std::cout << "Press any key to return...";
 				_getch();
 			}
 		}
