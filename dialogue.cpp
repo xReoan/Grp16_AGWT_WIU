@@ -5,7 +5,7 @@ dialogue::dialogue() // constructor, resolution operator::function name
 {}
 
 void dialogue::introdiag() { // absence of data or type  resolution operator::function name   R"( )" represents a raw string, it treats everything inside of it as a string. This is implemented here for easier dialogue. This is also used consistently!
-std::cout << R"(Press any key to continue . . .
+std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 You: "Besides the fact that this was abandoned 3 years ago, 
 there aren't any files related to this laboratory. Whoever
@@ -110,7 +110,7 @@ std::cin.get();
 }
 
 void dialogue::introbeforebattlediag() {
-std::cout << R"(Press any key to continue . . .
+std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "First of all, who gave you permission to call us by our 
 names? And second, I'm not obliged to tell you anything. I 
@@ -139,7 +139,7 @@ std::cin.get();
 }
 
 void dialogue::introafterbattlediag() {
-std::cout << R"(Press any key to continue . . .
+std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "Since you won your first game, I'll start by 
 introducing ourselves. If you can't tell, we were the 
@@ -195,7 +195,7 @@ std::cin.get();
 }
 
 void dialogue::battle2diag() {
-std::cout << R"(Press any key to continue . . .
+std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 You: "Why are there little to no files about this laboratory?")" << std::endl;
 	std::cin.get();
@@ -229,7 +229,7 @@ You: "Ah..."
 }
 
 void dialogue::battle3diag() {
-	std::cout << R"(Press any key to continue . . .
+	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 17 (Grim): "Hey here's a tip, take everything everyone says 
 with a grain of salt. I don't like you, but since 15 trusts 
@@ -288,7 +288,7 @@ He simply wanted justice."
 }
 
 void dialogue::battle4diag() {
-	std::cout << R"(Press any key to continue . . .
+	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 45 (Trickster): "NOO! HOW DID YOU BEAT ME! DON'T LEAVE 
 YET!!!")" << std::endl;
@@ -343,7 +343,7 @@ std::cout << R"(-------------------------------------------------------------
 }
 
 void dialogue::battle5diag() {
-	std::cout << R"(Press any key to continue . . .
+	std::cout << R"(Press Enter to continue . . .
               _..----.._    _
             .'  .--.    "-.(0)_
 '-.__.-'"'=:|   ,  _)_ \__ . c\'-..
@@ -408,7 +408,7 @@ std::cout << R"(-------------------------------------------------------------
 }
 
 void dialogue::bossdiag() {
-std::cout << R"(Press any key to continue . . .
+std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
 	std::cin.get();
