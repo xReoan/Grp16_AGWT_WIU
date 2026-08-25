@@ -89,6 +89,7 @@
     <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="CardTable.cpp" />
     <ClCompile Include="ClockPuzzle.cpp" />
+    <ClCompile Include="dialogue.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="CardDeck.h" />
     <ClInclude Include="CardTable.h" />
     <ClInclude Include="ClockPuzzle.h" />
+    <ClInclude Include="dialogue.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />

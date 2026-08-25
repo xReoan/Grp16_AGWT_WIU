@@ -10,7 +10,7 @@
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-int input = _getch(); // reads a single symbol instantly, skips showing it on screen, saves its numeric code into an integer variable
+int inputshop = _getch(); // reads a single symbol instantly, skips showing it on screen, saves its numeric code into an integer variable
 
 revisedshop::revisedshop() : coins()
 {
@@ -48,12 +48,12 @@ void revisedshop::ShopMenu()
 		std::cout << "[O] Open Inventory" << std::endl;
 
 
-        char input = _getch();
+        char inputshop = _getch();
 
         // Convert to uppercase automatically
-        input = toupper(input);
+        inputshop = toupper(inputshop);
 
-        switch (input) {
+        switch (inputshop) {
         case 'I': {
             OpenShop();
             std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";

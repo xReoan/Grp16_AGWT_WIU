@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "dialogue.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -29,6 +29,7 @@ int main()
                  ##     ##    ##  ##mmmmmm  ##    ##  ##
                  ""     ""    ""  """"""""  ""    ""  ""
 	)" << std::endl;
+
     system("pause");
     system("cls");
 
