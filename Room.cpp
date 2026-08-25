@@ -299,7 +299,7 @@ void Room::createRoomObjects()
                 5);
 
         addInteractable(cardTable);
-        }
+    }
 
 // =====================================
 // ROOM 4
@@ -324,28 +324,6 @@ void Room::createRoomObjects()
         exitDoor->setUnlocked(false);
 
         addInteractable(exitDoor);
-
-        // PORTRAIT
-        addInteractable(
-            new InspectableObject(
-                5,
-                15,
-                10,
-                1,
-                "Portrait",
-                "Placeholder: The portrait's face "
-                "has been scratched away."));
-
-        // CRATE
-        addInteractable(
-            new InspectableObject(
-                37,
-                15,
-                7,
-                1,
-                "Crate",
-                "Placeholder: The crate is sealed shut. " 
-                "Something is moving inside."));
 
         // CARD TABLE
         cardTable =
