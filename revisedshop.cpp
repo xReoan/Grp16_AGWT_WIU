@@ -12,7 +12,7 @@ int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
 revisedshop::revisedshop() : coins() // constructor   constructer declarator  member name 
 {
-    for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays. initialisation (variable named i set to 0) condition (if i aka index less than 10) increment (adds 1 to value of i)
+    for (int i = 0; i < 9; i++) { // for each index in the shopItems + shopItemPtrs arrays
         if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty ", have "-1" there because all valid items start from 0, therefore "-1" cannot refer to any valid items, considering it a "item invalid/empty"
             shopItemPtrs[i] = database.getitem(shopItems[i]); // shopitems = displayed items . database = manager to look for the item data . shopItemPtrs stores pointers to the actual item objects
         } // subscript operator [i] performs offset calculation from base address of the array. i represents the no. of elements to skip (scaled by the element size) to reach desired memory location.
@@ -21,9 +21,9 @@ revisedshop::revisedshop() : coins() // constructor   constructer declarator  me
         }
     }
 
-    for (int i = 0; i < 10; i++) {
-        if (weaponItems[i] != -1) { // serves as a sentinel value check or invalid ID . -1 is a magic number = reps an empty slot, invalid ID, or placeholder
-            weaponItemPtrs[i] = database.getitem(weaponItems[i]); // getter method . parameter    return type   func
+    for (int i = 0; i < 5; i++) {
+        if (weaponItems[i] != -1) {
+            weaponItemPtrs[i] = database.getitem(weaponItems[i]);
         }
         else {
             weaponItemPtrs[i] = nullptr;
@@ -198,7 +198,7 @@ void revisedshop::BuyItem(int itemSlot)
 
 void revisedshop::BuyWeapon(int weaponSlot)
 {
-    if (weaponSlot < 0 || weaponSlot >= 10) {
+    if (weaponSlot < 0 || weaponSlot >= 5) {
         std::cout << "Invalid weapon slot number!" << std::endl;
         return;
     }
@@ -226,6 +226,7 @@ void revisedshop::AddCoins(int amount)
     if (amount > 0) {
         coins += amount; // add amount added to coins
         std::cout << "Added " << amount << " coins. Total: " << coins << std::endl;
+		system("cls");
     }
 }
 

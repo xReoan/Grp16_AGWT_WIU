@@ -26,7 +26,8 @@ public:
 	void displayplayereffects();
 	void displayenemyeffects();
 	void displaycards(Card* cards[], int count);
-	void displayboard(who user);
+	void displayboard();
+	void inspectplayedcards();
 	//dialogue
 	void displaydialogue(std::string speaker, std::string text);
 	void battlestartdialogue();

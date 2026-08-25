@@ -31,8 +31,6 @@ public:
     Player();
 
     int getmoney();
-    void addmoney(int amount);
-    bool spendmoney(int amount);
     item* getequippedbasicweapon();
     item* getequippedbasicarmor();
     item* getequippedadvancedweapon();
