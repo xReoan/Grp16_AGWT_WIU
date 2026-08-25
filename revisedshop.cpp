@@ -14,7 +14,7 @@ int inputshop = _getch(); // reads a single symbol instantly, skips showing it o
 
 revisedshop::revisedshop() : coins()
 {
-    for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays
+    for (int i = 0; i < 9; i++) { // for each index in the shopItems + shopItemPtrs arrays
         if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty ", have "-1" there because all valid items start from 0, therefore "-1" cannot refer to any valid items, considering it a "item invalid/empty"
             shopItemPtrs[i] = database.getitem(shopItems[i]); 
         }
@@ -23,7 +23,7 @@ revisedshop::revisedshop() : coins()
         }
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
         if (weaponItems[i] != -1) {
             weaponItemPtrs[i] = database.getitem(weaponItems[i]);
         }
@@ -201,7 +201,7 @@ void revisedshop::BuyItem(int itemSlot)
 
 void revisedshop::BuyWeapon(int weaponSlot)
 {
-    if (weaponSlot < 0 || weaponSlot >= 10) {
+    if (weaponSlot < 0 || weaponSlot >= 5) {
         std::cout << "Invalid weapon slot number!" << std::endl;
         return;
     }
@@ -229,6 +229,7 @@ void revisedshop::AddCoins(int amount)
     if (amount > 0) {
         coins += amount; // add amount added to coins
         std::cout << "Added " << amount << " coins. Total: " << coins << std::endl;
+		system("cls");
     }
 }
 

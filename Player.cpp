@@ -71,20 +71,6 @@ void Player::unequiparmor(item* armor) {
     updatedefense();
 }
 
-void Player::addmoney(int amount) {
-    money += amount;
-}
-
-bool Player::spendmoney(int amount) {
-    if (money >= amount) {
-        money -= amount;
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 CardDeck* Player::getdeck() {
     return &deck;
 }
@@ -243,5 +229,5 @@ char Player::getFacingDirection() {
 }
 
 void Player::setStarterEquipment(itemDatabase* database) {
-    equippedbasicweapon = database->getitem(0); // assuming Rock is index 0
+    equipweapon(database->getitem(0));
 }
