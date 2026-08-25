@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "RunMap.h"
 #include "Interactable.h"
+#include "BattleManager.h"
+#include "CardDatabase.h"
+#include "Enemy.h"
 #include "Puzzle.h"
 #include "inv.h"
 #include "revisedshop.h"
@@ -15,7 +18,7 @@ enum GameState
     ROOM_STATE,
     MAP_STATE,
 
-    CARD_BATTLE_STATE,
+    BATTLE_STATE,
     SHOP_STATE,
     BACKPACK_STATE,
     INVENTORY_STATE,
@@ -29,6 +32,7 @@ private:
     Room room;
     Player player;
     Map map;
+    CardDatabase cardDatabase;
     // Backpack UI selection.
     // 0 to 2 are database items.
     // 3 is the fixed coin reward.
@@ -60,7 +64,7 @@ private:
     // Inventory slot currently selected.
     // Uses values from 0 to 15.
     int selectedInventorySlot;
-
+    bool isTutorialBattleDone = false;
     bool screenNeedsClear;
     bool running;
 
@@ -72,6 +76,8 @@ private:
     // General.
     void draw();
     void handleInput(char input);
+
+    void startBattle();
 
     // State controls.
     void handleRoomInput(char input);
