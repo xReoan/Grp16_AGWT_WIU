@@ -3,7 +3,7 @@
 class inv
 {
 private:
-	static int invinside[16];
+	static int invinside[16]; //static cuz another inventory was made in shop, this keeps the inventory the same
 	item* invitem[15];
 	itemDatabase database;
 
