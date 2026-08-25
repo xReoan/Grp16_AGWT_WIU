@@ -42,7 +42,7 @@ void revisedshop::ShopMenu()
         std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
-        std::cout << "                Press Enter to refresh" << std::endl;
+        std::cout << "          Use Enter to refresh/continue" << std::endl;
 		std::cout << "[O] Open Inventory" << std::endl;
 
         char inputshop = _getch(); // char = 'I' , inputshop = variable identifier , _getch(); = console input function call
