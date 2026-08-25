@@ -5,11 +5,12 @@ Enemy::Enemy() : Entity(0, 0, 0, 0, 0){
     projectileattack = 0;
 }
 
-Enemy::Enemy(ENEMY_TYPE type, int hp, int enemyMeleeAttack, int enemyProjectileAttack, int enemyMeleeDefense, int enemyProjectileDefense)
+Enemy::Enemy(std::string name, ENEMY_TYPE type, int hp, int enemyMeleeAttack, int enemyProjectileAttack, int enemyMeleeDefense, int enemyProjectileDefense)
     : Entity(hp, enemyMeleeAttack, enemyProjectileAttack, enemyMeleeDefense, enemyProjectileDefense)
 {
     enemytype = type;
 	meleeattack = enemyMeleeAttack;
+    this->name = name;
 }
 
 Enemy::~Enemy(){}
@@ -165,4 +166,8 @@ int Enemy::displayhp() {
 		}
 	}
 	return gethp();
+}
+
+std::string Enemy::getname() const {
+    return name;
 }

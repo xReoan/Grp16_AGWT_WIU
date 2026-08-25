@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include "Entity.h"
 #include "CardDeck.h"
@@ -32,17 +33,18 @@ private:
 	int enemyquantities[2] = { 2, 1 };
 	int bbbquantities[2] = { 4, 2 };
 	bool issurvivorphase2 = false;
+	std::string name;
 
 public:
 	Enemy();
-	Enemy(ENEMY_TYPE type, int hp, int enemyMeleeAttack, int enemyProjectileAttack, int enemyMeleeDefense, int enemyProjectileDefense);
+	Enemy(std::string name, ENEMY_TYPE type, int hp, int enemyMeleeAttack, int enemyProjectileAttack, int enemyMeleeDefense, int enemyProjectileDefense);
 	~Enemy();
-
 
 	// getters
     ENEMY_TYPE getEnemyType() const;
 	int getMeleeAttack() const;
 	int getProjectileAttack() const;
+	std::string getname() const;
 
     // setters
     void setEnemyType(ENEMY_TYPE type);
