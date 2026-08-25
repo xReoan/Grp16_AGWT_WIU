@@ -31,8 +31,8 @@
 Game::Game()
     : room(1)
 {
-    currentState = ROOM_STATE;
-
+    currentState = BATTLE_STATE;
+    player.setStarterEquipment(&itemdatabase);
     activePuzzle = nullptr;
 
     selectedBackpackItem = 0;
@@ -42,6 +42,7 @@ Game::Game()
     running = true;
 
     map.generateMap();
+    isTutorialBattleDone = false;
 }
 
 // =====================================
@@ -180,10 +181,15 @@ void Game::run()
 {
     while (running)
     {
+        if (currentState == BATTLE_STATE)
+        {
+            startBattle();
+            continue;
+        }
+
         if (screenNeedsClear == true)
         {
             clearScreen();
-
             screenNeedsClear = false;
         }
         else
@@ -206,7 +212,6 @@ void Game::run()
     }
 }
 
-// 
 // =====================================
 // GENERATE BACKPACK REWARDS
 // =====================================
@@ -315,41 +320,9 @@ void Game::draw()
     }
 
     // CARD BATTLE
-    else if (
-        currentState ==
-        CARD_BATTLE_STATE)
+    else if (currentState == BATTLE_STATE)
     {
-        std::cout
-            << "================ CARD BATTLE ================"
-            << std::endl;
-
-        std::cout << std::endl;
-
-        if (map.isAtFinalNode()
-            == true)
-        {
-            std::cout
-                << "BOSS BATTLE"
-                << std::endl;
-        }
-        else
-        {
-            std::cout
-                << "Enemy Encounter"
-                << std::endl;
-        }
-
-        std::cout << std::endl;
-
-        std::cout
-            << "Card Battle system will go here."
-            << std::endl;
-
-        std::cout << std::endl;
-
-        std::cout
-            << "E - Win Battle (TEST)"
-            << std::endl;
+        startBattle();
     }
 
     // SHOP
@@ -576,12 +549,6 @@ void Game::handleInput(
         MAP_STATE)
     {
         handleMapInput(input);
-    }
-
-    else if (currentState ==
-        CARD_BATTLE_STATE)
-    {
-        handleCardBattleInput(input);
     }
 
     else if (currentState ==
@@ -937,7 +904,7 @@ void Game::activateCurrentMapNode()
         FIGHT)
     {
         currentState =
-            CARD_BATTLE_STATE;
+            BATTLE_STATE;
     }
 
     else if (type ==
@@ -981,6 +948,10 @@ void Game::handleCardBattleInput(
         if (map.isAtFinalNode()
             == true)
         {
+            //lock puzzle 3 and 4
+            if (room.getRoomNumber() == 3 || room.getRoomNumber() == 4) {
+                room.setPuzzleUnlocked(true);
+            }
             // ============================
             // ROOM 1 BOSS
             // ============================
@@ -1023,7 +994,14 @@ void Game::handleCardBattleInput(
                 room.getRoomNumber() == 2)
             {
                 std::cout
-                    << "The room falls silent."
+                    << "The room falls silent, you remember the time: '10:15'"
+                    << std::endl;
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                std::cout
+                    << "The room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
                     << std::endl;
             }
 
@@ -1416,10 +1394,6 @@ void Game::goToNextRoom()
         readKey();
     }
 
-    // ============================
-    // ROOM 2 -> ROOM 3
-    // ============================
-
  // ============================
 // ROOM 2 -> ROOM 3
 // ============================
@@ -1451,7 +1425,7 @@ void Game::goToNextRoom()
         std::cout << std::endl;
 
         std::cout
-            << "A strange safe waits in the darkness."
+            << "This feels... weird. It feels like the room is spinning"
             << std::endl;
 
         std::cout << std::endl;
@@ -1463,22 +1437,87 @@ void Game::goToNextRoom()
         readKey();
     }
     
-// ============================
-// ROOM 3 COMPLETE
-// ============================
+    // ============================
+    // ROOM 3 -> ROOM 4
+    // ============================
 
     else if (currentRoomNumber == 3)
     {
+        room.loadRoom(4);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
         clearScreen();
 
         std::cout
-            << "Room 3 complete!"
+            << "Watch out!"
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "The final door opens."
+            << "There's a bunch of traps"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 4."
+            << std::endl;
+
+        readKey();
+    }
+    // ============================
+  // ROOM 4 -> ROOM 5
+  // ============================
+
+    else if (currentRoomNumber == 4)
+    {
+        room.loadRoom(5);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
+        clearScreen();
+
+        std::cout
+            << "You walk in..."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "There's someone waiting for you"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 5."
+            << std::endl;
+
+        readKey();
+        }
+    // ============================
+    // ENDING
+    // ============================
+    else if (currentRoomNumber == 5)
+    {
+        clearScreen();
+
+        std::cout
+            << "Room 5 complete!"
             << std::endl;
 
         std::cout << std::endl;
@@ -1496,6 +1535,114 @@ void Game::goToNextRoom()
         readKey();
 
         running = false;
+        }
+         
+}
+
+void Game::startBattle() {
+    Enemy* enemy = nullptr;
+
+    int roomnumber = room.getRoomNumber();   
+    if (isTutorialBattleDone == false) {
+        enemy = new Enemy("King Tut", Enemy::ENEMY_TYPE::TUTORIAL, 30, 5, 0, 5, 0);
+    }
+    else if (map.isAtFinalNode()) {
+        if (roomnumber == 1) {
+            enemy = new Enemy("Gunman", Enemy::ENEMY_TYPE::GUNMAN, 90, 5, 10, 1, 5);
+        }
+        else if (roomnumber == 2) {
+            enemy = new Enemy("Grim", Enemy::ENEMY_TYPE::GRIM, 100, 12, 1, 6, 7);
+        }
+        else if (roomnumber == 3) {
+            enemy = new Enemy("Trickster", Enemy::ENEMY_TYPE::TRICKSTER, 90, 17, 5, 6, 8);
+        }
+        else if (roomnumber == 4) {
+            enemy = new Enemy("Survivor", Enemy::ENEMY_TYPE::SURVIVOR, 200, 10, 10, 18, 15);
+        }
+        else if (roomnumber == 5) {
+            enemy = new Enemy("01", Enemy::ENEMY_TYPE::GAME_MASTER, 150, 20, 0, 17, 15);
+        }
+    }
+    else {
+        int hp = 30;
+		int mattack = 0;
+		int mdefense = 0;
+		int pattack = 0;
+		int pdefense = 0;
+        int projectileormelee = rand() % 2;
+		if (projectileormelee == 0) {
+			mattack = 5;
+			mdefense = 5;
+		}
+        else {
+            pattack = 6;
+            pdefense = 4;
+        }
+        if (roomnumber == 2) {
+            hp = rand() % 11 + 40;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 7;
+                mdefense = 6;
+            }
+            else {
+                pattack = 7;
+                pdefense = 5;
+            }
+        }
+        else if (roomnumber == 3) {
+            hp = rand() % 11 + 50;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 7;
+                mdefense = rand() % 2 + 7;
+            }
+            else {
+                pattack = rand() % 2 + 8;
+                pdefense = rand() % 2 + 6;
+            }
+        }
+        else if (roomnumber >= 4) {
+            hp = rand() % 11 + 60;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 8;
+                mdefense = rand() % 2 + 8;
+            }
+            else {
+                pattack = rand() % 2 + 9;
+                pdefense = rand() % 2 + 7;
+            }
+        }
+		int randomEnemyType = rand() % 99 + 1;
+        if (randomEnemyType < 10) {
+            enemy = new Enemy("0" + std::to_string(randomEnemyType), Enemy::ENEMY_TYPE::HENCHMEN, hp, mattack, pattack, mdefense, pdefense);
+        }
+        else {
+            enemy = new Enemy(std::to_string(randomEnemyType), Enemy::ENEMY_TYPE::HENCHMEN, hp, mattack, pattack, mdefense, pdefense);
+        }
     }
 
+    if (enemy == nullptr) {
+        return;
+    }
+
+    bool tutorialBattle = !isTutorialBattleDone;
+
+    BattleManager battle(
+        &player,
+        enemy,
+        &cardDatabase
+    );
+
+    battle.StartBattle();
+
+    delete enemy;
+
+    if (tutorialBattle) {
+        isTutorialBattleDone = true;
+        currentState = ROOM_STATE;
+    }
+    else {
+        currentState = MAP_STATE;
+    }
+
+    screenNeedsClear = true;
 }

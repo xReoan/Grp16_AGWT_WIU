@@ -44,6 +44,7 @@ public:
     void equiparmor(item* armor);
     void unequipweapon(item* weapon);
     void unequiparmor(item* armor);
+    void setStarterEquipment(itemDatabase* database);
 
     void builddeck(CardDatabase* database);
     // Moves the player if the new position
