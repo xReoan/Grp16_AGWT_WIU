@@ -5,7 +5,7 @@
 dialogue::dialogue() // constructor, resolution operator::function name
 {}
 
-void dialogue::introdiag() { // R"( )" represents a raw string, it treats everything inside of it as a string. This is implemented here for easier dialogue. 
+void dialogue::introdiag() { // R"( )" represents a raw string, it treats everything inside of it as a string. This is implemented here for easier dialogue. This is also used consistently!
 std::cout << R"(Press any key to continue . . .
 -------------------------------------------------------------
 You: "Besides the fact that this was abandoned 3 years ago, 
@@ -13,7 +13,7 @@ there aren't any files related to this laboratory. Whoever
 abandoned this place... they must've really wanted this
 place to be forgotten. But going here alone? My boss really
 doesn't care, he's such a bum...")" << std::endl;
-std::cin.get(); //reads a single character from the input buffer. used to force the program to wait for user to press any key
+std::cin.get(); //reads a single character from the input buffer. used to force the program to wait for user to press any key to continue
 std::cout << R"(-------------------------------------------------------------
 You: "Whatever... But what could this lab possibly contain, 
 to the point where NO ONE dares to step close? It's too 
