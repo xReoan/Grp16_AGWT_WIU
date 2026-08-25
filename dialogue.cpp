@@ -1,7 +1,7 @@
 #include "dialogue.h"
 #include <iostream>
 
-dialogue::dialogue() // constructor, resolution operator::function name
+dialogue::dialogue() // constructor, resolution operator (scope r.o. = access members to the class)::function name
 {}
 
 void dialogue::introdiag() { // absence of data or type  resolution operator::function name   R"( )" represents a raw string, it treats everything inside of it as a string. This is implemented here for easier dialogue. This is also used consistently!
