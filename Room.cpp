@@ -561,7 +561,7 @@ void Room::drawPuzzle()
     }
 
     // =====================================
-    // ROOM 2 - GRANDFATHER CLOCK
+    // ROOM 2 - GRANDFATHER CLOCK 
     // =====================================
 
     else if (roomNumber == 2)
