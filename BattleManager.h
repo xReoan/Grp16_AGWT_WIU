@@ -28,6 +28,7 @@ public:
 	void displaycards(Card* cards[], int count);
 	void displayboard();
 	void inspectplayedcards();
+	int displaylength(std::string text);
 	//dialogue
 	void displaydialogue(std::string speaker, std::string text);
 	void battlestartdialogue();
