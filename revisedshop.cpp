@@ -4,10 +4,13 @@
 #include "inv.h"
 #include <iostream>
 #include <cstdlib>
+#include <conio.h>
 
 // initialize the arrays + they are using the same array so static would make sense here
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
+
+int input = _getch(); // reads a single symbol instantly, skips showing it on screen, saves its numeric code into an integer variable
 
 revisedshop::revisedshop() : coins()
 {
@@ -32,7 +35,6 @@ revisedshop::revisedshop() : coins()
 
 void revisedshop::ShopMenu()
 {
-    char choice;
     int slotChoice;
 
     while (true) {
@@ -43,14 +45,15 @@ void revisedshop::ShopMenu()
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
         std::cout << "                Press Enter to refresh" << std::endl;
+		std::cout << "[O] Open Inventory" << std::endl;
 
 
-        std::cin >> choice;
+        char input = _getch();
 
         // Convert to uppercase automatically
-        choice = toupper(choice);
+        input = toupper(input);
 
-        switch (choice) {
+        switch (input) {
         case 'I': {
             OpenShop();
             std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";
@@ -58,6 +61,12 @@ void revisedshop::ShopMenu()
             if (slotChoice > 0 && slotChoice <= 10) {
 				BuyItem(slotChoice - 1); // do a "- 1" so that the user can input 1-10, but the array is 0-9
             }
+			else if (slotChoice == 0) {
+				std::cout << "Purchase cancelled." << std::endl;
+			}
+			else {
+				std::cout << "Invalid slot number." << std::endl;
+			}
             std::cin.ignore();
             std::cin.get();
             break;
@@ -69,6 +78,12 @@ void revisedshop::ShopMenu()
             std::cin >> slotChoice;
             if (slotChoice > 0 && slotChoice <= 10) {
                 BuyWeapon(slotChoice - 1);
+            }
+            else if (slotChoice == 0) {
+                std::cout << "Purchase cancelled." << std::endl;
+            }
+            else {
+                std::cout << "Invalid slot number." << std::endl;
             }
             std::cin.ignore();
             std::cin.get();
@@ -84,6 +99,11 @@ void revisedshop::ShopMenu()
 
         case 'E': {
             std::cout << "Thanks for visiting the shop!" << std::endl;
+            return;
+        }
+
+        case 'O': {
+            inv2.OpenInv();
             return;
         }
 
