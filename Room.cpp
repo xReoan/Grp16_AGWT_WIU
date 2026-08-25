@@ -240,7 +240,7 @@ void Room::createRoomObjects()
                 3,
                 2);
 
-        puzzle->setUnlocked(true);
+        puzzle->setUnlocked(false);
 
         addInteractable(puzzle);
 
@@ -276,7 +276,7 @@ void Room::createRoomObjects()
                 3,
                 2);
 
-        puzzle->setUnlocked(true);
+        puzzle->setUnlocked(false);
 
         addInteractable(puzzle);
 
