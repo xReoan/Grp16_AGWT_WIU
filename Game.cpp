@@ -1638,16 +1638,25 @@ void Game::startBattle() {
     if (player.isalive()) {
         if (enemy->getEnemyType() == Enemy::ENEMY_TYPE::HENCHMEN) {
             shopkeeper.AddCoins(2);
-            std::cout << "You earned $2!" << std::endl;
+            int easter = rand() % 101;
+            if (easter <= 95) {
+                std::cout << "you feel $2 richer..." << std::endl;
+			}
+            else {
+                std::cout << "you feel $100 richer... but in reality you got $2." << std::endl;
+            }
         }
         else {
             shopkeeper.AddCoins(10);
-            std::cout << "You earned $10!" << std::endl;
+            std::cout << "you feel $10 richer..." << std::endl;
         }
-        std::cout << "Total coins: " << shopkeeper.GetCoins() << std::endl;
-        std::cout << "Press any key to continue...";
+        std::cout << "Piggybank: " << shopkeeper.GetCoins() << std::endl;
+        std::cout << "Alright, enough drooling over your money. Press any key to continue...";
         _getch();
     }
+
+    player.getdeck()->cleardeck();
+    enemy->getdeck()->cleardeck();
 
     delete enemy;
 
