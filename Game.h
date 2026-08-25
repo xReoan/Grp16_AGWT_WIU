@@ -33,6 +33,7 @@ private:
     Player player;
     Map map;
     CardDatabase cardDatabase;
+	itemDatabase itemdatabase;
     // Backpack UI selection.
     // 0 to 2 are database items.
     // 3 is the fixed coin reward.

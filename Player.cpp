@@ -241,3 +241,7 @@ int Player::getY() {
 char Player::getFacingDirection() {
     return facingDirection;
 }
+
+void Player::setStarterEquipment(itemDatabase* database) {
+    equippedbasicweapon = database->getitem(0); // assuming Rock is index 0
+}
