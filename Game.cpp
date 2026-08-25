@@ -877,6 +877,10 @@ void Game::handleCardBattleInput(
         if (map.isAtFinalNode()
             == true)
         {
+            //lock puzzle 3 and 4
+            if (room.getRoomNumber() == 3 || room.getRoomNumber() == 4) {
+                room.setPuzzleUnlocked(true);
+            }
             // ============================
             // ROOM 1 BOSS
             // ============================
