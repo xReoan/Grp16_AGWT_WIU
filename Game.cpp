@@ -1234,6 +1234,7 @@ void Game::handleInventoryInput(
         }
     }
 
+    // Inspecting item
     else if (input == 'I' ||
         input == 'i') {
         inventory.inspecting(selectedInventorySlot);
