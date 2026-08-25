@@ -45,7 +45,7 @@ void revisedshop::ShopMenu()
         std::cout << "                Press Enter to refresh" << std::endl;
 		std::cout << "[O] Open Inventory" << std::endl;
 
-        char inputshop = _getch();
+        char inputshop = _getch(); // char = 'I' , inputshop = variable identifier , _getch(); = console input function call
 
         // Convert to uppercase automatically
         inputshop = toupper(inputshop);
