@@ -10,20 +10,20 @@
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-revisedshop::revisedshop() : coins()
+revisedshop::revisedshop() : coins() // constructor   constructer declarator  member name 
 {
-    for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays
+    for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays. initialisation (variable named i set to 0) condition (if i aka index less than 10) increment (adds 1 to value of i)
         if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty ", have "-1" there because all valid items start from 0, therefore "-1" cannot refer to any valid items, considering it a "item invalid/empty"
-            shopItemPtrs[i] = database.getitem(shopItems[i]); 
-        }
+            shopItemPtrs[i] = database.getitem(shopItems[i]); // shopitems = displayed items . database = manager to look for the item data . shopItemPtrs stores pointers to the actual item objects
+        } // subscript operator [i] performs offset calculation from base address of the array. i represents the no. of elements to skip (scaled by the element size) to reach desired memory location.
         else {
-            shopItemPtrs[i] = nullptr; // to say "don't add item/don't use it"
+            shopItemPtrs[i] = nullptr; // nullptr = tells program "this pointer points to nothing" so its a checker. Without it, there's dangling pointers pointing to random memory . might end in crashes or bugs
         }
     }
 
     for (int i = 0; i < 10; i++) {
-        if (weaponItems[i] != -1) {
-            weaponItemPtrs[i] = database.getitem(weaponItems[i]);
+        if (weaponItems[i] != -1) { // serves as a sentinel value check or invalid ID . -1 is a magic number = reps an empty slot, invalid ID, or placeholder
+            weaponItemPtrs[i] = database.getitem(weaponItems[i]); // getter method . parameter    return type   func
         }
         else {
             weaponItemPtrs[i] = nullptr;
@@ -36,7 +36,7 @@ void revisedshop::ShopMenu()
     int slotChoice;
 
     while (true) {
-        system("cls");
+        system("cls"); // c runtime library func call = executes a system command to clear the console screen.
         std::cout << "            What would you like to buy?" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
@@ -154,7 +154,7 @@ void revisedshop::OpenWeaponShop() const
     std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
     std::cout << "----------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) { // i = subscript operator. uses the index variable i to look up a specific position inside that collection.
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << weaponItemPtrs[i]->getname()
                 << " - " << weaponItemPtrs[i]->getprice() << " coins" << std::endl;
@@ -208,8 +208,8 @@ void revisedshop::BuyWeapon(int weaponSlot)
         return;
     }
 
-    item* selectedWeapon = weaponItemPtrs[weaponSlot];
-    int price = selectedWeapon->getprice();
+    item* selectedWeapon = weaponItemPtrs[weaponSlot]; // item* = variable that stores a pointer . points to selectedWeapon aka the name of a pointer variable . weaponitemptrs = array that stores pointers to item objects . weaponslot = integer variable acting as the index
+    int price = selectedWeapon->getprice(); // getprice = public getter method (member func) called on the weapon object to retrieve price value.
 
     if (coins < price) {
         std::cout << "Not enough coins! You need " << price - coins << " more coins." << std::endl;
