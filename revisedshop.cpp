@@ -10,8 +10,6 @@
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-int inputshop = _getch(); // reads a single symbol instantly, skips showing it on screen, saves its numeric code into an integer variable
-
 revisedshop::revisedshop() : coins()
 {
     for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays
@@ -46,7 +44,6 @@ void revisedshop::ShopMenu()
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
         std::cout << "                Press Enter to refresh" << std::endl;
 		std::cout << "[O] Open Inventory" << std::endl;
-
 
         char inputshop = _getch();
 

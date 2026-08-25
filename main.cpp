@@ -33,6 +33,12 @@ int main()
     system("pause");
     system("cls");
 
+    dialogue dialogue;
+    dialogue.introdiag();
+
+    system("pause");
+    system("cls");
+
     Game game;
 
     game.run();
