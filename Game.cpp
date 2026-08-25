@@ -1023,7 +1023,14 @@ void Game::handleCardBattleInput(
                 room.getRoomNumber() == 2)
             {
                 std::cout
-                    << "The room falls silent."
+                    << "The room falls silent, you remember the time: '10:15'"
+                    << std::endl;
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                std::cout
+                    << "The room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
                     << std::endl;
             }
 
