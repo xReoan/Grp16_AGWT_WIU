@@ -19,7 +19,7 @@ public:
     revisedshop();
     void OpenShop() const; // const is there if the values don't change + mainly used for getters & display!
     void OpenWeaponShop() const; // void = no need to return anything
-    void BuyItem(int itemSlot);
+    void BuyItem(int itemSlot); // return type  function name  parameter aka input the function needs
     void BuyWeapon(int weaponSlot);
     void AddCoins(int amount);
     int GetCoins() const;
