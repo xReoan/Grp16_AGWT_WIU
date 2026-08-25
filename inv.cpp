@@ -13,6 +13,8 @@ inv::inv() {
 int inv::invinside[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 void inv::OpenInv() const
+{
+
 {  
     for (int i = 0; i < 16; i++) {
         if (inv::invinside[i] != -1 ) {

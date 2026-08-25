@@ -24,6 +24,8 @@
     <ClCompile Include="SymbolPuzzle.cpp" />
     <ClCompile Include="InspectableObject.cpp" />
     <ClCompile Include="BattleManager.cpp" />
+    <ClCompile Include="revisedshop.cpp" />
+    <ClCompile Include="TricksterPuzzle.cpp" />
     <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="dialogue.cpp" />
@@ -51,6 +53,9 @@
     <ClInclude Include="SymbolPuzzle.h" />
     <ClInclude Include="InspectableObject.h" />
     <ClInclude Include="BattleManager.h" />
+    <ClInclude Include="revisedshop.h" />
+    <ClInclude Include="TricksterPuzzle.h" />
+    <ClInclude Include="SurvivorPuzzle.h" />
     <ClInclude Include="CardDeck.h" />
     <ClInclude Include="revisedshop.h" />
     <ClInclude Include="dialogue.h" />
