@@ -30,25 +30,23 @@ item* Player::getequippedadvancedarmor() {
 }
 
 void Player::equipweapon(item* weapon) {
-    if (weapon != nullptr && weapon->getitemcategory() == item::itemtype::weapon && weapon->getequipmenttier() == item::equipment::basic) {
-        if (weapon->getequipmenttier() == item::equipment::basic) {
-            equippedbasicweapon = weapon;
-        }
-        else if (weapon->getequipmenttier() == item::equipment::advanced) {
-            equippedadvancedweapon = weapon;
-        }
+    //checks if its a weapon outside of it already so that part was removed
+    if (weapon->getequipmenttier() == item::equipment::basic) {
+        equippedbasicweapon = weapon;
+    }
+    else if (weapon->getequipmenttier() == item::equipment::advanced) {
+        equippedadvancedweapon = weapon;
     }
     updateattack();
 }
 
 void Player::equiparmor(item* armor) {
-    if (armor != nullptr && armor->getitemcategory() == item::itemtype::armor) {
-        if (armor->getequipmenttier() == item::equipment::basic) {
-            equippedbasicarmor = armor;
-        }
-        else if (armor->getequipmenttier() == item::equipment::advanced) {
-            equippedadvancedarmor = armor;
-        }
+    //checks if its a armor outside of it already so that part was removed
+    if (armor->getequipmenttier() == item::equipment::basic) {
+        equippedbasicarmor = armor;
+    }
+    else if (armor->getequipmenttier() == item::equipment::advanced) {
+        equippedadvancedarmor = armor;
     }
     updatedefense();
 }

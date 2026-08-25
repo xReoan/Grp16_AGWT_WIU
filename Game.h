@@ -10,6 +10,7 @@
 #include "Puzzle.h"
 #include "inv.h"
 #include "revisedshop.h"
+#include "itemDatabase.h"
 #include <string>
 
 enum GameState
@@ -33,10 +34,23 @@ private:
     Map map;
     CardDatabase cardDatabase;
     // Backpack UI selection.
+    // 0 to 2 are database items.
+    // 3 is the fixed coin reward.
     int selectedBackpackItem;
 
+    // Stores the database indexes of the
+    // three randomly generated items.
+    int backpackItemIndices[3];
+
+    // Used to access the actual database items.
+    itemDatabase backpackDatabase;
+
+    // Generates three unique database items
+    // whenever a backpack event begins.
+    void generateBackpackItems();
+
     std::string getBackpackItemName(
-        int itemIndex) const;
+        int choiceIndex) const;
 
     // Player's inventory.
     inv inventory;

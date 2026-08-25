@@ -6,9 +6,9 @@
 class revisedshop
 {
 private:
-    static int shopItems[9]; // static = available when the class is not instantiated
-    static int weaponItems[5];
-    item* shopItemPtrs[9];
+    static int shopItems[9]; // item id + shop instances share the same inventory data
+    static int weaponItems[5]; //static is there because they are both using the same shop and they share the same inventory
+    item* shopItemPtrs[9]; // pointer; item object
     item* weaponItemPtrs[5];
     itemDatabase database;
     int coins;
@@ -17,10 +17,10 @@ private:
 
 public:
     revisedshop();
-    void OpenShop() const;
-    void OpenWeaponShop() const;
-    void BuyItem(int itemSlot) const;
-    void BuyWeapon(int weaponSlot) const;
+    void OpenShop() const; // const is there if the values don't change + mainly used for getters & display!
+    void OpenWeaponShop() const; // void = no need to return anything
+    void BuyItem(int itemSlot);
+    void BuyWeapon(int weaponSlot);
     void AddCoins(int amount);
     int GetCoins() const;
     bool IsItemAvailable(int itemSlot) const;

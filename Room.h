@@ -7,6 +7,8 @@
 #include "ClockPuzzle.h"
 #include "Door.h"
 #include "SymbolPuzzle.h"
+#include "TricksterPuzzle.h"
+#include "SurvivorPuzzle.h"
 #include "InspectableObject.h"
 
 class Room
