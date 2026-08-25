@@ -1,6 +1,5 @@
 #include "dialogue.h"
 #include <iostream>
-#include <conio.h>
 
 dialogue::dialogue() // constructor, resolution operator::function name
 {}
