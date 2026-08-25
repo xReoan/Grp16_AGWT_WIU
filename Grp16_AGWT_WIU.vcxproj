@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -89,6 +89,7 @@
     <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="CardTable.cpp" />
     <ClCompile Include="ClockPuzzle.cpp" />
+    <ClCompile Include="dialogue.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -107,7 +108,9 @@
     <ClCompile Include="revisedshop.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RunMap.cpp" />
+    <ClCompile Include="SurvivorPuzzle.cpp" />
     <ClCompile Include="SymbolPuzzle.cpp" />
+    <ClCompile Include="TricksterPuzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleManager.h" />
@@ -116,6 +119,7 @@
     <ClInclude Include="CardDeck.h" />
     <ClInclude Include="CardTable.h" />
     <ClInclude Include="ClockPuzzle.h" />
+    <ClInclude Include="dialogue.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
@@ -133,7 +137,9 @@
     <ClInclude Include="revisedshop.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RunMap.h" />
+    <ClInclude Include="SurvivorPuzzle.h" />
     <ClInclude Include="SymbolPuzzle.h" />
+    <ClInclude Include="TricksterPuzzle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

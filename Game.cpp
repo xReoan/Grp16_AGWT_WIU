@@ -27,10 +27,11 @@
 //
 // tells C++:
 // "Construct room as Room 1."
+
 Game::Game()
     : room(1)
 {
-    currentState = ROOM_STATE;
+    currentState = BATTLE_STATE;
 
     activePuzzle = nullptr;
 
@@ -41,6 +42,7 @@ Game::Game()
     running = true;
 
     map.generateMap();
+    isTutorialBattleDone = false;
 }
 
 // =====================================
@@ -179,10 +181,15 @@ void Game::run()
 {
     while (running)
     {
+        if (currentState == BATTLE_STATE)
+        {
+            startBattle();
+            continue;
+        }
+
         if (screenNeedsClear == true)
         {
             clearScreen();
-
             screenNeedsClear = false;
         }
         else
@@ -205,26 +212,75 @@ void Game::run()
     }
 }
 
-// 
 std::string Game::getBackpackItemName(
     int itemIndex) const
+// 
+// =====================================
+// GENERATE BACKPACK REWARDS
+// =====================================
+
+void Game::generateBackpackItems()
 {
-    if (itemIndex == 0)
+    int itemCount =
+        backpackDatabase.getItemCount();
+
+    for (int i = 0; i < 3; i++)
     {
-        return "Pliers";
+        bool duplicateItem;
+
+        do
+        {
+            backpackItemIndices[i] =
+                std::rand() % itemCount;
+
+            duplicateItem = false;
+
+            // Check the previously generated choices.
+            for (int j = 0; j < i; j++)
+            {
+                if (backpackItemIndices[i] ==
+                    backpackItemIndices[j])
+                {
+                    duplicateItem = true;
+                }
+            }
+
+        } while (duplicateItem == true);
     }
-    else if (itemIndex == 1)
-    {
-        return "Bottle";
-    }
-    else if (itemIndex == 2)
-    {
-        return "Candle";
-    }
-    else
+}
+
+// =====================================
+// GET BACKPACK REWARD NAME
+// =====================================
+
+std::string Game::getBackpackItemName(
+    int choiceIndex) const
+{
+    // Choice 3 is not a database item.
+    if (choiceIndex == 3)
     {
         return "5 Coins";
     }
+
+    if (choiceIndex < 0 ||
+        choiceIndex >= 3)
+    {
+        return "Unknown";
+    }
+
+    int databaseIndex =
+        backpackItemIndices[choiceIndex];
+
+    item* selectedItem =
+        backpackDatabase.getitem(
+            databaseIndex);
+
+    if (selectedItem == nullptr)
+    {
+        return "Unknown";
+    }
+
+    return selectedItem->getname();
 }
 
 // =====================================
@@ -267,41 +323,9 @@ void Game::draw()
     }
 
     // CARD BATTLE
-    else if (
-        currentState ==
-        CARD_BATTLE_STATE)
+    else if (currentState == BATTLE_STATE)
     {
-        std::cout
-            << "================ CARD BATTLE ================"
-            << std::endl;
-
-        std::cout << std::endl;
-
-        if (map.isAtFinalNode()
-            == true)
-        {
-            std::cout
-                << "BOSS BATTLE"
-                << std::endl;
-        }
-        else
-        {
-            std::cout
-                << "Enemy Encounter"
-                << std::endl;
-        }
-
-        std::cout << std::endl;
-
-        std::cout
-            << "Card Battle system will go here."
-            << std::endl;
-
-        std::cout << std::endl;
-
-        std::cout
-            << "E - Win Battle (TEST)"
-            << std::endl;
+        startBattle();
     }
 
     // SHOP
@@ -334,20 +358,29 @@ void Game::draw()
         currentState ==
         BACKPACK_STATE)
     {
+        // A larger width is needed because
+        // database item names may be longer.
+        const int backpackWidth = 72;
+
         auto drawBackpackLine =
-            [](const std::string& text)
+            [backpackWidth](
+                const std::string& text)
             {
                 std::cout
                     << "| "
                     << std::left
-                    << std::setw(44)
+                    << std::setw(backpackWidth)
                     << text
                     << " |"
                     << std::endl;
             };
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
 
         drawBackpackLine(
@@ -356,14 +389,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "               CHOOSE ONE");
+            "                         CHOOSE ONE");
 
         drawBackpackLine("");
 
         std::ostringstream itemLine;
 
-        // Four possible rewards:
-        // Pliers, Bottle, Candle and 5 Coins.
+        // Choices 0 to 2 are random items.
+        // Choice 3 is always 5 Coins.
         for (int i = 0; i < 4; i++)
         {
             if (i ==
@@ -384,7 +417,7 @@ void Game::draw()
 
             if (i < 3)
             {
-                itemLine << " ";
+                itemLine << "  ";
             }
         }
 
@@ -394,10 +427,14 @@ void Game::draw()
         drawBackpackLine("");
 
         drawBackpackLine(
-            "A/D Select          E Take");
+            "A/D Select                         E Take");
 
         std::cout
-            << "+----------------------------------------------+"
+            << "+"
+            << std::string(
+                backpackWidth + 2,
+                '-')
+            << "+"
             << std::endl;
     }
 
@@ -412,6 +449,37 @@ void Game::draw()
             std::cout << std::endl;
 
             inventory.OpenInv();
+
+            std::cout << std::endl;
+
+            //prints out armor and weapon epuipped status
+            if (player.getequippedbasicweapon() == nullptr) {
+                std::cout << "You have no basic weapon" << std::endl;
+            }
+            else {
+                std::cout<<"You have basic weapon "<<(player.getequippedbasicweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedweapon() == nullptr) {
+                std::cout << "You have no advanced weapon" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced weapon " << (player.getequippedadvancedweapon())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedbasicarmor() == nullptr) {
+                std::cout << "You have no basic armor" << std::endl;
+            }
+            else {
+                std::cout << "You have basic armor " << (player.getequippedbasicarmor())->getname() << " equipped" << std::endl;
+            }
+
+            if (player.getequippedadvancedarmor() == nullptr) {
+                std::cout << "You have no advanced armor" << std::endl;
+            }
+            else {
+                std::cout << "You have advanced armor " << (player.getequippedadvancedarmor())->getname() << " equipped" << std::endl;
+            }
 
             std::cout << std::endl;
 
@@ -433,6 +501,14 @@ void Game::draw()
 
             std::cout
                 << "E     - Use Item"
+                << std::endl;
+
+            std::cout
+                << "R     - Unequip weapon/armor"
+                << std::endl;
+
+            std::cout
+                << "I     - Inspect"
                 << std::endl;
 
             std::cout
@@ -476,12 +552,6 @@ void Game::handleInput(
         MAP_STATE)
     {
         handleMapInput(input);
-    }
-
-    else if (currentState ==
-        CARD_BATTLE_STATE)
-    {
-        handleCardBattleInput(input);
     }
 
     else if (currentState ==
@@ -837,7 +907,7 @@ void Game::activateCurrentMapNode()
         FIGHT)
     {
         currentState =
-            CARD_BATTLE_STATE;
+            BATTLE_STATE;
     }
 
     else if (type ==
@@ -850,7 +920,11 @@ void Game::activateCurrentMapNode()
     else if (type ==
         BACKPACK)
     {
-        // Always begin with Pliers selected.
+        // Generate the choices only once
+        // when entering this event.
+        generateBackpackItems();
+
+        // Begin with the first reward selected.
         selectedBackpackItem =
             0;
 
@@ -877,6 +951,10 @@ void Game::handleCardBattleInput(
         if (map.isAtFinalNode()
             == true)
         {
+            //lock puzzle 3 and 4
+            if (room.getRoomNumber() == 3 || room.getRoomNumber() == 4) {
+                room.setPuzzleUnlocked(true);
+            }
             // ============================
             // ROOM 1 BOSS
             // ============================
@@ -919,7 +997,14 @@ void Game::handleCardBattleInput(
                 room.getRoomNumber() == 2)
             {
                 std::cout
-                    << "The room falls silent."
+                    << "The room falls silent, you remember the time: '10:15'"
+                    << std::endl;
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                std::cout
+                    << "The room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
                     << std::endl;
             }
 
@@ -976,7 +1061,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem--;
 
-        // Wrap from Pliers to 5 Coins.
         if (selectedBackpackItem < 0)
         {
             selectedBackpackItem = 3;
@@ -992,7 +1076,6 @@ void Game::handleBackpackInput(
     {
         selectedBackpackItem++;
 
-        // Wrap from 5 Coins to Pliers.
         if (selectedBackpackItem > 3)
         {
             selectedBackpackItem = 0;
@@ -1008,7 +1091,7 @@ void Game::handleBackpackInput(
     {
         clearScreen();
 
-        // Index 3 is the coin reward.
+        // Choice 3 is always 5 Coins.
         if (selectedBackpackItem == 3)
         {
             std::cout
@@ -1018,24 +1101,45 @@ void Game::handleBackpackInput(
 
             std::cout << std::endl;
 
-            // Add the coins to the same shop object
-            // used by the game's shop.
             shopkeeper.AddCoins(5);
         }
         else
         {
-            std::cout
-                << "You take the "
-                << getBackpackItemName(
-                    selectedBackpackItem)
-                << "."
-                << std::endl;
+            int databaseIndex =
+                backpackItemIndices[
+                    selectedBackpackItem];
 
-            std::cout << std::endl;
+            item* selectedItem =
+                backpackDatabase.getitem(
+                    databaseIndex);
 
-            std::cout
-                << "This is a placeholder item."
-                << std::endl;
+            if (selectedItem != nullptr)
+            {
+                std::cout
+                    << "You take the "
+                    << selectedItem->getname()
+                    << "."
+                    << std::endl;
+
+                std::cout << std::endl;
+
+                // Store the actual database index
+                // inside the player's inventory.
+                inventory.ReceivedInv(
+                    databaseIndex);
+
+                std::cout
+                    << "The item was placed "
+                    << "in your inventory."
+                    << std::endl;
+            }
+            else
+            {
+                std::cout
+                    << "The selected item could "
+                    << "not be found."
+                    << std::endl;
+            }
         }
 
         std::cout << std::endl;
@@ -1053,7 +1157,6 @@ void Game::handleBackpackInput(
             true;
     }
 }
-
 // INVENTORY
 
 void Game::handleInventoryInput(
@@ -1093,10 +1196,50 @@ void Game::handleInventoryInput(
     {
         std::cout << std::endl;
 
-        inventory.UsedInv(
-            selectedInventorySlot);
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.equiparmor(inventory.getarmorInv(selectedInventorySlot));
+            std::cout << "Equipped armor " << inventory.getarmorInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        case 1:
+            player.equipweapon(inventory.getweaponInv(selectedInventorySlot));
+            std::cout << "Equipped weapon " << inventory.getweaponInv(selectedInventorySlot)->getname() << std::endl;
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
 
         std::cout << std::endl;
+
+        std::cout
+            << "Press any key to continue."
+            << std::endl;
+
+        readKey();
+
+        screenNeedsClear =
+            true;
+    }
+
+    // Unequipping
+    else if (input == 'R' ||
+        input == 'r') 
+    {
+        switch (inventory.checkingType(selectedInventorySlot)) {
+        case 0:
+            player.unequiparmor(inventory.getarmorInv(selectedInventorySlot));
+            break;
+        case 1:
+            player.unequipweapon(inventory.getweaponInv(selectedInventorySlot));
+            break;
+        default:
+            std::cout << "nothing happened" << std::endl;
+        }
+    }
+
+    else if (input == 'I' ||
+        input == 'i') {
+        inventory.inspecting(selectedInventorySlot);
 
         std::cout
             << "Press any key to continue."
@@ -1254,10 +1397,6 @@ void Game::goToNextRoom()
         readKey();
     }
 
-    // ============================
-    // ROOM 2 -> ROOM 3
-    // ============================
-
  // ============================
 // ROOM 2 -> ROOM 3
 // ============================
@@ -1289,7 +1428,7 @@ void Game::goToNextRoom()
         std::cout << std::endl;
 
         std::cout
-            << "A strange safe waits in the darkness."
+            << "This feels... weird. It feels like the room is spinning"
             << std::endl;
 
         std::cout << std::endl;
@@ -1301,22 +1440,87 @@ void Game::goToNextRoom()
         readKey();
     }
     
-// ============================
-// ROOM 3 COMPLETE
-// ============================
+    // ============================
+    // ROOM 3 -> ROOM 4
+    // ============================
 
     else if (currentRoomNumber == 3)
     {
+        room.loadRoom(4);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
         clearScreen();
 
         std::cout
-            << "Room 3 complete!"
+            << "Watch out!"
             << std::endl;
 
         std::cout << std::endl;
 
         std::cout
-            << "The final door opens."
+            << "There's a bunch of traps"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 4."
+            << std::endl;
+
+        readKey();
+    }
+    // ============================
+  // ROOM 4 -> ROOM 5
+  // ============================
+
+    else if (currentRoomNumber == 4)
+    {
+        room.loadRoom(5);
+
+        player.resetPosition();
+
+        map.generateMap();
+
+        activePuzzle = nullptr;
+
+        currentState = ROOM_STATE;
+
+        clearScreen();
+
+        std::cout
+            << "You walk in..."
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "There's someone waiting for you"
+            << std::endl;
+
+        std::cout << std::endl;
+
+        std::cout
+            << "Press any key to enter Room 5."
+            << std::endl;
+
+        readKey();
+        }
+    // ============================
+    // ENDING
+    // ============================
+    else if (currentRoomNumber == 5)
+    {
+        clearScreen();
+
+        std::cout
+            << "Room 5 complete!"
             << std::endl;
 
         std::cout << std::endl;
@@ -1334,6 +1538,114 @@ void Game::goToNextRoom()
         readKey();
 
         running = false;
+        }
+         
+}
+
+void Game::startBattle() {
+    Enemy* enemy = nullptr;
+
+    int roomnumber = room.getRoomNumber();   
+    if (isTutorialBattleDone == false) {
+        enemy = new Enemy("King Tut", Enemy::ENEMY_TYPE::TUTORIAL, 30, 5, 0, 5, 0);
+    }
+    else if (map.isAtFinalNode()) {
+        if (roomnumber == 1) {
+            enemy = new Enemy("Gunman", Enemy::ENEMY_TYPE::GUNMAN, 90, 5, 10, 1, 5);
+        }
+        else if (roomnumber == 2) {
+            enemy = new Enemy("Grim", Enemy::ENEMY_TYPE::GRIM, 100, 12, 1, 6, 7);
+        }
+        else if (roomnumber == 3) {
+            enemy = new Enemy("Trickster", Enemy::ENEMY_TYPE::TRICKSTER, 90, 17, 5, 6, 8);
+        }
+        else if (roomnumber == 4) {
+            enemy = new Enemy("Survivor", Enemy::ENEMY_TYPE::SURVIVOR, 200, 10, 10, 18, 15);
+        }
+        else if (roomnumber == 5) {
+            enemy = new Enemy("01", Enemy::ENEMY_TYPE::GAME_MASTER, 150, 20, 0, 17, 15);
+        }
+    }
+    else {
+        int hp = 30;
+		int mattack = 0;
+		int mdefense = 0;
+		int pattack = 0;
+		int pdefense = 0;
+        int projectileormelee = rand() % 2;
+		if (projectileormelee == 0) {
+			mattack = 5;
+			mdefense = 5;
+		}
+        else {
+            pattack = 6;
+            pdefense = 4;
+        }
+        if (roomnumber == 2) {
+            hp = rand() % 11 + 40;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 7;
+                mdefense = 6;
+            }
+            else {
+                pattack = 7;
+                pdefense = 5;
+            }
+        }
+        else if (roomnumber == 3) {
+            hp = rand() % 11 + 50;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 7;
+                mdefense = rand() % 2 + 7;
+            }
+            else {
+                pattack = rand() % 2 + 8;
+                pdefense = rand() % 2 + 6;
+            }
+        }
+        else if (roomnumber >= 4) {
+            hp = rand() % 11 + 60;
+            if (projectileormelee == 0) {
+                mattack = rand() % 2 + 8;
+                mdefense = rand() % 2 + 8;
+            }
+            else {
+                pattack = rand() % 2 + 9;
+                pdefense = rand() % 2 + 7;
+            }
+        }
+		int randomEnemyType = rand() % 99 + 1;
+        if (randomEnemyType < 10) {
+            enemy = new Enemy("0" + std::to_string(randomEnemyType), Enemy::ENEMY_TYPE::HENCHMEN, hp, mattack, pattack, mdefense, pdefense);
+        }
+        else {
+            enemy = new Enemy(std::to_string(randomEnemyType), Enemy::ENEMY_TYPE::HENCHMEN, hp, mattack, pattack, mdefense, pdefense);
+        }
     }
 
+    if (enemy == nullptr) {
+        return;
+    }
+
+    bool tutorialBattle = !isTutorialBattleDone;
+
+    BattleManager battle(
+        &player,
+        enemy,
+        &cardDatabase
+    );
+
+    battle.StartBattle();
+
+    delete enemy;
+
+    if (tutorialBattle) {
+        isTutorialBattleDone = true;
+        currentState = ROOM_STATE;
+    }
+    else {
+        currentState = MAP_STATE;
+    }
+
+    screenNeedsClear = true;
 }
