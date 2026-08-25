@@ -1,8 +1,6 @@
 #include "inv.h"
 #include <iostream>
 
-//#include <conio.h>//int input = _getch();
-
 inv::inv() {
     for (int i = 0; i < 15;i++) {
         invitem[i] = database.getitem(i);

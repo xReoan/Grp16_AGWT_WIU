@@ -88,6 +88,8 @@ void BattleManager::StartBattle() {
 				enemyselectedcards[i] = nullptr;
 			}
 		}
+		displaybattle(who::player, true);
+		inspectplayedcards();
 		resolveturn();
 		discardplayedcards();
 		checksurvivorphase();
@@ -109,13 +111,13 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	std::cout << "                   BATTLE" << std::endl;
 	std::cout << "============================================" << std::endl;
 
-	std::cout << "Enemy HP: " << enemyhp << "/100" << std::endl;
+	std::cout << "Enemy HP: " << enemyhp << "/" << currentenemy->getmaxhp() << std::endl;
 	displayenemyeffects();
 
 	std::cout << std::endl;
 
 	if (showboard == true) {
-		displayboard(turn);
+		displayboard();
 	}
 
 	std::cout << std::endl;
@@ -198,11 +200,14 @@ void BattleManager::displaycards(Card* cards[], int count) {
 	std::cout << std::endl;
 }
 
-void BattleManager::displayboard(who user) {
+void BattleManager::displayboard() {
 	std::cout << "ENEMY" << std::endl;
 
-	if (user == who::enemy) {
+	if (enemyselectedcount > 0) {
 		displaycards(enemyselectedcards, enemyselectedcount);
+	}
+	else {
+		std::cout << "(no cards selected)" << std::endl;
 	}
 
 	std::cout << std::endl;
@@ -211,8 +216,11 @@ void BattleManager::displayboard(who user) {
 
 	std::cout << "YOU" << std::endl;
 
-	if (user == who::player) {
+	if (selectedcount > 0) {
 		displaycards(selectedcards, selectedcount);
+	}
+	else {
+		std::cout << "(no cards selected)" << std::endl;
 	}
 }
 
@@ -331,19 +339,6 @@ void BattleManager::PlayerTurn() {
 			}
 		}
 	}
-
-	displaybattle(who::player, true);
-
-	/*for (int i = 0; i < selectedcount; i++) {
-		playcard(selectedcards[i], who::player);
-	}
-
-	for (int i = currentplayer->getdeck()->gethandcount() - 1; i >= 0; i--) {
-		if (selected[i] == true) {
-			currentplayer->getdeck()->discardcard(i);
-		}
-	}
-	checksurvivorphase();*/
 }
 
 void BattleManager::EnemyTurn() {
@@ -585,6 +580,10 @@ void BattleManager::playcard(Card* card, who user) {
 	else {
 		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!");
 	}
+	std::cout << std::endl;
+	std::cout << "Press any key to continue... Don't keep them waiting...";
+	_getch();
+	system("cls");
 	for (int i = 0; i < 3; i++) {
 		Card::effecttype effect = card->getcardeffect(i);
 		if (effect != Card::effecttype::none) {
@@ -1633,4 +1632,40 @@ void BattleManager::addtimedstat(int* stat, int amount, int duration) {
 
 void BattleManager::displaymessage(std::string message) {
 	std::cout << message << std::endl;
+}
+
+void BattleManager::inspectplayedcards() {
+	bool inspecting = true;
+
+	while (inspecting) {
+		std::cout << std::endl;
+		std::cout << "Inspect cards? " << std::endl;
+		std::cout << "1-" << selectedcount << ": Your cards" << std::endl;
+		std::cout << "4-" << 3 + enemyselectedcount << ": Enemy cards" << std::endl;
+		std::cout << "Enter: Continue" << std::endl;
+
+		char input = _getch();
+
+		if (input == 13) {
+			inspecting = false;
+		}
+		else if (input >= '1' && input <= '3') {
+			int index = input - '1';
+
+			if (index < selectedcount) {
+				std::cout << selectedcards[index]->getcardname() << std::endl;
+				std::cout << selectedcards[index]->getcarddescription() << std::endl;
+				_getch();
+			}
+		}
+		else if (input >= '4' && input <= '6') {
+			int index = input - '4';
+
+			if (index < enemyselectedcount) {
+				std::cout << enemyselectedcards[index]->getcardname() << std::endl;
+				std::cout << enemyselectedcards[index]->getcarddescription() << std::endl;
+				_getch();
+			}
+		}
+	}
 }

@@ -1634,6 +1634,20 @@ void Game::startBattle() {
 
     battle.StartBattle();
 
+    if (player.isalive()) {
+        if (enemy->getEnemyType() == Enemy::ENEMY_TYPE::HENCHMEN) {
+            shopkeeper.AddCoins(2);
+            std::cout << "You earned $2!" << std::endl;
+        }
+        else {
+            shopkeeper.AddCoins(10);
+            std::cout << "You earned $10!" << std::endl;
+        }
+        std::cout << "Total coins: " << shopkeeper.GetCoins() << std::endl;
+        std::cout << "Press any key to continue...";
+        _getch();
+    }
+
     delete enemy;
 
     if (tutorialBattle) {
