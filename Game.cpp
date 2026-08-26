@@ -248,8 +248,7 @@ void Game::generateBackpackItems()
                     duplicateItem = true;
                 }
             }
-        } 
-        while (duplicateItem == true);
+        } while (duplicateItem == true);
     }
 }
 
@@ -350,7 +349,7 @@ void Game::draw()
         std::cout << std::endl;
 
         shopkeeper.ShopMenu();
-        
+
         std::cout
             << "Q - Leave Shop"
             << std::endl;
@@ -445,80 +444,80 @@ void Game::draw()
     // Inventory
     else if (currentState ==
         INVENTORY_STATE)
-        {
-            std::cout
-                << "================ INVENTORY ================"
-                << std::endl;
+    {
+        std::cout
+            << "================ INVENTORY ================"
+            << std::endl;
 
-            std::cout << std::endl;
+        std::cout << std::endl;
 
-            inventory.OpenInv();
+        inventory.OpenInv();
 
-            std::cout << std::endl;
+        std::cout << std::endl;
 
-            //prints out armor and weapon epuipped status
-            if (player.getequippedbasicweapon() == nullptr) {
-                std::cout << "You have no basic weapon" << std::endl;
-            }
-            else {
-                std::cout<<"You have basic weapon "<<(player.getequippedbasicweapon())->getname() << " equipped" << std::endl;
-            }
+        //prints out armor and weapon epuipped status
+        if (player.getequippedbasicweapon() == nullptr) {
+            std::cout << "You have no basic weapon" << std::endl;
+        }
+        else {
+            std::cout << "You have basic weapon " << (player.getequippedbasicweapon())->getname() << " equipped" << std::endl;
+        }
 
-            if (player.getequippedadvancedweapon() == nullptr) {
-                std::cout << "You have no advanced weapon" << std::endl;
-            }
-            else {
-                std::cout << "You have advanced weapon " << (player.getequippedadvancedweapon())->getname() << " equipped" << std::endl;
-            }
+        if (player.getequippedadvancedweapon() == nullptr) {
+            std::cout << "You have no advanced weapon" << std::endl;
+        }
+        else {
+            std::cout << "You have advanced weapon " << (player.getequippedadvancedweapon())->getname() << " equipped" << std::endl;
+        }
 
-            if (player.getequippedbasicarmor() == nullptr) {
-                std::cout << "You have no basic armor" << std::endl;
-            }
-            else {
-                std::cout << "You have basic armor " << (player.getequippedbasicarmor())->getname() << " equipped" << std::endl;
-            }
+        if (player.getequippedbasicarmor() == nullptr) {
+            std::cout << "You have no basic armor" << std::endl;
+        }
+        else {
+            std::cout << "You have basic armor " << (player.getequippedbasicarmor())->getname() << " equipped" << std::endl;
+        }
 
-            if (player.getequippedadvancedarmor() == nullptr) {
-                std::cout << "You have no advanced armor" << std::endl;
-            }
-            else {
-                std::cout << "You have advanced armor " << (player.getequippedadvancedarmor())->getname() << " equipped" << std::endl;
-            }
+        if (player.getequippedadvancedarmor() == nullptr) {
+            std::cout << "You have no advanced armor" << std::endl;
+        }
+        else {
+            std::cout << "You have advanced armor " << (player.getequippedadvancedarmor())->getname() << " equipped" << std::endl;
+        }
 
-            std::cout << std::endl;
+        std::cout << std::endl;
 
-            std::cout
-                << "Selected Slot: ";
-                if (selectedInventorySlot + 1 < 10) {
-                    std::cout << selectedInventorySlot + 1<< " ";
-                }
-                else {
-                    std::cout << selectedInventorySlot + 1;
-                }
-                std::cout<< std::endl;
+        std::cout
+            << "Selected Slot: ";
+        if (selectedInventorySlot + 1 < 10) {
+            std::cout << selectedInventorySlot + 1 << " ";
+        }
+        else {
+            std::cout << selectedInventorySlot + 1;
+        }
+        std::cout << std::endl;
 
-            std::cout << std::endl;
+        std::cout << std::endl;
 
-            std::cout
-                << "W / S - Select Slot"
-                << std::endl;
+        std::cout
+            << "W / S - Select Slot"
+            << std::endl;
 
-            std::cout
-                << "E     - Use Item"
-                << std::endl;
+        std::cout
+            << "E     - Use Item"
+            << std::endl;
 
-            std::cout
-                << "R     - Unequip weapon/armor"
-                << std::endl;
+        std::cout
+            << "R     - Unequip weapon/armor"
+            << std::endl;
 
-            std::cout
-                << "I     - Inspect"
-                << std::endl;
+        std::cout
+            << "I     - Inspect"
+            << std::endl;
 
-            std::cout
-                << "N / Q - Close Inventory"
-                << std::endl;
-                }
+        std::cout
+            << "N / Q - Close Inventory"
+            << std::endl;
+    }
 
     // PUZZLE
     else if (
@@ -546,6 +545,29 @@ void Game::draw()
 void Game::handleInput(
     char input)
 {
+    if (input == 'T' || input == 't') {
+        char second = readKey();
+        char third = readKey();
+        if (second == 'P' || second == 'p') {
+            switch (third) {
+            case ('1'):
+                teleport(1);
+                break;
+            case ('2'):
+                teleport(2);
+                break;
+            case ('3'):
+                teleport(3);
+                break;
+            case ('4'):
+                teleport(4);
+                break;
+            case ('5'):
+                teleport(5);
+                break;
+            }
+        }
+    }
     if (currentState ==
         ROOM_STATE)
     {
@@ -728,47 +750,47 @@ void Game::handleRoomInput(
                     true;
             }
 
-           // ========================
-           // INSPECTABLE OBJECT
-           // ========================
+            // ========================
+            // INSPECTABLE OBJECT
+            // ========================
 
             else if (
                 result ==
                 SHOW_DIALOGUE)
+            {
+                InspectableObject* inspectedObject =
+                    dynamic_cast<InspectableObject*>(
+                        object);
+
+                if (inspectedObject !=
+                    nullptr)
                 {
-                    InspectableObject* inspectedObject =
-                        dynamic_cast<InspectableObject*>(
-                            object);
+                    clearScreen();
 
-                    if (inspectedObject !=
-                        nullptr)
-                    {
-                        clearScreen();
+                    std::cout
+                        << "================ "
+                        << inspectedObject->getName()
+                        << " ================"
+                        << std::endl;
 
-                        std::cout
-                            << "================ "
-                            << inspectedObject->getName()
-                            << " ================"
-                            << std::endl;
+                    std::cout << std::endl;
 
-                        std::cout << std::endl;
+                    std::cout
+                        << inspectedObject->getDialogue()
+                        << std::endl;
 
-                        std::cout
-                            << inspectedObject->getDialogue()
-                            << std::endl;
+                    std::cout << std::endl;
 
-                        std::cout << std::endl;
+                    std::cout
+                        << "Press any key to continue."
+                        << std::endl;
 
-                        std::cout
-                            << "Press any key to continue."
-                            << std::endl;
+                    readKey();
 
-                        readKey();
-
-                        screenNeedsClear =
-                            true;
-                    }
-                    }
+                    screenNeedsClear =
+                        true;
+                }
+            }
         }
     }
 }
@@ -1223,7 +1245,7 @@ void Game::handleInventoryInput(
 
     // Unequipping
     else if (input == 'R' ||
-        input == 'r') 
+        input == 'r')
     {
         switch (inventory.checkingType(selectedInventorySlot)) {
         case 0:
@@ -1398,9 +1420,9 @@ void Game::goToNextRoom()
         readKey();
     }
 
- // ============================
-// ROOM 2 -> ROOM 3
-// ============================
+    // ============================
+   // ROOM 2 -> ROOM 3
+   // ============================
 
     else if (currentRoomNumber == 2)
     {
@@ -1440,7 +1462,7 @@ void Game::goToNextRoom()
 
         readKey();
     }
-    
+
     // ============================
     // ROOM 3 -> ROOM 4
     // ============================
@@ -1512,7 +1534,7 @@ void Game::goToNextRoom()
             << std::endl;
 
         readKey();
-        }
+    }
     // ============================
     // ENDING
     // ============================
@@ -1539,14 +1561,14 @@ void Game::goToNextRoom()
         readKey();
         gameWon = true;
         running = false;
-        }
-         
+    }
+
 }
 
 void Game::startBattle() {
     Enemy* enemy = nullptr;
 
-    int roomnumber = room.getRoomNumber();   
+    int roomnumber = room.getRoomNumber();
     if (isTutorialBattleDone == false) {
         enemy = new Enemy("King Tut", Enemy::ENEMY_TYPE::TUTORIAL, 30, 5, 0, 5, 0);
     }
@@ -1558,7 +1580,7 @@ void Game::startBattle() {
             enemy = new Enemy("Grim", Enemy::ENEMY_TYPE::GRIM, 100, 12, 1, 6, 7);
         }
         else if (roomnumber == 3) {
-            enemy = new Enemy("Trickster", Enemy::ENEMY_TYPE::TRICKSTER, 90, 17, 5, 6, 8);
+            enemy = new Enemy("Trickster", Enemy::ENEMY_TYPE::TRICKSTER, 80, 5, 17, 6, 4);
         }
         else if (roomnumber == 4) {
             enemy = new Enemy("Survivor", Enemy::ENEMY_TYPE::SURVIVOR, 200, 10, 10, 18, 15);
@@ -1569,15 +1591,15 @@ void Game::startBattle() {
     }
     else {
         int hp = 30;
-		int mattack = 0;
-		int mdefense = 0;
-		int pattack = 0;
-		int pdefense = 0;
+        int mattack = 0;
+        int mdefense = 0;
+        int pattack = 0;
+        int pdefense = 0;
         int projectileormelee = rand() % 2;
-		if (projectileormelee == 0) {
-			mattack = 5;
-			mdefense = 5;
-		}
+        if (projectileormelee == 0) {
+            mattack = 5;
+            mdefense = 5;
+        }
         else {
             pattack = 6;
             pdefense = 4;
@@ -1615,7 +1637,7 @@ void Game::startBattle() {
                 pdefense = rand() % 2 + 7;
             }
         }
-		int randomEnemyType = rand() % 95 + 1;
+        int randomEnemyType = rand() % 95 + 1;
         if (randomEnemyType >= 43) {
             randomEnemyType++;
         }
@@ -1649,7 +1671,8 @@ void Game::startBattle() {
     BattleManager battle(
         &player,
         enemy,
-        &cardDatabase
+        &cardDatabase,
+        tutorialBattle
     );
 
     battle.StartBattle();
@@ -1658,7 +1681,7 @@ void Game::startBattle() {
         // Unlock puzzle after defeating Room 3 or 4 boss
         if (map.isAtFinalNode() == true)
         {
-            if (room.getRoomNumber() == 3 || room.getRoomNumber() == 4){
+            if (room.getRoomNumber() == 3 || room.getRoomNumber() == 4) {
                 room.setPuzzleUnlocked(true);
             }
         }
@@ -1667,7 +1690,7 @@ void Game::startBattle() {
             int easter = rand() % 101;
             if (easter <= 95) {
                 std::cout << "you feel $2 richer..." << std::endl;
-			}
+            }
             else {
                 std::cout << "you feel $100 richer... but in reality you got $2." << std::endl;
             }
@@ -1742,5 +1765,14 @@ void Game::startBattle() {
         currentState = MAP_STATE;
     }
 
+    screenNeedsClear = true;
+}
+
+void Game::teleport(int roomnumber) {
+    room.loadRoom(roomnumber);
+    player.resetPosition();
+    map.generateMap();
+    activePuzzle = nullptr;
+    currentState = ROOM_STATE;
     screenNeedsClear = true;
 }

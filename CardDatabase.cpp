@@ -51,22 +51,22 @@ CardDatabase::CardDatabase() {
 
 	//grim
 	cards[31] = new Card("Radial Slash", "They slash at you twice, reducing your melee defense by 3 with each hit and poisoning you after the second.", Card::cardtype::attack, item::combattype::melee, Card::effecttype::deal_damage, Card::effecttype::lower_defense, Card::effecttype::poison_tip, 3, 1.0f, 2, 2);
-	cards[32] = new Card("Burn In Despair!", "They despise how healthy you are.Deals 25 % of your current health as damage.", Card::cardtype::attack, item::combattype::melee, Card::effecttype::hp_based_damage, Card::effecttype::none, Card::effecttype::none, 0, 0.25f, 1, 0);
+	cards[32] = new Card("Burn In Despair!", "They despise how healthy you are. Deals 25 % of your current health as damage.", Card::cardtype::attack, item::combattype::melee, Card::effecttype::hp_based_damage, Card::effecttype::none, Card::effecttype::none, 0, 0.25f, 1, 0);
 	cards[33] = new Card("Grievance", "They grieve (maybe for your loss), unable to attack for a turn. They then raise their melee attack and defense by 2.", Card::cardtype::hybrid, item::combattype::melee, Card::effecttype::increase_defense, Card::effecttype::increase_attack, Card::effecttype::cannot_attack, 2, 1.0f, 0, 1);
 
 	//trickster
-	cards[34] = new Card("Hipnotizēt", "They put you in a trance, making you unable to attack for a turn, while also dealing damage over two turns.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::hypnotism, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 2);
+	cards[34] = new Card("Hipnotizēt", "They put you in a trance, making you unable to attack for a turn, while also dealing damage over two turns.", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::hypnotism, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 2);
 	cards[35] = new Card("Burvju Gredzens", "They summon a magic ring, giving them a temporary projectile defense boost, and a 25% chance to reflect projectiles.", Card::cardtype::hybrid, item::combattype::projectile, Card::effecttype::increase_defense, Card::effecttype::chance_reflect_projectile, Card::effecttype::none, 5, 1.0f, 0, 2);
 	cards[36] = new Card("Ilūzija", "You're under an illusion. Is anything real? Is this card real?", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::illusioned, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 1); //gives player the illusioned state (trickster -5 both defense) can be cancelled if player deals at least 7 damage
 	cards[37] = new Card("Ilūzija", "You're under an illusion. Is anything real? Is this card real?", Card::cardtype::trap, item::combattype::none, Card::effecttype::reflect_damage, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 0, 2); //reflects all damage next turn
-	cards[38] = new Card("Nodevība", "Watch closely... Too late! They deal massive damage while you're illusioned, ignoring your defense. I wonder when that happened...", Card::cardtype::attack, item::combattype::melee, Card::effecttype::ignore_defense, Card::effecttype::deal_damage, Card::effecttype::none, 0, 1.5f, 1, 0); //if not illusioned, shows as Ferīre
-	
+	cards[38] = new Card("Nodevība", "Watch closely... Too late! They deal massive damage while you're illusioned, ignoring your defense. I wonder when that happened...", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::ignore_defense, Card::effecttype::deal_damage, Card::effecttype::none, 0, 1.5f, 1, 0); //if not illusioned, shows as Ferīre
+
 	//survivor phase 1
 	cards[39] = new Card("Kinetic Strike", "They strike you, dealing damage and taunting you.", Card::cardtype::attack, item::combattype::melee, Card::effecttype::deal_damage, Card::effecttype::taunted, Card::effecttype::none, 0, 1.0f, 1, 1);
 	cards[40] = new Card("Horixon Valor", "They are fueled by this duel. +3 both defenses.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::none, Card::effecttype::none, 3, 1.0f, 0, 0);
 	cards[41] = new Card("Tharos", "Increases melee attack by 7 for one turn.", Card::cardtype::hybrid, item::combattype::melee, Card::effecttype::increase_attack, Card::effecttype::none, Card::effecttype::none, 7, 1.0f, 0, 1);
 	cards[42] = new Card("Unwilling", "Whatever happens, they will never budge. If you use at least 2 attack cards next turn, they negate both cards' effects.", Card::cardtype::trap, item::combattype::none, Card::effecttype::negate_attack_card, Card::effecttype::none, Card::effecttype::none, 2, 1.0f, 0, 1);
-	
+
 	//survivor phase 2
 	cards[43] = new Card("Kinetic Blast", "Have a taste of your own medicine. They deal damage equal to half your melee defense and half their own damage.", Card::cardtype::attack, item::combattype::projectile, Card::effecttype::kinetic_damage, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 0);
 	cards[44] = new Card("Bliss, On The Horizon's Edge", "They are at peace. +5 melee defense, +20 shield.", Card::cardtype::defense, item::combattype::melee, Card::effecttype::increase_defense, Card::effecttype::shield, Card::effecttype::none, 5, 1.0f, 0, 0);

@@ -103,6 +103,9 @@ private:
     //check if iwn game 
     bool gameWon;
 
+    //teleport
+    void teleport(int roomnumber);
+
 public:
     Game();
     bool getGameWon();
