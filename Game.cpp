@@ -1689,12 +1689,12 @@ void Game::startBattle() {
                 dialogueFunction.battle3diag();
             }
             else if (
-                room.getRoomNumber() == 5)
+                room.getRoomNumber() == 3)
             {
                 dialogueFunction.battle4diag();
             }
             else if (
-                room.getRoomNumber() == 5)
+                room.getRoomNumber() == 4)
             {
                 dialogueFunction.battle5diag();
             }
@@ -1717,6 +1717,7 @@ void Game::startBattle() {
 
     if (tutorialBattle) {
         isTutorialBattleDone = true;
+        dialogueFunction.introafterbattlediag();
         currentState = ROOM_STATE;
     }
     else {
