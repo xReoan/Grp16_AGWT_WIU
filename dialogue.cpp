@@ -103,7 +103,12 @@ about this place way more than me. If it's not too much to
 ask, could you tell me what happened? It would be much 
 appreciated. Maybe... I could help you too.")" << std::endl;
 std::cin.get();
-std::cout << R"(-------------------------------------------------------------
+system("cls");
+}
+
+void dialogue::introafterbattlediag() {
+std::cout << R"(Press Enter to continue . . .
+-------------------------------------------------------------
 15: "First of all, who gave you permission to call us by our 
 names? And second, I'm not obliged to tell you anything. I 
 plead the fourth.")" << std::endl;
@@ -184,6 +189,7 @@ std::cout << R"(-------------------------------------------------------------
 
 )" << std::endl;
 std::cin.get();
+system("cls");
 }
 
 void dialogue::battle2diag() {
@@ -218,6 +224,7 @@ You: "Ah..."
 
 )" << std::endl;
 	std::cin.get();
+system("cls");
 }
 
 void dialogue::battle3diag() {
@@ -286,7 +293,8 @@ He simply wanted justice."
 
 
 )" << std::endl;
-	std::cin.get();
+std::cin.get();
+system("cls");
 }
 
 void dialogue::battle4diag() {
@@ -344,7 +352,6 @@ std::cout << R"(-------------------------------------------------------------
 
 )" << std::endl;
 	std::cin.get();
-	system("cls");
 }
 
 void dialogue::battle5diag() {
@@ -409,7 +416,8 @@ You: "Oh.")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 74: "There, your question's answered. Leave.")" << std::endl;
-	std::cin.get();
+std::cin.get();
+system("cls");
 }
 
 void dialogue::bossdiag() {
@@ -446,4 +454,5 @@ std::cout << R"(-------------------------------------------------------------
 )" << std::endl;
 	std::cin.get();
 	}
+system("cls");
 }
