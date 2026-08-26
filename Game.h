@@ -99,6 +99,9 @@ private:
     // Handles Room 1 -> Room 2 etc.
     void goToNextRoom();
 
+    //teleport
+    void teleport(int roomnumber);
+
 public:
     Game();
 
