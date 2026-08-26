@@ -20,7 +20,7 @@ suspicious.")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 *As you entered the main lab, the eerie atmosphere sent 
-chillsbdown your spine, asbestos filling the air like 
+chills down your spine, asbestos filling the air like 
 snowflakes, making breathing ever so slightly difficult.*)" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
@@ -50,7 +50,7 @@ Unknown voice 1: "Interesting toy... Now get out!")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 You: "Calm down! Let's not be rash here... listen, I'm a 
-detective, only here to solve an old case.")" << std::endl;
+detective, only here to solve an old mystery.")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 Unknown voice 1: "Lies! Leave before you regret it." *He 
@@ -85,7 +85,7 @@ std::cout << R"(-------------------------------------------------------------
 15 (Survivor): "Are you serious? This isn't a game, 43. How 
 could you ever trust one of their kind, when you know just 
 as much as me what they did to us? They also threatened me 
-with a gun." *Holds up your pistol.*)" << std::endl;
+with this thing!" *Holds up your pistol.*)" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 43 (Gunman): "If this lovely Detective wanted to hurt us, 
@@ -100,18 +100,10 @@ You: "Hey, 43 is right. I'm not here to hurt anyone. I don't
 know who did this to you, but it wasn't me. I'm only here to
 investigate what happened here and go. You guys probably know
 about this place way more than me. If it's not too much to 
-ask, could you tell me what happened? It would be very much 
-appreciated. Maybe... I could help you too.
-
-
-
-)" << std::endl; // filler space = a way to signal diag is done :)
+ask, could you tell me what happened? It would be much 
+appreciated. Maybe... I could help you too.")" << std::endl;
 std::cin.get();
-}
-
-void dialogue::introafterbattlediag() {
-std::cout << R"(Press Enter to continue . . .
--------------------------------------------------------------
+std::cout << R"(-------------------------------------------------------------
 15: "First of all, who gave you permission to call us by our 
 names? And second, I'm not obliged to tell you anything. I 
 plead the fourth.")" << std::endl;
@@ -126,15 +118,23 @@ std::cout << R"(-------------------------------------------------------------
 that the outside is good when we are treated like dirt.")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-15: "..Fine. You want your information so bad? Since you
-won, I'll give you some information this once. But if you 
-end up losing to the other, there's no telling what will 
-happen. So what do you say, detective?")" << std::endl;
+15: ...Fine. You want your information so bad? How about 
+this? Let’s play some games. If you win… I might give you
+some  information. But if you lose… there’s no telling
+what will happen. So what do you say, detective?")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-You: "That's fine with me.")" << std::endl;
+You: "That's fine with me."
+
+
+
+)" << std::endl; // filler space = a way to signal diag is done :)
 std::cin.get();
-std::cout << R"(-------------------------------------------------------------
+}
+
+void dialogue::introafterbattlediag() {
+std::cout << R"(Press Enter to continue . . .
+-------------------------------------------------------------
 15: "Okay then... I'll start by introducing ourselves. 
 If you can't tell, we were the test subjects used in this
 lab. They took all of us from our parents when we were 
@@ -172,8 +172,7 @@ std::cout << R"(-------------------------------------------------------------
 15: "...")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-"*You, in mind:* "Ok... so I'll just call him the Big
-Bad Boss(BBB).")" << std::endl;
+"*You, in mind:* "Ok... so I'll just call him '01'.")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 43: "Bro, WHO are you talking about, 15?")" << std::endl;
@@ -246,24 +245,34 @@ Grim: If you truly want to know. As you may have already
 been told, 01 is the first test subject that came to the lab.
 From what I've heard, he was deemed as a failed experiment
 by the scientists. However, the scientists chose to keep him
-alive. They kept him throughout the run of the lab because
-they wanted to keep him as a reference. He was basically
-forced to watch as the scientists experiment on others,
-causing horrendous things to happen to them. The result of that
-was him growing a strong hatred towards the scientists. When
-the scientists eventually abandoned the lab, 01 was able to 
-break free from his confinement. He wanted to kill those 
+alive. 
+
+They kept him throughout the run of the lab because they 
+wanted to keep him as a reference. 
+
+He was basically forced to watch as the scientists experiment
+on others, causing horrendous things to happen to them. The 
+result of that was him growing a strong hatred towards the 
+scientists. 
+
+When the scientists eventually abandoned the lab, 01 was able
+to break free from his confinement. He wanted to kill those 
 scientists that experimented on him and everyone else, hoping
 to venture out and find them in order to give them a taste of
-their own medicine. Though, he knew that if he left, they
-would of killed him and us on sight because of what we are and
-what he wished to do. Afraid of risking even more lives, 
-especially since he had no idea where the scientists could've
-gone, he decided to keep the rest of us at the lab. Like what
-you heard from 43, initially, he planned to train us to become
-strong enough to kill the scientists one day. We went through
-a training routine for a good year or so. But as time went by,
-he became less willing to continue on with the revenge.
+their own medicine. 
+
+Though, he knew that if he left, they would of killed him and
+us on sight because of what we are and what he wished to do. 
+Afraid of risking even more lives, especially since we had no
+idea where the scientists could've gone, he decided to keep 
+the rest of us at the lab. 
+
+Like what you heard from 43, initially, he planned to train 
+us to become strong enough to kill the scientists one day. We
+went through a training routine for a good year or so. But as
+time went by, he became less willing to continue on with the
+revenge.
+
 Instead, he turned to playing games with us as a way to heal
 his and our inner child and occupy all of us.")" << std::endl;
 	std::cin.get();
@@ -306,19 +315,21 @@ You: "All of you must be really young...")" << std::endl;
 std::cout << R"(-------------------------------------------------------------
 45: "Yeah, after all, we were taken when we were very young
 for scientists to conduct studies on us. We were treated 
-like lab rats! No, we were treated far worse! They injected
-us with unknown substances that would mess with our blood
-and body. I even heard someone say that it altered our DNA
-too! I vividly remember what I experienced when it was my 
-turn. I would sometimes throw up or get high fevers. At some
-point, I even grew a pair of arms! I don’t know why it 
-didn't stick... I would’ve been so much cooler. Anyway, some
-people died because of the experiments, everyone would feel
-woozy every now and then as well... That's also why I can 
-read your mind!")" << std::endl;
+like lab rats! No, we were treated far worse! 
+
+They injected us with unknown substances that would mess with
+our blood and body. I even heard someone say that it altered 
+our DNA too! I vividly remember what I experienced when it 
+was my turn. I would sometimes throw up or get high fevers. 
+
+At some point, I even grew an extra pair of arms! I don’t know
+why it didn't stick... I would’ve been so much cooler. Anyway, 
+some people died because of the experiments, everyone would
+feel woozy every now and then as well... That's also why I 
+can read your mind!")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-You: "You: Really? What am I thinking of now?")" << std::endl;
+You: "Really? What am I thinking of now?")" << std::endl;
 	std::cin.get(); 
 std::cout << R"(-------------------------------------------------------------
 45: "You're thinking of... the... the door!")" << std::endl;
@@ -333,6 +344,7 @@ std::cout << R"(-------------------------------------------------------------
 
 )" << std::endl;
 	std::cin.get();
+	system("cls");
 }
 
 void dialogue::battle5diag() {
