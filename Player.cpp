@@ -71,20 +71,6 @@ void Player::unequiparmor(item* armor) {
     updatedefense();
 }
 
-void Player::addmoney(int amount) {
-    money += amount;
-}
-
-bool Player::spendmoney(int amount) {
-    if (money >= amount) {
-        money -= amount;
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 CardDeck* Player::getdeck() {
     return &deck;
 }
@@ -240,4 +226,8 @@ int Player::getY() {
 
 char Player::getFacingDirection() {
     return facingDirection;
+}
+
+void Player::setStarterEquipment(itemDatabase* database) {
+    equipweapon(database->getitem(0));
 }

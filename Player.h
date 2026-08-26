@@ -31,8 +31,6 @@ public:
     Player();
 
     int getmoney();
-    void addmoney(int amount);
-    bool spendmoney(int amount);
     item* getequippedbasicweapon();
     item* getequippedbasicarmor();
     item* getequippedadvancedweapon();
@@ -44,6 +42,7 @@ public:
     void equiparmor(item* armor);
     void unequipweapon(item* weapon);
     void unequiparmor(item* armor);
+    void setStarterEquipment(itemDatabase* database);
 
     void builddeck(CardDatabase* database);
     // Moves the player if the new position

@@ -10,20 +10,18 @@
 int revisedshop::shopItems[9] = { 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 int revisedshop::weaponItems[5] = { 1, 2, 3, 4, 5 };
 
-int inputshop = _getch(); // reads a single symbol instantly, skips showing it on screen, saves its numeric code into an integer variable
-
-revisedshop::revisedshop() : coins()
+revisedshop::revisedshop() : coins() // constructor   constructer declarator  member name 
 {
-    for (int i = 0; i < 10; i++) { // for each index in the shopItems + shopItemPtrs arrays
+    for (int i = 0; i < 9; i++) { // for each index in the shopItems + shopItemPtrs arrays
         if (shopItems[i] != -1) { // check value at i in shopItems is NOT -1 = " slot is empty ", have "-1" there because all valid items start from 0, therefore "-1" cannot refer to any valid items, considering it a "item invalid/empty"
-            shopItemPtrs[i] = database.getitem(shopItems[i]); 
-        }
+            shopItemPtrs[i] = database.getitem(shopItems[i]); // shopitems = displayed items . database = manager to look for the item data . shopItemPtrs stores pointers to the actual item objects
+        } // subscript operator [i] performs offset calculation from base address of the array. i represents the no. of elements to skip (scaled by the element size) to reach desired memory location.
         else {
-            shopItemPtrs[i] = nullptr; // to say "don't add item/don't use it"
+            shopItemPtrs[i] = nullptr; // nullptr = tells program "this pointer points to nothing" so its a checker. Without it, there's dangling pointers pointing to random memory . might end in crashes or bugs
         }
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
         if (weaponItems[i] != -1) {
             weaponItemPtrs[i] = database.getitem(weaponItems[i]);
         }
@@ -38,17 +36,16 @@ void revisedshop::ShopMenu()
     int slotChoice;
 
     while (true) {
-        system("cls");
+        system("cls"); // c runtime library func call = executes a system command to clear the console screen.
         std::cout << "            What would you like to buy?" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
-        std::cout << "                Press Enter to refresh" << std::endl;
+        std::cout << "          Use Enter to refresh/continue" << std::endl;
 		std::cout << "[O] Open Inventory" << std::endl;
 
-
-        char inputshop = _getch();
+        char inputshop = _getch(); // char = 'I' , inputshop = variable identifier , _getch(); = console input function call
 
         // Convert to uppercase automatically
         inputshop = toupper(inputshop);
@@ -56,9 +53,9 @@ void revisedshop::ShopMenu()
         switch (inputshop) {
         case 'I': {
             OpenShop();
-            std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";
+            std::cout << "\nEnter slot number to buy (1-9) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 10) {
+            if (slotChoice > 0 && slotChoice <= 9) {
 				BuyItem(slotChoice - 1); // do a "- 1" so that the user can input 1-10, but the array is 0-9
             }
 			else if (slotChoice == 0) {
@@ -74,9 +71,9 @@ void revisedshop::ShopMenu()
 
         case 'W': {
             OpenWeaponShop();
-            std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";
+            std::cout << "\nEnter slot number to buy (1-5) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 10) {
+            if (slotChoice > 0 && slotChoice <= 5) {
                 BuyWeapon(slotChoice - 1);
             }
             else if (slotChoice == 0) {
@@ -104,7 +101,11 @@ void revisedshop::ShopMenu()
 
         case 'O': {
             inv2.OpenInv();
-            return;
+            std::cout << std::endl;
+            std::cout << "Press any key to return to the shop...";
+            _getch();
+
+            break;
         }
 
         default: {
@@ -157,7 +158,7 @@ void revisedshop::OpenWeaponShop() const
     std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
     std::cout << "----------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) { // i = subscript operator. uses the index variable i to look up a specific position inside that collection.
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
             std::cout << " [" << i + 1 << "] " << weaponItemPtrs[i]->getname()
                 << " - " << weaponItemPtrs[i]->getprice() << " coins" << std::endl;
@@ -196,12 +197,13 @@ void revisedshop::BuyItem(int itemSlot)
     }
 
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
+    RemoveCoins(price);
     inv2.ReceivedInv(shopItems[itemSlot]);
 }
 
 void revisedshop::BuyWeapon(int weaponSlot)
 {
-    if (weaponSlot < 0 || weaponSlot >= 10) {
+    if (weaponSlot < 0 || weaponSlot >= 5) {
         std::cout << "Invalid weapon slot number!" << std::endl;
         return;
     }
@@ -211,8 +213,8 @@ void revisedshop::BuyWeapon(int weaponSlot)
         return;
     }
 
-    item* selectedWeapon = weaponItemPtrs[weaponSlot];
-    int price = selectedWeapon->getprice();
+    item* selectedWeapon = weaponItemPtrs[weaponSlot]; // item* = variable that stores a pointer . points to selectedWeapon aka the name of a pointer variable . weaponitemptrs = array that stores pointers to item objects . weaponslot = integer variable acting as the index
+    int price = selectedWeapon->getprice(); // getprice = public getter method (member func) called on the weapon object to retrieve price value.
 
     if (coins < price) {
         std::cout << "Not enough coins! You need " << price - coins << " more coins." << std::endl;
@@ -220,6 +222,7 @@ void revisedshop::BuyWeapon(int weaponSlot)
     }
 
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
+    RemoveCoins(price);
     inv2.ReceivedInv(weaponItems[weaponSlot]);
 }
 
@@ -229,29 +232,18 @@ void revisedshop::AddCoins(int amount)
     if (amount > 0) {
         coins += amount; // add amount added to coins
         std::cout << "Added " << amount << " coins. Total: " << coins << std::endl;
+		system("cls");
     }
+}
+
+void revisedshop::RemoveCoins(int amount)
+{
+        coins = coins - amount; // add amount added to coins
+        std::cout << "Deducted " << amount << " coins. Total: " << coins << std::endl;
 }
 
 // returns current coin total of the shop
 int revisedshop::GetCoins() const // const=ensure func no change the shop's data aka does nnt modify any variables
 {
     return coins; // sends back the coin value if called by diff func
-}
-
-// check if item available
-bool revisedshop::IsItemAvailable(int itemSlot) const
-{
-    if (itemSlot >= 0 && itemSlot < 10) {
-        return shopItems[itemSlot] != -1; // return true/false based on slot
-    }
-    return false;
-}
-
-//check if weapon available
-bool revisedshop::IsWeaponAvailable(int weaponSlot) const
-{
-    if (weaponSlot >= 0 && weaponSlot < 10) {
-        return weaponItems[weaponSlot] != -1;
-    }
-    return false;
 }

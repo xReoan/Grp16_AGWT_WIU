@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Card.h"
+#include "CardDatabase.h"
+#include <string>
 class BattleManager
 {
 public:
@@ -9,28 +11,39 @@ public:
 		player,
 		enemy
 	};
-	BattleManager(Player* player, Enemy* enemy);
+
+	struct timedstatchange {
+		int* stat;
+		int amount;
+		int turns;
+		bool active;
+	};
+
+	timedstatchange timedstats[20];
+	void addtimedstat(int* stat, int amount, int duration);
+	BattleManager(Player* player, Enemy* enemy, CardDatabase* database);
 	void displaybattle(who turn, bool showboard);
 	void displayplayereffects();
 	void displayenemyeffects();
 	void displaycards(Card* cards[], int count);
-	void displayboard(who user);
-	//dialogue
-	void displaydialogue(std::string speaker, std::string text);
-	void battlestartdialogue();
-	void battleenddialogue();
-	void battleeventdialogue(std::string event);
+	void displayboard();
+	void inspectplayedcards();
+	int displaylength(std::string text);
 
 	void displaymessage(std::string message);
 	void StartBattle();
 	void PlayerTurn();
 	void EnemyTurn();
 	void resolveturn();
+	void displayresolution();
 
 	void playcard(Card* card, who user);
 	void applyeffect(Card* card, Card::effecttype effect, who user);
+	void updateeffects();
+	void discardplayedcards();
 	
 	int calculateDamage(int rawdamage, int defense);
+	void damageplayer(int damage);
 	void damageenemy(int damage);
 	void checktraps(Card* attackercard[], int attackercount, bool negated[], who defender);
 	int findrandomcardtype(Card* cards[], int count, Card::cardtype type, bool negated[]);
@@ -44,45 +57,88 @@ private:
 	Enemy* currentenemy;
 	Card* selectedcards[3] = { nullptr, nullptr, nullptr };
 	bool selected[12];
-	int selectedcount = 0;
+	int selectedcount;
 	Card* enemyselectedcards[3] = { nullptr, nullptr, nullptr };
 	bool enemyselected[12];
-	int enemyselectedcount = 0;
-	int playermeleeattackbonus = 0;
-	int playerprojectileattackbonus = 0;
-	int playermeleedefensebonus = 0;
-	int playerprojectiledefensebonus = 0;
-	int playershield = 0;
-	int turn = 0;
+	int enemyselectedcount;
+	int playermeleeattackbonus;
+	int playerprojectileattackbonus;
+	int playermeleedefensebonus;
+	int playerprojectiledefensebonus;
+	int playershield;
+	int enemymeleeattackbonus;
+	int enemymeleedefensebonus;
+	int enemyprojectileattackbonus;
+	int enemyprojectiledefensebonus;
+	int enemyshield;
+	int playerlastdamage;
 
-	float playerdamagemultiplier = 1.0f;
-	float enemydamagemultiplier = 1.0f;
+	float playerdamagemultiplier;
+	float enemydamagemultiplier;
 	//stay alert / watch
 	int playernegateattacktrap;
 	int playernegatedefensetrap;
 	int enemynegateattacktrap;
-	int enemynegatedefensetrap;
 	//rat trap
-	bool playermeleecountertrap;
-	bool enemymeleecountertrap;
+	bool meleecountertrap;
 	//mirror trap
 	bool playermirrortrap;
 
 	bool playerignoredefense;
 	bool enemyignoredefense;
-	bool playerignoreshield;
+
 	bool enemyignoreshield;
+
+	bool playerhalfmelee;
+	bool playerhalfdamage;
+
+	bool playercannotattack;
+	bool enemycannotattack;
+
+	int playerdamagemultiplierturns;
+	int enemydamagemultiplierturns;
+
+	bool playerillusioned;
+
+	bool enemyreflectdamage;
+	float enemyreflectdamagemultiplier;
+	int enemyreflectdamageturns;
+
+	bool playertaunted;
+
+	bool playerupclose;
+	int playerupcloseturns;
+	int playerupclosedamage;
 
 	bool playerreflectprojectile;
 	int enemyreflectprojectile;
 
-	int enemymeleeattackbonus = 0;
-	int enemymeleedefensebonus = 0;
-	int enemyprojectileattackbonus = 0;
-	int enemyprojectiledefensebonus = 0;
-	int enemyshield = 0;
+	int playerhypnotismturns;
+	int playerhypnotismdamage;
 
-	bool playerskip = false;
-	bool enemyskip = false;
+	int playerpoisonturns;
+	int enemypoisonturns;
+
+	int playerphalanxbonus;
+	bool playerphalanxing;
+	int playerphalanxturns;
+	int playerphalanxdamage;
+	bool phalanxdonated;
+	bool playerphalanxboosted;
+
+	bool playerdonation;
+	int playerdonationturns;
+
+	bool playerprojectiletomelee;
+
+	bool playerskip;
+	bool enemyskip;
+
+	bool playerpoisonjustapplied;
+	bool enemypoisonjustapplied;
+	bool playerhypnotismjustapplied;
+	int playertauntedturns;
+	int playercannotattackturns;
+	int enemycannotattackturns;
 };
 
