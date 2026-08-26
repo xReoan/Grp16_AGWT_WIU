@@ -352,6 +352,7 @@ std::cout << R"(-------------------------------------------------------------
 
 )" << std::endl;
 	std::cin.get();
+system("cls");
 }
 
 void dialogue::battle5diag() {
@@ -364,7 +365,7 @@ void dialogue::battle5diag() {
 71, 72, 74 (Henchmen): "No way you won!")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-You: "You: What the, why can the rats talk?")" << std::endl;
+You: "What the, why can the rats talk?")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 71: "You've been playing games with us, and you didn't
