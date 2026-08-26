@@ -46,16 +46,62 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	enemyreflectdamagemultiplier = 1.0f;
 	enemyreflectdamageturns = 0;
 
+	playerhalfmeleeturns = 0;
+	playerbandageturns = 0;
+	playerbandageheal = 0;
 	playertaunted = false;
 
 	enemyreflectdamage = false;
 	playerreflectprojectile = false;
 	enemyreflectprojectile = 0;
 
+	enemydetermination = false;
+	enemygrievance = false;
 	playerprojectiletomelee = false;
 
 	playerskip = false;
 	enemyskip = false;
+
+	selectedcount = 0;
+	enemyselectedcount = 0;
+	playerlastdamage = 0;
+
+	playerdamagemultiplierturns = 0;
+	enemydamagemultiplierturns = 0;
+
+	playerupclose = false;
+	playerupcloseturns = 0;
+	playerupclosedamage = 0;
+
+	playerhypnotismturns = 0;
+	playerhypnotismdamage = 0;
+
+	playerpoisonturns = 0;
+	enemypoisonturns = 0;
+
+	playerphalanxbonus = 0;
+	playerphalanxing = false;
+	playerphalanxturns = 0;
+	playerphalanxdamage = 0;
+	phalanxdonated = false;
+	playerphalanxboosted = false;
+
+	playerdonation = false;
+	playerdonationturns = 0;
+
+	playerpoisonjustapplied = false;
+	enemypoisonjustapplied = false;
+	playerhypnotismjustapplied = false;
+
+	playertauntedturns = 0;
+	playercannotattackturns = 0;
+	enemycannotattackturns = 0;
+	survivorfinaltestused = false;
+	metalpiercerpaired = false;
+	for (int i = 0; i < 12; i++) {
+		selected[i] = false;
+		enemyselected[i] = false;
+	}
 }
 
 void BattleManager::StartBattle() {
@@ -89,11 +135,8 @@ void BattleManager::StartBattle() {
 			}
 		}
 		displaybattle(who::player, true);
-		inspectplayedcards();
 		resolveturn();
-		std::cout << std::endl;
-		std::cout << "Press any key to continue... Don't keep them waiting...";
-		_getch();
+		inspectplayedcards();
 
 		discardplayedcards();
 		checksurvivorphase();
@@ -112,14 +155,37 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	}
 
 	std::cout << "============================================" << std::endl;
-	std::cout << "                   BATTLE" << std::endl;
+	const int battlewidth = 44;
+	std::string title = "vs. " + currentenemy->getname();
+	int padding = (battlewidth - title.length()) / 2;
+	for (int i = 0; i < padding; i++) {
+		std::cout << " ";
+	}
+	std::cout << title << std::endl;
 	std::cout << "============================================" << std::endl;
 
-	std::cout << "Enemy HP: " << enemyhp;
+	std::cout << currentenemy->getname() << " HP: " << enemyhp;
 	if (enemyshield > 0) {
 		std::cout << "(+" << enemyshield << ")";
 	}
-	std::cout << "/" << currentenemy->getmaxhp() << std::endl;
+	std::cout << "/" << currentenemy->getmaxhp();
+	std::cout << ", ATK (melee): ?";
+	if (enemymeleeattackbonus > 0) {
+		std::cout << "(+" << enemymeleeattackbonus << ")";
+	}
+	std::cout << ", ATK (projectile): ?";
+	if (enemyprojectileattackbonus > 0) {
+		std::cout << "(+" << enemyprojectileattackbonus << ")";
+	}
+	std::cout << ", DEF (melee): ?";
+	if (enemymeleedefensebonus > 0) {
+		std::cout << "(+" << enemymeleedefensebonus << ")";
+	}
+	std::cout << ", DEF (projectile): ?";
+	if (enemyprojectiledefensebonus > 0) {
+		std::cout << "(+" << enemyprojectiledefensebonus << ")";
+	}
+	std::cout << std::endl;
 	displayenemyeffects();
 
 	std::cout << std::endl;
@@ -130,11 +196,32 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 
 	std::cout << std::endl;
 
-	std::cout << "Player HP: " << currentplayer->gethp();
+	std::cout << "Your HP: " << currentplayer->gethp();
 	if (playershield > 0) {
 		std::cout << "(+" << playershield << ")";
 	}
-	std::cout << "/100" << std::endl;
+	std::cout << "/100";
+	if (currentplayer->getMeleeAttack() >= currentplayer->getProjectileAttack()) {
+		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
+		if (playermeleeattackbonus > 0) {
+			std::cout << "(+" << playermeleeattackbonus << ")";
+		}
+	}
+	else {
+		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
+		if (playerprojectileattackbonus > 0) {
+			std::cout << "(+" << playerprojectileattackbonus << ")";
+		}
+	}
+	std::cout << ", DEF (melee): " << currentplayer->getMeleeDefense();
+	if (playermeleedefensebonus > 0) {
+		std::cout << "(+" << playermeleedefensebonus << ")";
+	}
+	std::cout << ", DEF (projectile): " << currentplayer->getProjectileDefense();
+	if (playerprojectiledefensebonus > 0) {
+		std::cout << "(+" << playerprojectiledefensebonus << ")";
+	}
+	std::cout << std::endl;
 	displayplayereffects();
 
 	std::cout << "============================================" << std::endl;
@@ -156,7 +243,7 @@ void BattleManager::displayplayereffects() {
 	}
 
 	if (playermirrortrap == true) {
-		std::cout << "[Mirror Trap] ";
+		std::cout << "[Double Whammy] ";
 	}
 
 	if (playerreflectprojectile == true) {
@@ -164,44 +251,30 @@ void BattleManager::displayplayereffects() {
 	}
 
 	if (playerpoisonturns > 0) {
-		std::cout << "[Poisoned: "
-			<< playerpoisonturns
-			<< " turns] ";
+		std::cout << "[Poisoned: " << playerpoisonturns<< " turns] ";
 	}
 
 	if (playerhypnotismturns > 0) {
-		std::cout << "[Hypnotised: "
-			<< playerhypnotismturns
-			<< " turns] ";
+		std::cout << "[Hypnotised: " << playerhypnotismturns << " turns] ";
 	}
 	else if (playercannotattack == true) {
-		std::cout << "[Muted: "
-			<< playercannotattackturns
-			<< " turns] ";
+		std::cout << "[Muted: " << playercannotattackturns << " turns] ";
 	}
 
 	if (playertaunted == true) {
-		std::cout << "[Taunted: "
-			<< playertauntedturns
-			<< " turns] ";
+		std::cout << "[Taunted: " << playertauntedturns << " turns] ";
 	}
 
 	if (playerupclose == true) {
-		std::cout << "[Charge: "
-			<< playerupcloseturns
-			<< " turns] ";
+		std::cout << "[Charge: " << playerupcloseturns << " turns] ";
 	}
 
 	if (playerphalanxing == true) {
 		if (playerphalanxboosted == false) {
-			std::cout << "[Phalanxing: "
-				<< playerphalanxturns
-				<< " turns] ";
+			std::cout << "[Phalanxing: " << playerphalanxturns << " turns] ";
 		}
 		else {
-			std::cout << "[Phalanx Boosted: "
-				<< playerphalanxturns
-				<< " turns] ";
+			std::cout << "[Phalanx Boosted: " << playerphalanxturns << " turns] ";
 		}
 	}
 	
@@ -217,15 +290,15 @@ void BattleManager::displayplayereffects() {
 		std::cout << "[Half Damage] ";
 	}
 
-	if (playerdamagemultiplier > 1.0f) {
-		std::cout << "[Chemical Booster]";
+	if (playerbandageturns > 0) {
+		std::cout << "[Bandage: " << playerbandageturns << " turns] ";
 	}
 
 	std::cout << std::endl;
 }
 
 void BattleManager::displayenemyeffects() {
-	std::cout << "Enemy effects: ";
+	std::cout << currentenemy->getname() << "'s effects: ";
 
 	bool haseffects = false;
 
@@ -261,9 +334,7 @@ void BattleManager::displayenemyeffects() {
 	}
 
 	if (enemyreflectprojectile > 0) {
-		std::cout << "[Magic Ring: "
-			<< enemyreflectprojectile
-			<< " turns] ";
+		std::cout << "[Magic Ring: " << enemyreflectprojectile << " turns] ";
 		haseffects = true;
 	}
 
@@ -273,9 +344,7 @@ void BattleManager::displayenemyeffects() {
 	}
 
 	if (enemypoisonturns > 0) {
-		std::cout << "[Poisoned: "
-			<< enemypoisonturns
-			<< " turns] ";
+		std::cout << "[Poisoned: " << enemypoisonturns << " turns] ";
 		haseffects = true;
 	}
 
@@ -283,55 +352,35 @@ void BattleManager::displayenemyeffects() {
 		std::cout << "[Cannot Attack] ";
 		haseffects = true;
 	}
-
-	if (enemymeleeattackbonus != 0) {
-		std::cout << "[Melee ATK "
-			<< (enemymeleeattackbonus > 0 ? "+" : "")
-			<< enemymeleeattackbonus << "] ";
-		haseffects = true;
-	}
-
-	if (enemyprojectileattackbonus != 0) {
-		std::cout << "[Projectile ATK "
-			<< (enemyprojectileattackbonus > 0 ? "+" : "")
-			<< enemyprojectileattackbonus << "] ";
-		haseffects = true;
-	}
-
-	if (enemymeleedefensebonus != 0) {
-		std::cout << "[Melee DEF "
-			<< (enemymeleedefensebonus > 0 ? "+" : "")
-			<< enemymeleedefensebonus << "] ";
-		haseffects = true;
-	}
-
-	if (enemyprojectiledefensebonus != 0) {
-		std::cout << "[Projectile DEF "
-			<< (enemyprojectiledefensebonus > 0 ? "+" : "")
-			<< enemyprojectiledefensebonus << "] ";
-		haseffects = true;
-	}
-
-	if (haseffects == false) {
-		std::cout << "None";
-	}
-
 	std::cout << std::endl;
 }
 
-void BattleManager::displaycards(Card* cards[], int count) {
+void BattleManager::displaycards(Card* cards[], int count, bool hideenemytraps = false) {
+	const int width = 20;
+
 	for (int i = 0; i < count; i++) {
-		std::cout << "+----------------------+  ";
+		std::cout << "+";
+		for (int a = 0; a < width + 2; a++) {
+			std::cout << "-";
+		}
+		std::cout << "+  ";
 	}
 	std::cout << std::endl;
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "| ";
-
 		std::string name = cards[i]->getcardname();
-		std::cout << name;
 
-		for (int a = displaylength(name); a < 20; a++) {
+		if (hideenemytraps == true && cards[i]->gettype() == Card::cardtype::trap) {
+			name = "???";
+		}
+
+		if (name == "Nodevība" && playerillusioned == false) {
+			name = "Ferīre";
+		}
+
+		std::cout << "| " << name;
+
+		for (int a = displaylength(name); a < width; a++) {
 			std::cout << " ";
 		}
 
@@ -340,16 +389,20 @@ void BattleManager::displaycards(Card* cards[], int count) {
 	std::cout << std::endl;
 
 	for (int i = 0; i < count; i++) {
-		std::cout << "+----------------------+  ";
+		std::cout << "+";
+		for (int a = 0; a < width + 2; a++) {
+			std::cout << "-";
+		}
+		std::cout << "+  ";
 	}
 	std::cout << std::endl;
 }
 
 void BattleManager::displayboard() {
-	std::cout << "ENEMY" << std::endl;
+	std::cout << currentenemy->getname() << std::endl;
 
 	if (enemyselectedcount > 0) {
-		displaycards(enemyselectedcards, enemyselectedcount);
+		displaycards(enemyselectedcards, enemyselectedcount, true);
 	}
 	else {
 		std::cout << "(no cards selected)" << std::endl;
@@ -362,7 +415,7 @@ void BattleManager::displayboard() {
 	std::cout << "YOU" << std::endl;
 
 	if (selectedcount > 0) {
-		displaycards(selectedcards, selectedcount);
+		displaycards(selectedcards, selectedcount, false);
 	}
 	else {
 		std::cout << "(no cards selected)" << std::endl;
@@ -417,7 +470,7 @@ void BattleManager::PlayerTurn() {
 		}
 		std::cout << std::endl;
 		std::cout << "Selected: " << selectedcount << "/3" << std::endl;
-		std::cout << "W/S: Up/Down  A/D: Deselect/Select  I: Card information  Q: Skip Turn  Enter: Confirm Cards" << std::endl;
+		std::cout << "W/S: Up/Down  A/D: Deselect/Select  I: Card information  E: Open Inventory  Q: Skip Turn  Enter: Confirm Cards" << std::endl;
 		char input = _getch();
 		if (input == 'w' || input == 'W') {
 			if (cursor > 0) {
@@ -478,6 +531,48 @@ void BattleManager::PlayerTurn() {
 			std::cout << "Press any key to return. Don't keep them waiting." << std::endl;
 			_getch();
 		}
+		else if (input == 'e' || input == 'E') {
+			inv inventory;
+			system("cls");
+
+			inventory.OpenInv(true);
+			int choice;
+
+			std::cout << std::endl;
+			std::cout << "Choose an item (1-16, 0 to cancel): ";
+			std::cin >> choice;
+
+			if (choice != 0) {
+				choice--;
+				if (choice >= 0 && choice < 16) {
+					if (inventory.checkingType(choice) == 2) {
+						item* useditem = inventory.geteatInv(choice);
+						if (useditem != nullptr) {
+							if (useditem->getname() == "Bandage") {
+								playerbandageturns = useditem->getduration();
+								playerbandageheal = useditem->gethealvalue();
+							}
+							else {
+								int oldhp = currentplayer->gethp();
+								currentplayer->sethp(currentplayer->gethp() + useditem->gethealvalue());
+								if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+									currentplayer->sethp(currentplayer->getmaxhp());
+								}
+								int healed = currentplayer->gethp() - oldhp;
+								std::cout << "recovered " << healed << " HP!" << std::endl;
+							}
+						}
+
+						std::cout << "Press any key to continue...";
+						_getch();
+					}
+					else {
+						std::cout << "now's not the time to use that...!" << std::endl;
+						_getch();
+					}
+				}
+			}
+		}
 		else if (input == 13) {
 			if (selectedcount > 0) {
 				selecting = false;
@@ -487,6 +582,23 @@ void BattleManager::PlayerTurn() {
 }
 
 void BattleManager::EnemyTurn() {
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::SURVIVOR) {
+		if (survivorfinaltestused == true) {
+			enemyselectedcount = 0;
+			for (int i = 0; i < 3; i++) {
+				enemyselectedcards[i] = nullptr;
+			}
+			return;
+		}	
+		if (currentenemy->gethp() < 5) {
+			enemyselectedcount = 1;
+			enemyselectedcards[0] = database->getcard(47);
+			enemyselectedcards[1] = nullptr;
+			enemyselectedcards[2] = nullptr;
+			survivorfinaltestused = true;
+			return;
+		}
+	}
 	for (int i = 0; i < 2; i++) {
 		currentenemy->getdeck()->drawcard();
 	}
@@ -687,21 +799,51 @@ void BattleManager::resolveturn() {
 	bool enemynegated[3] = { false, false, false };
 	bool hasmetalpiercer = false;
 	bool hasattackcard = false;
-
+	checktraps(selectedcards, selectedcount, playernegated, who::enemy);
+	checktraps(enemyselectedcards, enemyselectedcount, enemynegated, who::player);
+	metalpiercerpaired = false;
 	for (int i = 0; i < selectedcount; i++) {
-		if (selectedcards[i]->getcardname() == "Metal Piercer") {
+		if (!playernegated[i] &&
+			selectedcards[i]->getcardname() == "Metal Piercer") {
 			hasmetalpiercer = true;
 		}
+		if (!playernegated[i] &&
+			selectedcards[i]->gettype() == Card::cardtype::attack) {
 
-		if (selectedcards[i]->gettype() == Card::cardtype::attack) {
 			hasattackcard = true;
 		}
 	}
-	if (hasmetalpiercer == true && hasattackcard == true) {
+	if (hasmetalpiercer && hasattackcard) {
+		metalpiercerpaired = true;
 		playerignoredefense = true;
 	}
-	checktraps(selectedcards, selectedcount, playernegated, who::enemy);
-	checktraps(enemyselectedcards, enemyselectedcount, enemynegated, who::player);
+
+	bool hasnonnegatedattack = false;
+	for (int i = 0; i < selectedcount; i++) {
+		if (!playernegated[i] &&
+			selectedcards[i]->gettype() ==
+			Card::cardtype::attack) {
+			hasnonnegatedattack = true;
+		}
+	}
+	for (int i = 0; i < selectedcount; i++) {
+		if (!playernegated[i] && selectedcards[i]->getcardname() == "Poison-Tipped Bullets" && hasnonnegatedattack == true) {
+			enemypoisonturns = selectedcards[i]->getduration();
+			enemypoisonjustapplied = true;
+		}
+	}
+	for (int i = 0; i < selectedcount; i++) {
+		if (!playernegated[i] && selectedcards[i]->getcardname() == "Chemical Boost") {
+			playerdamagemultiplier *= selectedcards[i]->getmultiplier();
+			playerdamagemultiplierturns = selectedcards[i]->getduration();
+		}
+	}
+	for (int i = 0; i < enemyselectedcount; i++) {
+		if (!enemynegated[i] && enemyselectedcards[i]->getcardname() == "Enhance") {
+			enemydamagemultiplier *= enemyselectedcards[i]->getmultiplier();
+			enemydamagemultiplierturns = enemyselectedcards[i]->getduration();
+		}
+	}
 	for (int i = 0; i < selectedcount; i++) {
 		if (!playernegated[i]) {
 			playcard(selectedcards[i], who::player);
@@ -719,16 +861,21 @@ void BattleManager::resolveturn() {
 }
 
 void BattleManager::playcard(Card* card, who user) {
-	if (user == who::player) {
-		displaymessage("You used " + card->getcardname() + "!");
-	}
-	else {
-		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!");
-	}
 	for (int i = 0; i < 3; i++) {
 		Card::effecttype effect = card->getcardeffect(i);
+
 		if (effect != Card::effecttype::none) {
 			applyeffect(card, effect, user);
+		}
+	}
+
+	if (user == who::enemy) {
+		if (haseffect(card, Card::effecttype::ignore_defense)) {
+			enemyignoredefense = false;
+		}
+
+		if (haseffect(card, Card::effecttype::ignore_shield)) {
+			enemyignoreshield = false;
 		}
 	}
 }
@@ -779,7 +926,6 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				hits = 1;
 			}
 			int oldhp = currentenemy->gethp();
-			bool fullreflect = false;
 			for (int i = 0; i < hits; i++) {
 				if (isProjectile && enemyreflectprojectile > 0) {
 					int chance = rand() % 100;
@@ -794,22 +940,13 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				else if (enemyreflectdamage == true) {
 					int reflecteddamage = finaldamage * enemyreflectdamagemultiplier;
 					damageplayer(reflecteddamage);
-
-					if (enemyreflectdamagemultiplier >= 1.0f) {
-						fullreflect = true;
-					}
-					else {
+					if (enemyreflectdamagemultiplier < 1.0f) {
 						damageenemy(finaldamage);
 					}
 				}
 				else {
 					damageenemy(finaldamage);
 				}
-			}
-
-			if (fullreflect == true) {
-				enemyreflectdamage = false;
-				enemyreflectdamageturns = 0;
 			}
 
 			playerlastdamage = oldhp - currentenemy->gethp();
@@ -823,25 +960,31 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		else {
 			int damagedealt = 0;
 			int rawdamage = 0;
+			float multiplier = card->getmultiplier();
+			if (card->getcardname() == "Nodevība" &&
+				playerillusioned == false) {
+
+				multiplier = 1.0f;
+			}
 			bool isProjectile = false;
 			if (card->getcombatcategory() == item::combattype::melee) {
 				damagedealt = currentenemy->getMeleeAttack();
-				rawdamage = (damagedealt + enemymeleeattackbonus) * card->getmultiplier() * enemydamagemultiplier;
+				rawdamage = (damagedealt + enemymeleeattackbonus) * multiplier * enemydamagemultiplier;
 			}
 			else if (card->getcombatcategory() == item::combattype::projectile) {
 				damagedealt = currentenemy->getProjectileAttack();
 				isProjectile = true;
-				rawdamage = (damagedealt + enemyprojectileattackbonus) * card->getmultiplier() * enemydamagemultiplier;
+				rawdamage = (damagedealt + enemyprojectileattackbonus) * multiplier * enemydamagemultiplier;
 			}
 			else if (card->getcombatcategory() == item::combattype::flexible) {
 				if (currentenemy->getMeleeAttack() >= currentenemy->getProjectileAttack()) {
 					damagedealt = currentenemy->getMeleeAttack();
-					rawdamage = (damagedealt + enemymeleeattackbonus) * card->getmultiplier() * enemydamagemultiplier;
+					rawdamage = (damagedealt + enemymeleeattackbonus) *multiplier * enemydamagemultiplier;
 				}
 				else {
 					damagedealt = currentenemy->getProjectileAttack();
 					isProjectile = true;
-					rawdamage = (damagedealt + enemyprojectileattackbonus) * card->getmultiplier() * enemydamagemultiplier;
+					rawdamage = (damagedealt + enemyprojectileattackbonus) * multiplier * enemydamagemultiplier;
 				}
 			}
 			int defense = 0;
@@ -873,7 +1016,6 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				}
 				if (playerhalfmelee == true && isProjectile == false) {
 					finaldamage *= 0.5f;
-					playerhalfmelee = false;
 				}
 				if (playerhalfdamage == true) {
 					finaldamage *= 0.5f;
@@ -897,18 +1039,22 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 
 	if (effect == Card::effecttype::damage_multiplier) {
 		if (user == who::player) {
-			if (playerdonation == true) {
-				enemydamagemultiplier *= card->getmultiplier();
-				enemydamagemultiplierturns = card->getduration();
-			}
-			else {
-				playerdamagemultiplier *= card->getmultiplier();
-				playerdamagemultiplierturns = card->getduration();
+			if (card->getcardname() != "Chemical Boost") {
+				if (playerdonation == true) {
+					enemydamagemultiplier *= card->getmultiplier();
+					enemydamagemultiplierturns = card->getduration();
+				}
+				else {
+					playerdamagemultiplier *= card->getmultiplier();
+					playerdamagemultiplierturns = card->getduration();
+				}
 			}
 		}
 		else {
-			enemydamagemultiplier *= card->getmultiplier();
-			enemydamagemultiplierturns = card->getduration();
+			if (card->getcardname() != "Enhance") {
+				enemydamagemultiplier *= card->getmultiplier();
+				enemydamagemultiplierturns = card->getduration();
+			}
 		}
 	}
 
@@ -921,46 +1067,46 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 	}
 
 	if (effect == Card::effecttype::finaltest_damage) {
-		int finaldamage = currentplayer->gethp() - 1;
-		currentplayer->takeDamage(finaldamage);
+		if (currentenemy->gethp() < 5) {
+			currentplayer->sethp(1);
+			enemymeleedefensebonus = 0 - currentenemy->getMeleeDefense();
+			enemyprojectiledefensebonus = 0 - currentenemy->getProjectileDefense();
+		}
 	}
 	
 	if (effect == Card::effecttype::lower_defense) {
 		if (card->getcardname() == "Metal Piercer") {
-			bool hasattackcard = false;
-			for (int i = 0; i < selectedcount; i++) {
-				if (selectedcards[i] != card &&
-					selectedcards[i]->gettype() == Card::cardtype::attack) {
-					hasattackcard = true;
-				}
-			}
-			if (hasattackcard == false) {
+			if (metalpiercerpaired == false) {
 				addtimedstat(&enemymeleedefensebonus, -card->getvalue(), card->getduration());
 			}
 		}
 		else {
+			int amount = card->getvalue();
 			if (user == who::player) {
 				if (card->getcombatcategory() == item::combattype::melee) {
-					addtimedstat(&enemymeleedefensebonus, -card->getvalue(), card->getduration());
+					addtimedstat(&enemymeleedefensebonus, -amount, card->getduration());
 				}
 				else if (card->getcombatcategory() == item::combattype::projectile) {
-					addtimedstat(&enemyprojectiledefensebonus, -card->getvalue(), card->getduration());
+					addtimedstat(&enemyprojectiledefensebonus, -amount, card->getduration());
 				}
 				else if (card->getcombatcategory() == item::combattype::flexible) {
 					if (currentplayer->getequippedbasicweapon()->getcombatcategory() == item::combattype::melee) {
-						addtimedstat(&enemymeleedefensebonus, -card->getvalue(), card->getduration());
+						addtimedstat(&enemymeleedefensebonus, -amount, card->getduration());
 					}
 					else if (currentplayer->getequippedbasicweapon()->getcombatcategory() == item::combattype::projectile) {
-						addtimedstat(&enemyprojectiledefensebonus, -card->getvalue(), card->getduration());
+						addtimedstat(&enemyprojectiledefensebonus, -amount, card->getduration());
 					}
 				}
 			}
 			else {
+				if (card->getcardname() == "Radial Slash") {
+					amount *= card->gethits();
+				}
 				if (card->getcombatcategory() == item::combattype::melee) {
-					addtimedstat(&playermeleedefensebonus, -card->getvalue(), card->getduration());
+					addtimedstat(&playermeleedefensebonus, -amount, card->getduration());
 				}
 				else if (card->getcombatcategory() == item::combattype::projectile) {
-					addtimedstat(&playerprojectiledefensebonus, -card->getvalue(), card->getduration());
+					addtimedstat(&playerprojectiledefensebonus, -amount, card->getduration());
 				}
 			}
 		}
@@ -978,37 +1124,67 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 	}
 	
 	if (effect == Card::effecttype::increase_defense) {
-		if (user == who::player) {
-			if (card->getcombatcategory() == item::combattype::melee) {
-				if (playerdonation == true) {
-					addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
+		if (card->getcardname() != "Grievance") {
+			if (user == who::player) {
+				if (card->getcombatcategory() == item::combattype::melee) {
+					if (playerdonation == true) {
+						addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
+					}
+					else {
+						addtimedstat(&playermeleedefensebonus, card->getvalue(), card->getduration());
+					}
 				}
-				else {
-					addtimedstat(&playermeleedefensebonus, card->getvalue(), card->getduration());
+				else if (card->getcombatcategory() == item::combattype::projectile) {
+					if (playerdonation == true) {
+						addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+					}
+					else {
+						addtimedstat(&playerprojectiledefensebonus, card->getvalue(), card->getduration());
+					}
 				}
-			}
-			else if (card->getcombatcategory() == item::combattype::projectile) {
-				if (playerdonation == true) {
-					addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
-				}
-				else {
-					addtimedstat(&playerprojectiledefensebonus, card->getvalue(), card->getduration());
-				}
-			}
-			else if (card->getcombatcategory() == item::combattype::flexible) {
-				if (currentplayer->getequippedadvancedarmor() == nullptr) {
-					if (currentplayer->getequippedbasicarmor() == nullptr) {
-						if (playerdonation == true) {
-							addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
-							addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+				else if (card->getcombatcategory() == item::combattype::flexible) {
+					if (currentplayer->getequippedadvancedarmor() == nullptr) {
+						if (currentplayer->getequippedbasicarmor() == nullptr) {
+							if (playerdonation == true) {
+								addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
+								addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+							}
+							else {
+								addtimedstat(&playermeleedefensebonus, card->getvalue(), card->getduration());
+								addtimedstat(&playerprojectiledefensebonus, card->getvalue(), card->getduration());
+							}
 						}
 						else {
-							addtimedstat(&playermeleedefensebonus, card->getvalue(), card->getduration());
-							addtimedstat(&playerprojectiledefensebonus, card->getvalue(), card->getduration());
+							if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::melee) {
+								if (playerdonation == true) {
+									addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
+								}
+								else {
+									addtimedstat(&playermeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
+								}
+							}
+							else if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::projectile) {
+								if (playerdonation == true) {
+									addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
+								}
+								else {
+									addtimedstat(&playerprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
+								}
+							}
+							else if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::none) {
+								if (playerdonation == true) {
+									addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
+									addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
+								}
+								else {
+									addtimedstat(&playermeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
+									addtimedstat(&playerprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
+								}
+							}
 						}
 					}
 					else {
-						if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::melee) {
+						if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::melee) {
 							if (playerdonation == true) {
 								addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
 							}
@@ -1016,7 +1192,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 								addtimedstat(&playermeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
 							}
 						}
-						else if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::projectile) {
+						else if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::projectile) {
 							if (playerdonation == true) {
 								addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
 							}
@@ -1024,7 +1200,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 								addtimedstat(&playerprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
 							}
 						}
-						else if (currentplayer->getequippedbasicarmor()->getcombatcategory() == item::combattype::none) {
+						else if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::none) {
 							if (playerdonation == true) {
 								addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
 								addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
@@ -1036,66 +1212,41 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 						}
 					}
 				}
-				else {
-					if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::melee) {
-						if (playerdonation == true) {
-							addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
-						}
-						else {
-							addtimedstat(&playermeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
-						}
-					}
-					else if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::projectile) {
-						if (playerdonation == true) {
-							addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
-						}
-						else {
-							addtimedstat(&playerprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
-						}
-					}
-					else if (currentplayer->getequippedadvancedarmor()->getcombatcategory() == item::combattype::none) {
-						if (playerdonation == true) {
-							addtimedstat(&enemymeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
-							addtimedstat(&enemyprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
-						}
-						else {
-							addtimedstat(&playermeleedefensebonus, (currentplayer->getMeleeDefense() / 2) + card->getvalue(), card->getduration());
-							addtimedstat(&playerprojectiledefensebonus, (currentplayer->getProjectileDefense() / 2) + card->getvalue(), card->getduration());
-						}
-					}
+			}
+			else {
+				if (card->getcombatcategory() == item::combattype::melee) {
+					addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
 				}
-			}
-		}
-		else {
-			if (card->getcombatcategory() == item::combattype::melee) {
-				addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
-			}
-			else if (card->getcombatcategory() == item::combattype::projectile) {
-				addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
-			}
-			else if (card->getcombatcategory() == item::combattype::flexible) {
-				addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
-				addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+				else if (card->getcombatcategory() == item::combattype::projectile) {
+					addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+				}
+				else if (card->getcombatcategory() == item::combattype::flexible) {
+					addtimedstat(&enemymeleedefensebonus, card->getvalue(), card->getduration());
+					addtimedstat(&enemyprojectiledefensebonus, card->getvalue(), card->getduration());
+				}
 			}
 		}
 	}
 
 	if (effect == Card::effecttype::increase_attack) {
-		if (card->getcombatcategory() == item::combattype::melee) {
-			addtimedstat(&enemymeleeattackbonus, card->getvalue(), card->getduration());
-		}
-		else if (card->getcombatcategory() == item::combattype::projectile) {
-			addtimedstat(&enemyprojectileattackbonus, card->getvalue(), card->getduration());
-		}
-		else if (card->getcombatcategory() == item::combattype::flexible) {
-			addtimedstat(&enemymeleeattackbonus, card->getvalue(), card->getduration());
-			addtimedstat(&enemyprojectileattackbonus, card->getvalue(), card->getduration());
+		if (card->getcardname() != "Grievance") {
+			if (card->getcombatcategory() == item::combattype::melee) {
+				addtimedstat(&enemymeleeattackbonus, card->getvalue(), card->getduration());
+			}
+			else if (card->getcombatcategory() == item::combattype::projectile) {
+				addtimedstat(&enemyprojectileattackbonus, card->getvalue(), card->getduration());
+			}
+			else if (card->getcombatcategory() == item::combattype::flexible) {
+				addtimedstat(&enemymeleeattackbonus, card->getvalue(), card->getduration());
+				addtimedstat(&enemyprojectileattackbonus, card->getvalue(), card->getduration());
+			}
 		}
 	}
 
 	if (effect == Card::effecttype::half_damage_next_turn) {
 		if (card->gettype() == Card::cardtype::hybrid) {
 			playerhalfmelee = true;
+			playerhalfmeleeturns = card->getduration() + 1;
 		}
 		else if (card->gettype() == Card::cardtype::defense) {
 			playerhalfdamage = true;
@@ -1111,13 +1262,13 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		int playercurrenthp = currentplayer->gethp();
 		int rawdamage = 0;
 		if (playercurrenthp <= currentplayer->getmaxhp() / 4) {
-			rawdamage = 5;
+			rawdamage = currentenemy->getMeleeAttack() * 0.5f;
 		}
 		else if (playercurrenthp <= currentplayer->getmaxhp() / 2) {
-			rawdamage = 10;
+			rawdamage = currentenemy->getMeleeAttack();
 		}
 		else {
-			rawdamage = 15;
+			rawdamage = currentenemy->getMeleeAttack() * 2;
 		}
 		int defense = currentplayer->getMeleeDefense() + playermeleedefensebonus;
 		int finaldamage = calculateDamage(rawdamage, defense);
@@ -1130,6 +1281,9 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		}
 		else {
 			enemynegateattacktrap = card->getvalue();
+			if (card->getcardname() == "Determination") {
+				enemydetermination = true;
+			}
 		}
 	}
 
@@ -1139,14 +1293,13 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 
 	if (effect == Card::effecttype::ignore_defense) {
 		if (card->getcardname() == "Metal Piercer") {
-			bool hasattackcard = false;
-			for (int i = 0; i < selectedcount; i++) {
-				if (selectedcards[i] != card && selectedcards[i]->gettype() == Card::cardtype::attack) {
-					hasattackcard = true;
-				}
-			}
-			if (hasattackcard == true) {
+			if (metalpiercerpaired == true) {
 				playerignoredefense = true;
+			}
+		}
+		else if (card->getcardname() == "Nodevība") {
+			if (playerillusioned == true) {
+				enemyignoredefense = true;
 			}
 		}
 		else {
@@ -1212,24 +1365,26 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 	}
 
 	if (effect == Card::effecttype::poison_tip) {
-		if (user == who::player) {
-			bool hasattackcard = false;
+		if (card->getcardname() != "Poison-Tipped Bullets") {
+			if (user == who::player) {
+				bool hasattackcard = false;
 
-			for (int i = 0; i < selectedcount; i++) {
-				if (selectedcards[i] != card &&
-					selectedcards[i]->gettype() == Card::cardtype::attack) {
-					hasattackcard = true;
+				for (int i = 0; i < selectedcount; i++) {
+					if (selectedcards[i] != card &&
+						selectedcards[i]->gettype() == Card::cardtype::attack) {
+						hasattackcard = true;
+					}
+				}
+
+				if (hasattackcard == true) {
+					enemypoisonturns = card->getduration();
+					enemypoisonjustapplied = true;
 				}
 			}
-
-			if (hasattackcard == true) {
-				enemypoisonturns = card->getduration();
-				enemypoisonjustapplied = true;
+			else {
+				playerpoisonturns = card->getduration();
+				playerpoisonjustapplied = true;
 			}
-		}
-		else {
-			playerpoisonturns = card->getduration();
-			playerpoisonjustapplied = true;
 		}
 	}
 
@@ -1241,6 +1396,9 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		else {
 			enemycannotattack = true;
 			enemycannotattackturns = card->getduration();
+			if (card->getcardname() == "Grievance") {
+				enemygrievance = true;
+			}
 		}
 	}
 
@@ -1344,10 +1502,12 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 
 	if (effect == Card::effecttype::hypnotism) {
 		playercannotattack = true;
+		playercannotattackturns = 1;
 		playerhypnotismturns = card->getduration();
 		playerhypnotismjustapplied = true;
 		int attack = 0;
 		if (currentenemy->getMeleeAttack() >= currentenemy->getProjectileAttack()) {
+
 			attack = currentenemy->getMeleeAttack() + enemymeleeattackbonus;
 		}
 		else {
@@ -1370,14 +1530,18 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 	}
 
 	if (effect == Card::effecttype::heal_hp) {
+		int healamount = card->getvalue();
+		if (card->getcardname() == "Suit Up") {
+			healamount = 2;
+		}
 		if (user == who::player) {
-			currentplayer->sethp(currentplayer->gethp() + card->getvalue());
+			currentplayer->sethp(currentplayer->gethp() + healamount);
 			if (currentplayer->gethp() > currentplayer->getmaxhp()) {
 				currentplayer->sethp(currentplayer->getmaxhp());
 			}
 		}
 		else {
-			currentenemy->sethp(currentenemy->gethp() + card->getvalue());
+			currentenemy->sethp(currentenemy->gethp() +healamount);
 			if (currentenemy->gethp() > currentenemy->getmaxhp()) {
 				currentenemy->sethp(currentenemy->getmaxhp());
 			}
@@ -1421,9 +1585,6 @@ void BattleManager::updateeffects() {
 		else {
 			damageplayer(playerhypnotismdamage);
 			playerhypnotismturns--;
-			if (playerhypnotismturns == 0) {
-				playercannotattack = false;
-			}
 		}
 	}
 
@@ -1498,14 +1659,14 @@ void BattleManager::updateeffects() {
 	}
 
 	//reflect_damage
-	if (enemyreflectdamage == true && enemyreflectdamagemultiplier < 1.0f) {
+	if (enemyreflectdamage == true) {
 		if (enemyreflectdamageturns > 0) {
 			enemyreflectdamageturns--;
 		}
 
 		if (enemyreflectdamageturns == 0) {
 			enemyreflectdamage = false;
-			enemyreflectdamagemultiplier = 0.0f;
+			enemyreflectdamagemultiplier = 1.0f;
 		}
 	}
 
@@ -1525,7 +1686,7 @@ void BattleManager::updateeffects() {
 	}
 
 	// player cannot attack
-	if (playercannotattack == true && playerhypnotismturns == 0) {
+	if (playercannotattack == true) {
 		if (playercannotattackturns > 0) {
 			playercannotattackturns--;
 		}
@@ -1541,6 +1702,22 @@ void BattleManager::updateeffects() {
 		}
 		else {
 			enemycannotattack = false;
+			if (enemygrievance == true) {
+				addtimedstat(&enemymeleeattackbonus, 2, 0);
+				addtimedstat(&enemymeleedefensebonus, 2, 0);
+				enemygrievance = false;
+			}
+		}
+	}
+
+	//half melee
+	if (playerhalfmelee == true) {
+		if (playerhalfmeleeturns > 0) {
+			playerhalfmeleeturns--;
+		}
+
+		if (playerhalfmeleeturns == 0) {
+			playerhalfmelee = false;
 		}
 	}
 
@@ -1570,6 +1747,14 @@ void BattleManager::updateeffects() {
 		if (enemydamagemultiplierturns == 0) {
 			enemydamagemultiplier = 1.0f;
 		}
+	}
+
+	if (playerbandageturns > 0) {
+		currentplayer->sethp(currentplayer->gethp() + playerbandageheal);
+		if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+			currentplayer->sethp(currentplayer->getmaxhp());
+		}
+		playerbandageturns--;
 	}
 }
 
@@ -1620,6 +1805,18 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 				trapaffected = true;
 			}
 		}
+		if (defender == who::enemy &&
+			enemydetermination == true &&
+			trapaffected == true) {
+
+			addtimedstat(&enemymeleedefensebonus, 2, 0);
+
+			addtimedstat(&enemyprojectiledefensebonus, 2, 0);
+		}
+	}
+	else {
+		enemynegateattacktrap = 0;
+		enemydetermination = false;
 	}
 
 	if (defensecount >= 2 && defensenegationcount > 0) {
@@ -1643,34 +1840,31 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 	//rat trap
 	bool meleedamage = false;
 
-	for (int i = 0; i < attackercount; i++) {
-		if (negated[i] == false && haseffect(attackercard[i], Card::effecttype::deal_damage)) {
-			if (attackercard[i]->getcombatcategory() == item::combattype::melee) {
-				meleedamage = true;
-			}
-			else if (attackercard[i]->getcombatcategory() == item::combattype::flexible) {
-				if (defender == who::enemy) {
-					if (currentplayer->getequippedbasicweapon()->getcombatcategory() == item::combattype::melee) {
-						meleedamage = true;
-					}
+	if (defender == who::player && meleecountertrap == true)
+	{
+		bool meleedamage = false;
+		for (int i = 0; i < attackercount; i++) {
+			if (negated[i] == false && haseffect(attackercard[i], Card::effecttype::deal_damage)) {
+				if (attackercard[i]->getcombatcategory() == item::combattype::melee) {
+					meleedamage = true;
 				}
-				else {
+				else if (attackercard[i]->getcombatcategory() == item::combattype::flexible) {
 					if (currentenemy->getMeleeAttack() >= currentenemy->getProjectileAttack()) {
 						meleedamage = true;
 					}
 				}
 			}
 		}
-	}
-	if (meleedamage == true) {
-		int rawdamage = currentplayer->getMeleeAttack() / 2;
-		int defense = currentenemy->getMeleeDefense() + enemymeleedefensebonus;
-		int finaldamage = calculateDamage(rawdamage, defense);
+		if (meleedamage == true) {
+			int rawdamage = currentplayer->getMeleeAttack() / 2;
+			int defense = currentenemy->getMeleeDefense() + enemymeleedefensebonus;
+			int finaldamage = calculateDamage(rawdamage, defense);
 
-		damageenemy(finaldamage);
-		trapaffected = true;
+			damageenemy(finaldamage);
+			trapaffected = true;
+		}
+		meleecountertrap = false;
 	}
-	meleecountertrap = false;
 
 	if (defender == who::player) {
 		if (trapaffected == true && playermirrortrap == true) {
@@ -1757,12 +1951,28 @@ void BattleManager::checksurvivorphase() {
 }
 
 void BattleManager::addtimedstat(int* stat, int amount, int duration) {
-	*stat += amount;
+	int cap = 20;
+	if (stat == &playermeleeattackbonus || stat == &playerprojectileattackbonus || stat == &enemymeleeattackbonus || stat == &enemyprojectileattackbonus) {
+		cap = 15;
+	}
+
+	int newamount = amount;
+	if (*stat + amount > cap) {
+		newamount = cap - *stat;
+	}
+	else if (*stat + amount < -cap) {
+		newamount = -cap - *stat;
+	}
+	if (newamount == 0) {
+		return;
+	}
+
+	*stat += newamount;
 	if (duration > 0) {
 		for (int i = 0; i < 20; i++) {
 			if (timedstats[i].active == false) {
 				timedstats[i].stat = stat;
-				timedstats[i].amount = amount;
+				timedstats[i].amount = newamount;
 				timedstats[i].turns = duration;
 				timedstats[i].active = true;
 				return;
@@ -1779,11 +1989,16 @@ void BattleManager::inspectplayedcards() {
 	bool inspecting = true;
 
 	while (inspecting) {
+		displayresolution();
 
 		std::cout << std::endl;
-		std::cout << "Inspect cards? " << std::endl;
-		std::cout << "1-" << selectedcount << ": Your cards" << std::endl;
-		std::cout << "4-" << 3 + enemyselectedcount << ": Enemy cards" << std::endl;
+		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
+
+		if (enemyselectedcount > 0) {
+			std::cout << "4-" << 3 + enemyselectedcount
+				<< ": Inspect enemy cards\n" << std::endl;
+		}
+
 		std::cout << "Enter: Continue" << std::endl;
 
 		char input = _getch();
@@ -1795,8 +2010,20 @@ void BattleManager::inspectplayedcards() {
 			int index = input - '1';
 
 			if (index < selectedcount) {
-				std::cout << selectedcards[index]->getcardname() << std::endl;
-				std::cout << selectedcards[index]->getcarddescription() << std::endl;
+				system("cls");
+				Card* card = enemyselectedcards[index];
+				if (card->getcardname() == "Nodevība" && playerillusioned == false) {
+					std::cout << "Ferīre" << std::endl;
+					std::cout << std::endl;
+					std::cout << "They deal damage." << std::endl;
+				}
+				else {
+					std::cout << selectedcards[index]->getcardname() << std::endl;
+					std::cout << std::endl;
+					std::cout << selectedcards[index]->getcarddescription() << std::endl;
+				}
+				std::cout << std::endl;
+				std::cout << "Press any key to return...";
 				_getch();
 			}
 		}
@@ -1804,8 +2031,27 @@ void BattleManager::inspectplayedcards() {
 			int index = input - '4';
 
 			if (index < enemyselectedcount) {
+				system("cls");
+				Card* card = enemyselectedcards[index];
+
+				if (card->gettype() == Card::cardtype::trap) {
+					std::cout << "???" << std::endl;
+					std::cout << std::endl;
+					std::cout << "You can't tell what this trap does yet." << std::endl;
+				}
+				else if (card->getcardname() == "Nodevība" &&
+					playerillusioned == false) {
+					std::cout << "Ferīre" << std::endl;
+					std::cout << std::endl;
+					std::cout << "They deal damage." << std::endl;
+				}
+
 				std::cout << enemyselectedcards[index]->getcardname() << std::endl;
+				std::cout << std::endl;
 				std::cout << enemyselectedcards[index]->getcarddescription() << std::endl;
+
+				std::cout << std::endl;
+				std::cout << "Press any key to return...";
 				_getch();
 			}
 		}
@@ -1824,4 +2070,27 @@ int BattleManager::displaylength(std::string text) {
 	}
 
 	return length;
+}
+
+void BattleManager::displayresolution() {
+	displaybattle(who::player, true);
+
+	std::cout << std::endl;
+
+	for (int i = 0; i < selectedcount; i++) {
+		std::cout << "You used " << selectedcards[i]->getcardname() << "!\n" << std::endl;
+	}
+
+	for (int i = 0; i < enemyselectedcount; i++) {
+		if (enemyselectedcards[i]->gettype() == Card::cardtype::trap) {
+			std::cout << currentenemy->getname() << " used a trap card!\n" << std::endl;
+		}
+		else {
+			std::string name = enemyselectedcards[i]->getcardname();
+			if (name == "Nodevība" && playerillusioned == false) {
+				name = "Ferīre";
+			}
+			std::cout << currentenemy->getname() << " used " << name << "!\n" << std::endl;
+		}
+	}
 }

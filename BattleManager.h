@@ -25,7 +25,7 @@ public:
 	void displaybattle(who turn, bool showboard);
 	void displayplayereffects();
 	void displayenemyeffects();
-	void displaycards(Card* cards[], int count);
+	void displaycards(Card* cards[], int count, bool hideenemytraps);
 	void displayboard();
 	void inspectplayedcards();
 	int displaylength(std::string text);
@@ -35,6 +35,7 @@ public:
 	void PlayerTurn();
 	void EnemyTurn();
 	void resolveturn();
+	void displayresolution();
 
 	void playcard(Card* card, who user);
 	void applyeffect(Card* card, Card::effecttype effect, who user);
@@ -56,7 +57,7 @@ private:
 	Enemy* currentenemy;
 	Card* selectedcards[3] = { nullptr, nullptr, nullptr };
 	bool selected[12];
-	int selectedcount = 0;
+	int selectedcount;
 	Card* enemyselectedcards[3] = { nullptr, nullptr, nullptr };
 	bool enemyselected[12];
 	int enemyselectedcount;
@@ -87,6 +88,8 @@ private:
 	bool enemyignoredefense;
 
 	bool enemyignoreshield;
+	bool enemydetermination;
+	bool enemygrievance;
 
 	bool playerhalfmelee;
 	bool playerhalfdamage;
@@ -109,14 +112,17 @@ private:
 	int playerupcloseturns;
 	int playerupclosedamage;
 
+	int playerhalfmeleeturns;
+
 	bool playerreflectprojectile;
 	int enemyreflectprojectile;
 
 	int playerhypnotismturns;
 	int playerhypnotismdamage;
-
 	int playerpoisonturns;
 	int enemypoisonturns;
+	int playerbandageturns;
+	int playerbandageheal;
 
 	int playerphalanxbonus;
 	bool playerphalanxing;
@@ -139,5 +145,7 @@ private:
 	int playertauntedturns;
 	int playercannotattackturns;
 	int enemycannotattackturns;
+	bool survivorfinaltestused;
+	bool metalpiercerpaired;
 };
 

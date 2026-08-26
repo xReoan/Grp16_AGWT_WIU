@@ -10,10 +10,12 @@ inv::inv() {
 //saves the number of the number base on the item database, -1 is none
 int inv::invinside[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
-void inv::OpenInv() const
+void inv::OpenInv(bool battlemode) const
 {  
     for (int i = 0; i < 16; i++) {
         if (inv::invinside[i] != -1 ) {
+            item* currentitem = invitem[invinside[i]];
+
             std::cout << i + 1<<". " << invitem[inv::invinside[i]]->getname();
         }
         else {
@@ -22,6 +24,7 @@ void inv::OpenInv() const
         std::cout << "         ";
         i++;
         if (inv::invinside[i] != -1) {
+            item* currentitem = invitem[invinside[i]];
             std::cout << i + 1 << ". " << invitem[inv::invinside[i]]->getname()<<std::endl;
         }
         else {
@@ -57,9 +60,16 @@ item* inv::getweaponInv(int itemSlot)
 
 item* inv::geteatInv(int itemSlot)
 {
-    std::cout << "Ate " << invitem[invinside[itemSlot]]->getname() << std::endl;
+    if (itemSlot < 0 || itemSlot >= 16) {
+        return nullptr;
+    }
+    if (invinside[itemSlot] == -1) {
+        return nullptr;
+    }
+    item* eatenitem = invitem[invinside[itemSlot]];
+    std::cout << "Ate " << invitem[invinside[itemSlot]]->getname() << "... yuck." << std::endl;
     invinside[itemSlot] = -1;
-    return invitem[invinside[itemSlot]];
+    return eatenitem;
 }
 
 int inv::checkingType(int itemSlot)

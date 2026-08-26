@@ -59,28 +59,26 @@ void Enemy::builddeck(CardDatabase* database) {
     deck.cleardeck();
     if (Enemy::getEnemyType() == ENEMY_TYPE::TUTORIAL) {
         for (int i = 25; i < 28; i++) {
-            for (int a = 0; a < 2; a++) {
+            for (int a = 0; a < tutorialquantities[i - 25]; a++) {
                 deck.addcardtodraw(database->getcard(i));
             }
         }
-        for (int i = 52; i < 54; i++) {
-            for (int a = 0; a < 2; a++) {
-                deck.addcardtodraw(database->getcard(i));
-            }
+        for (int a = 0; a < 2; a++) {
+            deck.addcardtodraw(database->getcard(53));
         }
+        deck.addcardtodraw(database->getcard(52));
     }
 
     if (Enemy::getEnemyType() == ENEMY_TYPE::HENCHMEN) {
         for (int i = 25; i < 28; i++) {
-            for (int a = 0; a < 2; a++) {
+            for (int a = 0; a < tutorialquantities[i - 25]; a++) {
                 deck.addcardtodraw(database->getcard(i));
             }
         }
-        for (int i = 52; i < 54; i++) {
-            for (int a = 0; a < 2; a++) {
-                deck.addcardtodraw(database->getcard(i));
-            }
+        for (int a = 0; a < 2; a++) {
+            deck.addcardtodraw(database->getcard(53));
         }
+        deck.addcardtodraw(database->getcard(52));
     }
 
     if (Enemy::getEnemyType() == ENEMY_TYPE::GUNMAN) {
