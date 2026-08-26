@@ -145,9 +145,9 @@ void revisedshop::ShopMenu()
 // shop items displayed after "I"
 void revisedshop::OpenShop() const // const so it doesnt change any data
 {
-    std::cout << "----------------------------------------------------" << std::endl;
-    std::cout << "                    ITEMS FOR SALE                  " << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
+    std::cout << "                          ITEMS FOR SALE                  " << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
 
     for (int i = 0; i < 9; i++) {
         if (shopItems[i] != -1 && shopItemPtrs[i] != nullptr) { // if the item is NOT -1 and NOT nullptr=meaaning it exists in memory
@@ -172,15 +172,15 @@ void revisedshop::OpenShop() const // const so it doesnt change any data
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
         }
     }
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 }
 
 // weapon items displayed after "W"
 void revisedshop::OpenWeaponShop() const
 {
-    std::cout << "----------------------------------------------------" << std::endl;
-    std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
+    std::cout << "                         WEAPONS FOR SALE                 " << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
 
     for (int i = 0; i < 5; i++) { // i = subscript operator. uses the index variable i to look up a specific position inside that collection.
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
@@ -196,7 +196,7 @@ void revisedshop::OpenWeaponShop() const
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
         }
     }
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 }
 
 void revisedshop::BuyItem(int itemSlot)
