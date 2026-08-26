@@ -6,7 +6,7 @@ CardDatabase::CardDatabase() {
 	cards[0] = new Card("Strike", "Basic attack.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::deal_damage, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 0);
 	cards[1] = new Card("Chemical Boost", "Raises damage of attack cards paired with this card by 1.5x. Lucky you, it could have been drugs.", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::damage_multiplier, Card::effecttype::none, Card::effecttype::none, 0, 1.5f, 0, 1);
 	cards[2] = new Card("Weak Point Strike", "Deals damage and lowers enemy defense by 3.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::deal_damage, Card::effecttype::lower_defense, Card::effecttype::none, 3, 0.5f, 1, 0);
-	cards[3] = new Card("Suit Up", "Raises defense by 3 + half your defense, and heal 2 hp.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::heal_hp, Card::effecttype::none, 3, 1.0f, 0, 0);
+	cards[3] = new Card("Suit Up", "Raises defense by 2 + half your defense, and heal 2 hp.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::heal_hp, Card::effecttype::none, 2, 1.0f, 0, 0);
 	cards[4] = new Card("Brace", "Brace, brace. Next incoming hit deals 0.5x damage.", Card::cardtype::defense, item::combattype::none, Card::effecttype::half_damage_next_turn, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 0, 0);
 	cards[5] = new Card("Be Alert!", "Become alert; If enemy uses at least 2 attack cards next turn, negate one at random.", Card::cardtype::trap, item::combattype::none, Card::effecttype::negate_attack_card, Card::effecttype::none, Card::effecttype::none, 1, 1.0f, 0, 1);
 	cards[6] = new Card("Watch!", "Watch their every move...; If enemy uses at least 2 defense cards next turn, negate one at random.", Card::cardtype::trap, item::combattype::none, Card::effecttype::negate_defense_card, Card::effecttype::none, Card::effecttype::none, 1, 1.0f, 0, 1);
@@ -82,7 +82,7 @@ CardDatabase::CardDatabase() {
 
 	//tutorial purposes
 	cards[52] = new Card("Ferīre 2", "They deal bigger damage.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::deal_damage, Card::effecttype::none, Card::effecttype::none, 0, 2.0f, 1, 0);
-	cards[53] = new Card("Rest", "They increase defense and heal hp.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::heal_hp, Card::effecttype::none, 3, 1.0f, 1, 0);
+	cards[53] = new Card("Rest", "They increase defense and heal hp.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::heal_hp, Card::effecttype::none, 2, 1.0f, 1, 0);
 }
 
 CardDatabase::~CardDatabase() {

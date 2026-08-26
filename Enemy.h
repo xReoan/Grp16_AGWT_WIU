@@ -26,6 +26,7 @@ private:
 	CardDeck deck;
 	int meleeattack;
 	int projectileattack;
+	int tutorialquantities[3] = { 5, 1, 2 };
 	int gunmanquantities[5] = { 3, 2, 2, 1, 2 };
 	int grimquantities[3] = { 1, 1, 2 };
 	int tricksterquantities[5] = { 1, 1, 2, 1, 2 };

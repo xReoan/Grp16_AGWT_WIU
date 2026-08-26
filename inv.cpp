@@ -17,10 +17,6 @@ void inv::OpenInv(bool battlemode) const
             item* currentitem = invitem[invinside[i]];
 
             std::cout << i + 1<<". " << invitem[inv::invinside[i]]->getname();
-
-            if (battlemode == true && currentitem->getitemcategory() != item::itemtype::consumable) {
-                std::cout << " [now's not the time to use that...!]";
-            }
         }
         else {
             std::cout << i + 1 << ". Empty";
@@ -29,12 +25,7 @@ void inv::OpenInv(bool battlemode) const
         i++;
         if (inv::invinside[i] != -1) {
             item* currentitem = invitem[invinside[i]];
-
             std::cout << i + 1 << ". " << invitem[inv::invinside[i]]->getname()<<std::endl;
-
-            if (battlemode == true && currentitem->getitemcategory() != item::itemtype::consumable) {
-                std::cout << " [now's not the time to use that...!]";
-            }
         }
         else {
             std::cout << i + 1 << ". Empty"<<std::endl;
@@ -69,9 +60,16 @@ item* inv::getweaponInv(int itemSlot)
 
 item* inv::geteatInv(int itemSlot)
 {
-    std::cout << "Ate " << invitem[invinside[itemSlot]]->getname() << std::endl;
+    if (itemSlot < 0 || itemSlot >= 16) {
+        return nullptr;
+    }
+    if (invinside[itemSlot] == -1) {
+        return nullptr;
+    }
+    item* eatenitem = invitem[invinside[itemSlot]];
+    std::cout << "Ate " << invitem[invinside[itemSlot]]->getname() << "... yuck." << std::endl;
     invinside[itemSlot] = -1;
-    return invitem[invinside[itemSlot]];
+    return eatenitem;
 }
 
 int inv::checkingType(int itemSlot)
