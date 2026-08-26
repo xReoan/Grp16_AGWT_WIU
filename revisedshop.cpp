@@ -193,6 +193,7 @@ void revisedshop::BuyItem(int itemSlot)
     }
 
     std::cout << "You bought " << selectedItem->getname() << " for " << price << " coins!" << std::endl;
+    RemoveCoins(price);
     inv2.ReceivedInv(shopItems[itemSlot]);
 }
 
@@ -217,6 +218,7 @@ void revisedshop::BuyWeapon(int weaponSlot)
     }
 
     std::cout << "You bought " << selectedWeapon->getname() << " for " << price << " coins!" << std::endl;
+    RemoveCoins(price);
     inv2.ReceivedInv(weaponItems[weaponSlot]);
 }
 
@@ -228,6 +230,12 @@ void revisedshop::AddCoins(int amount)
         std::cout << "Added " << amount << " coins. Total: " << coins << std::endl;
 		system("cls");
     }
+}
+
+void revisedshop::RemoveCoins(int amount)
+{
+        coins = coins - amount; // add amount added to coins
+        std::cout << "Deducted " << amount << " coins. Total: " << coins << std::endl;
 }
 
 // returns current coin total of the shop
