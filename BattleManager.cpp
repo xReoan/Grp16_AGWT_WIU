@@ -2,6 +2,7 @@
 #include <iostream>
 #include <conio.h>
 BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* database) {
+	battleCheatActivated = false;
 	currentenemy = enemy;
 	currentplayer = player;
 	this->database = database;
@@ -104,42 +105,129 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	}
 }
 
-void BattleManager::StartBattle() {
-	currentplayer->builddeck(database);
-	currentenemy->builddeck(database);
-	for (int i = 0; i < 4; i++) {
-		currentplayer->getdeck()->drawcard();
+void BattleManager::StartBattle()
+{
+	// Reset the cheat whenever a new
+	// battle begins.
+	battleCheatActivated = false;
+
+	currentplayer->builddeck(
+		database);
+
+	currentenemy->builddeck(
+		database);
+
+	for (int i = 0; i < 4; i++)
+	{
+		currentplayer->
+			getdeck()->
+			drawcard();
 	}
-	for (int i = 0; i < 4; i++) {
-		currentenemy->getdeck()->drawcard();
+
+	for (int i = 0; i < 4; i++)
+	{
+		currentenemy->
+			getdeck()->
+			drawcard();
 	}
-	while (currentplayer->isalive() && currentenemy->isalive()) {
-		if (playerskip == false) {
+
+	while (currentplayer->isalive() &&
+		currentenemy->isalive())
+	{
+		// ============================
+		// PLAYER TURN
+		// ============================
+
+		if (playerskip == false)
+		{
 			PlayerTurn();
 		}
-		else {
+		else
+		{
 			playerskip = false;
 			selectedcount = 0;
-			for (int i = 0; i < 3; i++) {
-				selectedcards[i] = nullptr;
+
+			for (int i = 0; i < 3; i++)
+			{
+				selectedcards[i] =
+					nullptr;
 			}
 		}
-		if (enemyskip == false) {
+
+		// P was pressed during PlayerTurn.
+		if (battleCheatActivated == true)
+		{
+			// Directly set HP to zero instead of
+			// using damageenemy(). This also skips
+			// special enemy phases.
+			currentenemy->sethp(0);
+
+			system("cls");
+
+			std::cout
+				<< "============================================"
+				<< std::endl;
+
+			std::cout
+				<< "          BATTLE SKIP ACTIVATED"
+				<< std::endl;
+
+			std::cout
+				<< "============================================"
+				<< std::endl;
+
+			std::cout << std::endl;
+
+			std::cout
+				<< currentenemy->getname()
+				<< " was defeated."
+				<< std::endl;
+
+			std::cout << std::endl;
+
+			std::cout
+				<< "Press any key to continue."
+				<< std::endl;
+
+			_getch();
+
+			// Return to the code that originally
+			// started the battle.
+			return;
+		}
+
+		// ============================
+		// ENEMY TURN
+		// ============================
+
+		if (enemyskip == false)
+		{
 			EnemyTurn();
 		}
-		else {
+		else
+		{
 			enemyskip = false;
 			enemyselectedcount = 0;
-			for (int i = 0; i < 3; i++) {
-				enemyselectedcards[i] = nullptr;
+
+			for (int i = 0; i < 3; i++)
+			{
+				enemyselectedcards[i] =
+					nullptr;
 			}
 		}
-		displaybattle(who::player, true);
+
+		displaybattle(
+			who::player,
+			true);
+
 		resolveturn();
+
 		inspectplayedcards();
 
 		discardplayedcards();
+
 		checksurvivorphase();
+
 		updateeffects();
 	}
 }
@@ -573,6 +661,28 @@ void BattleManager::PlayerTurn() {
 				}
 			}
 		}
+
+		// =====================================
+		// P = SKIP BATTLE CHEAT
+		// =====================================
+
+		else if (input == 'p' ||
+			input == 'P')
+			{
+				battleCheatActivated = true;
+
+				// Exit the card-selection loop.
+				selecting = false;
+
+				selectedcount = 0;
+
+				for (int i = 0; i < 3; i++)
+				{
+					selectedcards[i] =
+						nullptr;
+				}
+				}
+
 		else if (input == 13) {
 			if (selectedcount > 0) {
 				selecting = false;

@@ -1671,6 +1671,29 @@ void Game::startBattle() {
         }
         std::cout << "Piggybank: " << shopkeeper.GetCoins() << std::endl;
         std::cout << "Alright, enough drooling over your money. Press any key to continue...";
+        if (map.isAtFinalNode()
+            == true) {
+            if (room.getRoomNumber() == 1)
+            {
+                std::cout
+                    << "\nYou remember the code: '9473'"
+                    << std::endl;
+            }
+            else if (
+                room.getRoomNumber() == 2)
+            {
+                std::cout
+                    << "\nThe room falls silent, you remember the time: '10:15'"
+                    << std::endl;
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                std::cout
+                    << "\nThe room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
+                    << std::endl;
+            }
+        }
         _getch();
     }
 
