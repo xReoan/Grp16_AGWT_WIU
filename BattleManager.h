@@ -147,5 +147,9 @@ private:
 	int enemycannotattackturns;
 	bool survivorfinaltestused;
 	bool metalpiercerpaired;
+
+	// Testing cheat.
+	// Becomes true when P is pressed.
+	bool battleCheatActivated;
 };
 
