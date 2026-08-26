@@ -109,7 +109,7 @@ appreciated. Maybe... I could help you too.
 std::cin.get();
 }
 
-void dialogue::introbeforebattlediag() {
+void dialogue::introafterbattlediag() {
 std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "First of all, who gave you permission to call us by our 
@@ -125,32 +125,25 @@ std::cout << R"(-------------------------------------------------------------
 15: "43, we talked about this. You have to stop thinking 
 that the outside is good when we are treated like dirt.")" << std::endl;
 std::cin.get();
+std::cout << R"(-------------------------------------------------------------
+15: "..Fine. You want your information so bad? Since you
+won, I'll give you some information this once. But if you 
+end up losing to the other, there's no telling what will 
+happen. So what do you say, detective?")" << std::endl;
 std::cin.get();
 std::cout << R"(-------------------------------------------------------------
-15: "Fine. You want your information so bad? How about 
-this? Let’s play some games.If you win... I might give
-you some information. But if you lose... there's no 
-telling what will happen. So what do you say, detective?"
-
-
-
-)"<< std::endl;
+You: "That's fine with me.")" << std::endl;
 std::cin.get();
-}
-
-void dialogue::introafterbattlediag() {
-std::cout << R"(Press Enter to continue . . .
--------------------------------------------------------------
-15: "Since you won your first game, I'll start by 
-introducing ourselves. If you can't tell, we were the 
-test subjects used in this lab. They took all of us from
-our parents when we were kids. There used to be way more
-of us, but unfortunately, they didn't survive the 
-experiments. There's only a few of us remaining. I'm the 
-second oldest, the others call me 15 since I was the 15th
-test subject. 43 is one of the youngest we have left. The
-oldest is the first ever test subject that arrived here, 
-we refer to him as...")" << std::endl;
+std::cout << R"(-------------------------------------------------------------
+15: "Okay then... I'll start by introducing ourselves. 
+If you can't tell, we were the test subjects used in this
+lab. They took all of us from our parents when we were 
+kids. There used to be way more of us, but unfortunately,
+they didn't survive the experiments. There's only a few 
+of us remaining. I'm the second oldest, the others call 
+me 15 since I was the 15th test subject. 43 is one of the
+youngest we have left. The oldest is the first ever test 
+subject that arrived here, we refer to him as...")" << std::endl;
 	std::cin.get();
 std::cout << R"("Aleksandr")" << std::endl;
 	std::cin.get();
