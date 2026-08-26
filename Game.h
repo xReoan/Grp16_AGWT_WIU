@@ -11,6 +11,7 @@
 #include "inv.h"
 #include "revisedshop.h"
 #include "itemDatabase.h"
+#include "dialogue.h"
 #include <string>
 
 enum GameState
@@ -29,6 +30,7 @@ enum GameState
 class Game
 {
 private:
+    dialogue dialogueFunction;
     Room room;
     Player player;
     Map map;
@@ -98,12 +100,15 @@ private:
 
     // Handles Room 1 -> Room 2 etc.
     void goToNextRoom();
+    //check if iwn game 
+    bool gameWon;
 
     //teleport
     void teleport(int roomnumber);
 
 public:
     Game();
+    bool getGameWon();
 
     void run();
 };

@@ -37,13 +37,37 @@ void revisedshop::ShopMenu()
 
     while (true) {
         system("cls"); // c runtime library func call = executes a system command to clear the console screen.
-        std::cout << "            What would you like to buy?" << std::endl;
-        std::cout << "----------------------------------------------------" << std::endl;
-        std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
-        std::cout << "----------------------------------------------------" << std::endl;
-        std::cout << "[C] Check Coins                        [E] Exit Shop" << std::endl;
-        std::cout << "          Use Enter to refresh/continue" << std::endl;
-		std::cout << "[O] Open Inventory" << std::endl;
+        std::cout << R"(
+         _=========================================_
+        // // // // // // // //  \\ \\ \\ \\ \\ \\ \\
+       // // // // // // // // || \\ \\ \\ \\ \\ \\ \\
+      // // // // // // // // || || \\ \\ \\ \\ \\ \\ \\
+    +====================================================+
+    ||                                                  ||
+    ||       _===============_        _===========_     ||
+    ||      //===============\\       ||         ||     ||
+    ||      ||               ||       ||    =    ||     ||
+    ||      ||   __ +        ||       ||  =/ \=  ||     ||
+    ||      ||  _||_         ||       || =  +  = ||     ||
+    ||      ||  |  |   ___   ||       ||  =\ /=  ||     ||
+    ||      ||  |  |   | |   ||       ||    =    ||     ||
+    ||     =====================      ||         ||     ||
+    ||                                ||         ||     ||
+    ||                                =============     ||
+    ||                                 =============    ||
+    ||                                =============     ||
+    ||                                 =============    ||
+    ||                                                  ||
+  ==+====================================================+==
+==============================================================
+)" << std::endl;
+        std::cout << "                  What would you like to buy?" << std::endl;
+        std::cout << "      ----------------------------------------------------" << std::endl;
+        std::cout << "      |       [I] Items        |       [W] Weapons       |" << std::endl;
+        std::cout << "      ----------------------------------------------------" << std::endl;
+        std::cout << "      [C] Check Coins                        [E] Exit Shop" << std::endl;
+        std::cout << "                Use Enter to refresh/continue" << std::endl;
+		std::cout << "      [O] Open Inventory" << std::endl;
 
         char inputshop = _getch(); // char = 'I' , inputshop = variable identifier , _getch(); = console input function call
 
@@ -121,9 +145,9 @@ void revisedshop::ShopMenu()
 // shop items displayed after "I"
 void revisedshop::OpenShop() const // const so it doesnt change any data
 {
-    std::cout << "----------------------------------------------------" << std::endl;
-    std::cout << "                    ITEMS FOR SALE                  " << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
+    std::cout << "                          ITEMS FOR SALE                  " << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
 
     for (int i = 0; i < 9; i++) {
         if (shopItems[i] != -1 && shopItemPtrs[i] != nullptr) { // if the item is NOT -1 and NOT nullptr=meaaning it exists in memory
@@ -148,15 +172,15 @@ void revisedshop::OpenShop() const // const so it doesnt change any data
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
         }
     }
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 }
 
 // weapon items displayed after "W"
 void revisedshop::OpenWeaponShop() const
 {
-    std::cout << "----------------------------------------------------" << std::endl;
-    std::cout << "                   WEAPONS FOR SALE                 " << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
+    std::cout << "                         WEAPONS FOR SALE                 " << std::endl;
+    std::cout << "      ----------------------------------------------------" << std::endl;
 
     for (int i = 0; i < 5; i++) { // i = subscript operator. uses the index variable i to look up a specific position inside that collection.
         if (weaponItems[i] != -1 && weaponItemPtrs[i] != nullptr) {
@@ -172,7 +196,7 @@ void revisedshop::OpenWeaponShop() const
             std::cout << " [" << i + 1 << "] Empty slot" << std::endl;
         }
     }
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 }
 
 void revisedshop::BuyItem(int itemSlot)
@@ -238,7 +262,7 @@ void revisedshop::AddCoins(int amount)
 
 void revisedshop::RemoveCoins(int amount)
 {
-        coins = coins - amount; // add amount added to coins
+        coins = coins - amount; // removed coins
         std::cout << "Deducted " << amount << " coins. Total: " << coins << std::endl;
 }
 

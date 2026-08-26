@@ -31,6 +31,8 @@
 Game::Game()
     : room(1)
 {
+    gameWon = false;
+
     currentState = BATTLE_STATE;
     player.setStarterEquipment(&itemdatabase);
     activePuzzle = nullptr;
@@ -43,6 +45,11 @@ Game::Game()
 
     map.generateMap();
     isTutorialBattleDone = false;
+}
+
+bool Game::getGameWon()
+{
+    return gameWon;
 }
 
 // =====================================
@@ -1552,7 +1559,7 @@ void Game::goToNextRoom()
             << std::endl;
 
         readKey();
-
+        gameWon = true;
         running = false;
     }
 
@@ -1701,6 +1708,7 @@ void Game::startBattle() {
                 std::cout
                     << "\nYou remember the code: '9473'"
                     << std::endl;
+                dialogueFunction.battle2diag();
             }
             else if (
                 room.getRoomNumber() == 2)
@@ -1708,6 +1716,17 @@ void Game::startBattle() {
                 std::cout
                     << "\nThe room falls silent, you remember the time: '10:15'"
                     << std::endl;
+                dialogueFunction.battle3diag();
+            }
+            else if (
+                room.getRoomNumber() == 3)
+            {
+                dialogueFunction.battle4diag();
+            }
+            else if (
+                room.getRoomNumber() == 4)
+            {
+                dialogueFunction.battle5diag();
             }
             else if (
                 room.getRoomNumber() == 5)
@@ -1715,9 +1734,21 @@ void Game::startBattle() {
                 std::cout
                     << "\nThe room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
                     << std::endl;
+                dialogueFunction.bossdiag();
             }
         }
         _getch();
+    }
+    //LOSE SCREEN
+    else {
+        clearScreen();
+        std::cout << "====================================" << std::endl;
+        std::cout << "               YOU DIED             " << std::endl;
+        std::cout << "====================================" << std::endl;
+        std::cout << "Press any key to exit." << std::endl;
+
+        _getch();
+        running = false;
     }
 
     player.getdeck()->cleardeck();
@@ -1727,6 +1758,7 @@ void Game::startBattle() {
 
     if (tutorialBattle) {
         isTutorialBattleDone = true;
+        dialogueFunction.introafterbattlediag();
         currentState = ROOM_STATE;
     }
     else {

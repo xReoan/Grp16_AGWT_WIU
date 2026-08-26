@@ -156,7 +156,8 @@ void BattleManager::StartBattle()
 		if (playerskip == false) {
 			PlayerTurn();
 		}
-		else {
+		else
+		{
 			playerskip = false;
 			selectedcount = 0;
 
@@ -192,17 +193,22 @@ void BattleManager::StartBattle()
 		if (enemyskip == false) {
 			EnemyTurn();
 		}
-		else {
+		else
+		{
 			enemyskip = false;
 			enemyselectedcount = 0;
-			for (int i = 0; i < 3; i++) {
-				enemyselectedcards[i] = nullptr;
+
+			for (int i = 0; i < 3; i++)
+			{
+				enemyselectedcards[i] =
+					nullptr;
 			}
 		}
 		displaybattle(who::player, true);
 		hpbeforeturn = currentplayer->gethp();
 		enemyhpbeforeturn = currentenemy->gethp();
 		resolveturn();
+
 		inspectplayedcards();
 		trapmessagecount = 0;
 		combomessagecount = 0;
@@ -219,7 +225,9 @@ void BattleManager::StartBattle()
 		}
 
 		discardplayedcards();
+
 		checksurvivorphase();
+
 		updateeffects();
 	}
 }
