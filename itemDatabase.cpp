@@ -5,7 +5,7 @@ itemDatabase::itemDatabase() {
 	items[1] = new item("Knife", "breaking news: knife found in kitchen", item::itemtype::weapon, item::equipment::basic, item::combattype::melee, 12, 0, 0, 0, 5);
 	items[2] = new item("Sword", "you might be arthur", item::itemtype::weapon, item::equipment::advanced, item::combattype::melee, 14, 0, 0, 0, 15);
 	items[3] = new item("Nerf Gun", "cool nerf gun with one bullet missing", item::itemtype::weapon, item::equipment::basic, item::combattype::projectile, 10, 0, 0, 0, 3);
-	items[4] = new item("Pistol", "pew pew", item::itemtype::weapon, item::equipment::basic, item::combattype::projectile, 12, 0, 0, 0, 5);
+	items[4] = new item("Pistol", "pew pew, genuinely might be the pistol they took from you", item::itemtype::weapon, item::equipment::basic, item::combattype::projectile, 12, 0, 0, 0, 5);
 	items[5] = new item("Shotgun", "bigger pew pew", item::itemtype::weapon, item::equipment::advanced, item::combattype::projectile, 14, 0, 0, 0, 15);
 
 	items[6] = new item("Cardboard Box", "makes you feel homeless. or like a hermit crab", item::itemtype::armor, item::equipment::basic, item::combattype::none, 0, 4, 0, 0, 2);

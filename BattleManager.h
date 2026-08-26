@@ -29,17 +29,13 @@ public:
 	void displayboard();
 	void inspectplayedcards();
 	int displaylength(std::string text);
-	//dialogue
-	void displaydialogue(std::string speaker, std::string text);
-	void battlestartdialogue();
-	void battleenddialogue();
-	void battleeventdialogue(std::string event);
 
 	void displaymessage(std::string message);
 	void StartBattle();
 	void PlayerTurn();
 	void EnemyTurn();
 	void resolveturn();
+	void displayresolution();
 
 	void playcard(Card* card, who user);
 	void applyeffect(Card* card, Card::effecttype effect, who user);
