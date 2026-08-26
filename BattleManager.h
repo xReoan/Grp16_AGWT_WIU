@@ -29,11 +29,6 @@ public:
 	void displayboard();
 	void inspectplayedcards();
 	int displaylength(std::string text);
-	//dialogue
-	void displaydialogue(std::string speaker, std::string text);
-	void battlestartdialogue();
-	void battleenddialogue();
-	void battleeventdialogue(std::string event);
 
 	void displaymessage(std::string message);
 	void StartBattle();

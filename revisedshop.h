@@ -22,6 +22,7 @@ public:
     void BuyItem(int itemSlot); // return type  function name  parameter aka input the function needs
     void BuyWeapon(int weaponSlot);
     void AddCoins(int amount);
+    void RemoveCoins(int amount);
     int GetCoins() const;
     void ShopMenu();
 };
