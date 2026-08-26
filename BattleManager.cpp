@@ -131,9 +131,6 @@ void BattleManager::StartBattle() {
 		displaybattle(who::player, true);
 		resolveturn();
 		inspectplayedcards();
-		std::cout << std::endl;
-		std::cout << "Press any key to continue... Don't keep them waiting...";
-		_getch();
 
 		discardplayedcards();
 		checksurvivorphase();
@@ -152,11 +149,16 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	}
 
 	std::cout << "============================================" << std::endl;
-	std::cout << "                    vs. " << currentenemy->getname() << std::endl;
+	const int battlewidth = 44;
+	std::string title = "vs. " + currentenemy->getname();
+	int padding = (battlewidth - title.length()) / 2;
+	for (int i = 0; i < padding; i++) {
+		std::cout << " ";
+	}
+	std::cout << title << std::endl;
 	std::cout << "============================================" << std::endl;
 
-	std::cout << currentenemy->getname() << " HP: " << enemyhp << "/" << currentenemy->getmaxhp() << std::endl;
-	std::cout << "Enemy HP: " << enemyhp;
+	std::cout << currentenemy->getname() << " HP: " << enemyhp;
 	if (enemyshield > 0) {
 		std::cout << "(+" << enemyshield << ")";
 	}
@@ -171,11 +173,18 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 
 	std::cout << std::endl;
 
-	std::cout << "Player HP: " << currentplayer->gethp();
+	std::cout << "Your HP: " << currentplayer->gethp();
 	if (playershield > 0) {
 		std::cout << "(+" << playershield << ")";
 	}
-	std::cout << "/100" << std::endl;
+	std::cout << "/100";
+	if (currentplayer->getMeleeAttack() >= currentplayer->getProjectileAttack()) {
+		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
+	}
+	else {
+		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
+	}
+	std::cout << ", DEF (melee): " << currentplayer->getMeleeDefense() << ", DEF (projectile): " << currentplayer->getProjectileDefense() << std::endl;
 	displayplayereffects();
 
 	std::cout << "============================================" << std::endl;
@@ -259,7 +268,7 @@ void BattleManager::displayplayereffects() {
 	}
 
 	if (playerdamagemultiplier > 1.0f) {
-		std::cout << "[Chemical Booster]";
+		std::cout << "[Chemical Boost]";
 	}
 
 	std::cout << std::endl;
@@ -362,13 +371,13 @@ void BattleManager::displayenemyeffects() {
 
 void BattleManager::displaycards(Card* cards[], int count) {
 	const int width = 20;
+
 	for (int i = 0; i < count; i++) {
 		std::cout << "+";
 		for (int a = 0; a < width + 2; a++) {
 			std::cout << "-";
 		}
 		std::cout << "+  ";
-		std::cout << "+----------------------+  ";
 	}
 	std::cout << std::endl;
 
@@ -377,8 +386,7 @@ void BattleManager::displaycards(Card* cards[], int count) {
 
 		std::cout << "| " << name;
 
-		for (int a = name.length(); a < width; a++) {
-		for (int a = displaylength(name); a < 20; a++) {
+		for (int a = displaylength(name); a < width; a++) {
 			std::cout << " ";
 		}
 
@@ -392,13 +400,12 @@ void BattleManager::displaycards(Card* cards[], int count) {
 			std::cout << "-";
 		}
 		std::cout << "+  ";
-		std::cout << "+----------------------+  ";
 	}
 	std::cout << std::endl;
 }
 
 void BattleManager::displayboard() {
-	std::cout << "ENEMY" << std::endl;
+	std::cout << currentenemy->getname() << std::endl;
 
 	if (enemyselectedcount > 0) {
 		displaycards(enemyselectedcards, enemyselectedcount);
@@ -469,7 +476,7 @@ void BattleManager::PlayerTurn() {
 		}
 		std::cout << std::endl;
 		std::cout << "Selected: " << selectedcount << "/3" << std::endl;
-		std::cout << "W/S: Up/Down  A/D: Deselect/Select  I: Card information  Q: Skip Turn  Enter: Confirm Cards" << std::endl;
+		std::cout << "W/S: Up/Down  A/D: Deselect/Select  I: Card information  E: Open Inventory  Q: Skip Turn  Enter: Confirm Cards" << std::endl;
 		char input = _getch();
 		if (input == 'w' || input == 'W') {
 			if (cursor > 0) {
@@ -529,6 +536,42 @@ void BattleManager::PlayerTurn() {
 			std::cout << card->getcarddescription() << std::endl;
 			std::cout << "Press any key to return. Don't keep them waiting." << std::endl;
 			_getch();
+		}
+		else if (input == 'e' || input == 'E') {
+			inv inventory;
+			system("cls");
+
+			inventory.OpenInv(true);
+			int choice;
+
+			std::cout << std::endl;
+			std::cout << "Choose an item (1-16, 0 to cancel): ";
+			std::cin >> choice;
+
+			if (choice != 0) {
+				choice--;
+				if (choice >= 0 && choice < 16) {
+					if (inventory.checkingType(choice) == 2) {
+						item* useditem = inventory.geteatInv(choice);
+						if (useditem != nullptr) {
+							int oldhp = currentplayer->gethp();
+							currentplayer->sethp(currentplayer->gethp() + useditem->gethealvalue());
+							if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+								currentplayer->sethp(currentplayer->getmaxhp());
+							}
+							int healed = currentplayer->gethp() - oldhp;
+							std::cout << "recovered "<< healed << " HP!" << std::endl;
+						}
+
+						std::cout << "Press any key to continue...";
+						_getch();
+					}
+					else {
+						std::cout << "now's not the time to use that...!" << std::endl;
+						_getch();
+					}
+				}
+			}
 		}
 		else if (input == 13) {
 			if (selectedcount > 0) {
@@ -755,6 +798,18 @@ void BattleManager::resolveturn() {
 	checktraps(selectedcards, selectedcount, playernegated, who::enemy);
 	checktraps(enemyselectedcards, enemyselectedcount, enemynegated, who::player);
 	for (int i = 0; i < selectedcount; i++) {
+		if (!playernegated[i] && selectedcards[i]->getcardname() == "Chemical Boost") {
+			playerdamagemultiplier *= selectedcards[i]->getmultiplier();
+			playerdamagemultiplierturns = selectedcards[i]->getduration();
+		}
+	}
+	for (int i = 0; i < enemyselectedcount; i++) {
+		if (!enemynegated[i] && enemyselectedcards[i]->getcardname() == "Enhance") {
+			enemydamagemultiplier *= enemyselectedcards[i]->getmultiplier();
+			enemydamagemultiplierturns = enemyselectedcards[i]->getduration();
+		}
+	}
+	for (int i = 0; i < selectedcount; i++) {
 		if (!playernegated[i]) {
 			playcard(selectedcards[i], who::player);
 		}
@@ -771,14 +826,9 @@ void BattleManager::resolveturn() {
 }
 
 void BattleManager::playcard(Card* card, who user) {
-	if (user == who::player) {
-		displaymessage("You used " + card->getcardname() + "!\n");
-	}
-	else {
-		displaymessage(currentenemy->getname() + " used " + card->getcardname() + "!\n");
-	}
 	for (int i = 0; i < 3; i++) {
 		Card::effecttype effect = card->getcardeffect(i);
+
 		if (effect != Card::effecttype::none) {
 			applyeffect(card, effect, user);
 		}
@@ -949,18 +999,22 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 
 	if (effect == Card::effecttype::damage_multiplier) {
 		if (user == who::player) {
-			if (playerdonation == true) {
-				enemydamagemultiplier *= card->getmultiplier();
-				enemydamagemultiplierturns = card->getduration();
-			}
-			else {
-				playerdamagemultiplier *= card->getmultiplier();
-				playerdamagemultiplierturns = card->getduration();
+			if (card->getcardname() == "Chemical Boost") {
+				if (playerdonation == true) {
+					enemydamagemultiplier *= card->getmultiplier();
+					enemydamagemultiplierturns = card->getduration();
+				}
+				else {
+					playerdamagemultiplier *= card->getmultiplier();
+					playerdamagemultiplierturns = card->getduration();
+				}
 			}
 		}
 		else {
-			enemydamagemultiplier *= card->getmultiplier();
-			enemydamagemultiplierturns = card->getduration();
+			if (card->getcardname() != "Enhance") {
+				enemydamagemultiplier *= card->getmultiplier();
+				enemydamagemultiplierturns = card->getduration();
+			}
 		}
 	}
 
@@ -1825,12 +1879,12 @@ void BattleManager::addtimedstat(int* stat, int amount, int duration) {
 		return;
 	}
 
-	*stat += amount;
+	*stat += newamount;
 	if (duration > 0) {
 		for (int i = 0; i < 20; i++) {
 			if (timedstats[i].active == false) {
 				timedstats[i].stat = stat;
-				timedstats[i].amount = amount;
+				timedstats[i].amount = newamount;
 				timedstats[i].turns = duration;
 				timedstats[i].active = true;
 				return;
@@ -1847,21 +1901,14 @@ void BattleManager::inspectplayedcards() {
 	bool inspecting = true;
 
 	while (inspecting) {
+		displayresolution();
 
 		std::cout << std::endl;
 		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
 
 		if (enemyselectedcount > 0) {
 			std::cout << "4-" << 3 + enemyselectedcount
-				<< ": Inspect enemy cards" << std::endl;
-		}
-
-		std::cout << std::endl;
-		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
-
-		if (enemyselectedcount > 0) {
-			std::cout << "4-" << 3 + enemyselectedcount
-				<< ": Inspect enemy cards" << std::endl;
+				<< ": Inspect enemy cards\n" << std::endl;
 		}
 
 		std::cout << "Enter: Continue" << std::endl;
@@ -1871,7 +1918,6 @@ void BattleManager::inspectplayedcards() {
 		if (input == 13) {
 			inspecting = false;
 		}
-
 		else if (input >= '1' && input <= '3') {
 			int index = input - '1';
 
@@ -1887,7 +1933,6 @@ void BattleManager::inspectplayedcards() {
 				_getch();
 			}
 		}
-
 		else if (input >= '4' && input <= '6') {
 			int index = input - '4';
 
@@ -1918,4 +1963,18 @@ int BattleManager::displaylength(std::string text) {
 	}
 
 	return length;
+}
+
+void BattleManager::displayresolution() {
+	displaybattle(who::player, true);
+
+	std::cout << std::endl;
+
+	for (int i = 0; i < selectedcount; i++) {
+		std::cout << "You used " << selectedcards[i]->getcardname() << "!\n" << std::endl;
+	}
+
+	for (int i = 0; i < enemyselectedcount; i++) {
+		std::cout << currentenemy->getname() << " used " << enemyselectedcards[i]->getcardname() << "!\n" << std::endl;
+	}
 }

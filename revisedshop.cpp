@@ -53,9 +53,9 @@ void revisedshop::ShopMenu()
         switch (inputshop) {
         case 'I': {
             OpenShop();
-            std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";
+            std::cout << "\nEnter slot number to buy (1-9) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 10) {
+            if (slotChoice > 0 && slotChoice <= 9) {
 				BuyItem(slotChoice - 1); // do a "- 1" so that the user can input 1-10, but the array is 0-9
             }
 			else if (slotChoice == 0) {
@@ -71,9 +71,9 @@ void revisedshop::ShopMenu()
 
         case 'W': {
             OpenWeaponShop();
-            std::cout << "\nEnter slot number to buy (1-10) or 0 to cancel: ";
+            std::cout << "\nEnter slot number to buy (1-5) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 10) {
+            if (slotChoice > 0 && slotChoice <= 5) {
                 BuyWeapon(slotChoice - 1);
             }
             else if (slotChoice == 0) {
@@ -101,7 +101,11 @@ void revisedshop::ShopMenu()
 
         case 'O': {
             inv2.OpenInv();
-            return;
+            std::cout << std::endl;
+            std::cout << "Press any key to return to the shop...";
+            _getch();
+
+            break;
         }
 
         default: {

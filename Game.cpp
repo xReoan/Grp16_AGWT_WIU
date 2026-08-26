@@ -218,31 +218,31 @@ void Game::run()
 
 void Game::generateBackpackItems()
 {
-    int itemCount =
-        backpackDatabase.getItemCount();
+    int healingItems[5] = { 10, 11, 12, 13, 14 };
+    int basicEquipment[6] = { 0, 1, 3, 4, 6, 7 };
 
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
         bool duplicateItem;
-
-        do
-        {
-            backpackItemIndices[i] =
-                std::rand() % itemCount;
-
+        do {
+            int chance = rand() % 100;
+            if (chance < 10) {
+                backpackItemIndices[i] =
+                    basicEquipment[rand() % 6];
+            }
+            else {
+                backpackItemIndices[i] =
+                    healingItems[rand() % 5];
+            }
             duplicateItem = false;
-
-            // Check the previously generated choices.
-            for (int j = 0; j < i; j++)
-            {
+            for (int j = 0; j < i; j++) {
                 if (backpackItemIndices[i] ==
                     backpackItemIndices[j])
                 {
                     duplicateItem = true;
                 }
             }
-
-        } while (duplicateItem == true);
+        } 
+        while (duplicateItem == true);
     }
 }
 
@@ -1612,7 +1612,23 @@ void Game::startBattle() {
                 pdefense = rand() % 2 + 7;
             }
         }
-		int randomEnemyType = rand() % 99 + 1;
+		int randomEnemyType = rand() % 95 + 1;
+        if (randomEnemyType >= 43) {
+            randomEnemyType++;
+        }
+
+        if (randomEnemyType >= 45) {
+            randomEnemyType++;
+        }
+
+        if (randomEnemyType >= 15) {
+            randomEnemyType++;
+        }
+
+        if (randomEnemyType >= 1) {
+            randomEnemyType++;
+        }
+
         if (randomEnemyType < 10) {
             enemy = new Enemy("0" + std::to_string(randomEnemyType), Enemy::ENEMY_TYPE::HENCHMEN, hp, mattack, pattack, mdefense, pdefense);
         }

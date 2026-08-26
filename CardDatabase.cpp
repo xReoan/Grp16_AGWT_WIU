@@ -4,7 +4,7 @@ CardDatabase::CardDatabase() {
 	// PLAYER -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//basic set
 	cards[0] = new Card("Strike", "Basic attack.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::deal_damage, Card::effecttype::none, Card::effecttype::none, 0, 1.0f, 1, 0);
-	cards[1] = new Card("Chemical Boost", "Raises attacks paired with this card by 1.5x. Lucky you, it could have been drugs.", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::damage_multiplier, Card::effecttype::none, Card::effecttype::none, 0, 1.5f, 0, 0);
+	cards[1] = new Card("Chemical Boost", "Raises attacks paired with this card by 1.5x. Lucky you, it could have been drugs.", Card::cardtype::hybrid, item::combattype::none, Card::effecttype::damage_multiplier, Card::effecttype::none, Card::effecttype::none, 0, 1.5f, 0, 1);
 	cards[2] = new Card("Weak Point Strike", "Deals damage and lowers enemy defense by 3.", Card::cardtype::attack, item::combattype::flexible, Card::effecttype::deal_damage, Card::effecttype::lower_defense, Card::effecttype::none, 3, 0.5f, 1, 0);
 	cards[3] = new Card("Suit Up", "Raises defense by 3 + half your defense, and heal 5 hp.", Card::cardtype::defense, item::combattype::flexible, Card::effecttype::increase_defense, Card::effecttype::heal_hp, Card::effecttype::none, 5, 1.0f, 0, 0);
 	cards[4] = new Card("Brace", "Brace, brace. Next attack deals 0.5x damage.", Card::cardtype::defense, item::combattype::none, Card::effecttype::half_damage_next_turn, Card::effecttype::none, Card::effecttype::none, 0, 0.5f, 0, 0);
