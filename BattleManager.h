@@ -119,9 +119,10 @@ private:
 
 	int playerhypnotismturns;
 	int playerhypnotismdamage;
-
 	int playerpoisonturns;
 	int enemypoisonturns;
+	int playerbandageturns;
+	int playerbandageheal;
 
 	int playerphalanxbonus;
 	bool playerphalanxing;

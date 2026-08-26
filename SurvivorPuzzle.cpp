@@ -205,6 +205,13 @@ void SurvivorPuzzle::draw() {
 }
 
 void SurvivorPuzzle::handleInput(char input) {
+    // Puzzle already completed
+    if (getSolved() == true)
+    {
+        setExitRequested(true);
+        return;
+    }
+
     //W = move up
     if (input == 'W' || input == 'w') {
         selectedChoice--;

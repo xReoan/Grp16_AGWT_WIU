@@ -34,9 +34,9 @@ void TricksterPuzzle::draw(){
 
     std::cout << "|              The ball starts under Cup 2.                |" << std::endl;
     std::cout << "|                                                          |" << std::endl;
-    std::cout << "|              Cup 2 <--> Cup 3                            |" << std::endl;
-    std::cout << "|              Cup 1 <--> Cup 3                            |" << std::endl;
-    std::cout << "|              Cup 1 <--> Cup 2                            |" << std::endl;
+    for (int i = 0; i < 3; i++){
+        std::cout << "|              Cup " << firstCup[i] << " <--> Cup " << secondCup[i] << std::endl;
+    }
     std::cout << "|                                                          |" << std::endl;
     std::cout << "|          CUP 1          CUP 2          CUP 3             |" << std::endl;
     std::cout << "|                                                          |" << std::endl;
@@ -131,6 +131,7 @@ void TricksterPuzzle::handleInput(char input) {
     }
 }
 
+//track the ball
 void TricksterPuzzle::shuffleCups(int firstCup, int secondCup) {
     if (ballPosition == firstCup) {
         ballPosition = secondCup;
@@ -142,10 +143,19 @@ void TricksterPuzzle::shuffleCups(int firstCup, int secondCup) {
     }
 }
 
+//shuffle cup
 void TricksterPuzzle::showShuffle()
 {
-    shuffleCups(2, 3);
-    shuffleCups(1, 3);
-    shuffleCups(1, 2);
+    for (int i = 0; i < 3; i++) {
+        firstCup[i] = rand() % 3 + 1;
+        secondCup[i] = rand() % 3 + 1;
+
+        while (secondCup[i] == firstCup[i])
+        {
+            secondCup[i] = rand() % 3 + 1;
+        }
+
+        shuffleCups(firstCup[i], secondCup[i]);
+    }
 }
 

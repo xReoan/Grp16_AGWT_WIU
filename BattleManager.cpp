@@ -47,7 +47,8 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	enemyreflectdamageturns = 0;
 
 	playerhalfmeleeturns = 0;
-
+	playerbandageturns = 0;
+	playerbandageheal = 0;
 	playertaunted = false;
 
 	enemyreflectdamage = false;
@@ -287,6 +288,10 @@ void BattleManager::displayplayereffects() {
 
 	if (playerhalfdamage == true) {
 		std::cout << "[Half Damage] ";
+	}
+
+	if (playerbandageturns > 0) {
+		std::cout << "[Bandage: " << playerbandageturns << " turns] ";
 	}
 
 	std::cout << std::endl;
@@ -543,13 +548,19 @@ void BattleManager::PlayerTurn() {
 					if (inventory.checkingType(choice) == 2) {
 						item* useditem = inventory.geteatInv(choice);
 						if (useditem != nullptr) {
-							int oldhp = currentplayer->gethp();
-							currentplayer->sethp(currentplayer->gethp() + useditem->gethealvalue());
-							if (currentplayer->gethp() > currentplayer->getmaxhp()) {
-								currentplayer->sethp(currentplayer->getmaxhp());
+							if (useditem->getname() == "Bandage") {
+								playerbandageturns = useditem->getduration();
+								playerbandageheal = useditem->gethealvalue();
 							}
-							int healed = currentplayer->gethp() - oldhp;
-							std::cout << "recovered "<< healed << " HP!" << std::endl;
+							else {
+								int oldhp = currentplayer->gethp();
+								currentplayer->sethp(currentplayer->gethp() + useditem->gethealvalue());
+								if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+									currentplayer->sethp(currentplayer->getmaxhp());
+								}
+								int healed = currentplayer->gethp() - oldhp;
+								std::cout << "recovered " << healed << " HP!" << std::endl;
+							}
 						}
 
 						std::cout << "Press any key to continue...";
@@ -1736,6 +1747,14 @@ void BattleManager::updateeffects() {
 		if (enemydamagemultiplierturns == 0) {
 			enemydamagemultiplier = 1.0f;
 		}
+	}
+
+	if (playerbandageturns > 0) {
+		currentplayer->sethp(currentplayer->gethp() + playerbandageheal);
+		if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+			currentplayer->sethp(currentplayer->getmaxhp());
+		}
+		playerbandageturns--;
 	}
 }
 
