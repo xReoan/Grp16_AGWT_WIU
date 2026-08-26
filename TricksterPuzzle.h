@@ -9,6 +9,10 @@ private:
     bool wrongChoice;
     bool shuffled;
 
+    //make random shuffle
+    int firstCup[3];
+    int secondCup[3];
+
 
 public:
     TricksterPuzzle(int startX, int startY);
@@ -18,6 +22,6 @@ public:
     bool checkSolution();
     void handleInput(char input);
 
-    void shuffleCups(int firsCup, int secondCup);
+    void shuffleCups(int firstCup, int secondCup);
     void showShuffle();
 };
