@@ -15,7 +15,7 @@ private:
     item* equippedadvancedweapon;
     item* equippedbasicarmor;
     item* equippedadvancedarmor;
-    int basicquantities[7] = { 6, 2, 2, 4, 2, 2, 2 };
+    int basicquantities[7] = { 6, 2, 2, 3, 3, 2, 2 };
 
     // Player's current position inside the room.
     int x;
