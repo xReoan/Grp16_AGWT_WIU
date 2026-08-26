@@ -37,6 +37,32 @@ void revisedshop::ShopMenu()
 
     while (true) {
         system("cls"); // c runtime library func call = executes a system command to clear the console screen.
+        std::cout << R"(
+         _=========================================_
+        // // // // // // // //  \\ \\ \\ \\ \\ \\ \\
+       // // // // // // // // || \\ \\ \\ \\ \\ \\ \\
+      // // // // // // // // || || \\ \\ \\ \\ \\ \\ \\
+    +====================================================+
+    ||                                                  ||
+    ||       _===============_        _===========_     ||
+    ||      //===============\\       ||         ||     ||
+    ||      ||               ||       ||    =    ||     ||
+    ||      ||   __ +        ||       ||  =/ \=  ||     ||
+    ||      ||  _||_         ||       || =  +  = ||     ||
+    ||      ||  |  |   ___   ||       ||  =\ /=  ||     ||
+    ||      ||  |  |   | |   ||       ||    =    ||     ||
+    ||     =====================      ||         ||     ||
+    ||                                ||         ||     ||
+    ||                                =============     ||
+    ||                                 =============    ||
+    ||                                =============     ||
+    ||                                 =============    ||
+    ||                                                  ||
+  ==+====================================================+==
+==============================================================
+
+)" << std::endl;
+
         std::cout << "            What would you like to buy?" << std::endl;
         std::cout << "----------------------------------------------------" << std::endl;
         std::cout << "|       [I] Items        |       [W] Weapons       |" << std::endl;
@@ -238,7 +264,7 @@ void revisedshop::AddCoins(int amount)
 
 void revisedshop::RemoveCoins(int amount)
 {
-        coins = coins - amount; // add amount added to coins
+        coins = coins - amount; // removed coins
         std::cout << "Deducted " << amount << " coins. Total: " << coins << std::endl;
 }
 
