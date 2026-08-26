@@ -98,9 +98,12 @@ private:
 
     // Handles Room 1 -> Room 2 etc.
     void goToNextRoom();
+    //check if iwn game 
+    bool gameWon;
 
 public:
     Game();
+    bool getGameWon();
 
     void run();
 };

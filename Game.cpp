@@ -31,6 +31,8 @@
 Game::Game()
     : room(1)
 {
+    gameWon = false;
+
     currentState = BATTLE_STATE;
     player.setStarterEquipment(&itemdatabase);
     activePuzzle = nullptr;
@@ -43,6 +45,11 @@ Game::Game()
 
     map.generateMap();
     isTutorialBattleDone = false;
+}
+
+bool Game::getGameWon()
+{
+    return gameWon;
 }
 
 // =====================================
@@ -1530,7 +1537,7 @@ void Game::goToNextRoom()
             << std::endl;
 
         readKey();
-
+        gameWon = true;
         running = false;
         }
          
@@ -1695,6 +1702,17 @@ void Game::startBattle() {
             }
         }
         _getch();
+    }
+    //LOSE SCREEN
+    else {
+        clearScreen();
+        std::cout << "====================================" << std::endl;
+        std::cout << "               YOU DIED             " << std::endl;
+        std::cout << "====================================" << std::endl;
+        std::cout << "Press any key to exit." << std::endl;
+
+        _getch();
+        running = false;
     }
 
     player.getdeck()->cleardeck();

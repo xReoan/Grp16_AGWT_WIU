@@ -46,16 +46,17 @@ int main()
 
     game.run();
 
-    //end screen
-    std::cout << R"(
+    if (game.getGameWon() == true) {
+        //end screen
+        std::cout << R"(
 ,---. .         ,--.       .   
   |   |         |          |   
   |   |-. ,-.   |-   ;-. ,-|   
   |   | | |-'   |    | | | |   
   '   ' ' `-'   `--' ' ' `-' o 
                                )";
-    std::cout << std::endl;
-    std::cout << R"(
+        std::cout << std::endl;
+        std::cout << R"(
 ^::::::::::::::YBP7?JJJJJJ?7!!~^^^:YG7:^^^^^~~~~7?^~^^^^^^^^^^^^^^^^^^
 ^^^^:::::::::::JBP^::::^^~!!7???JJ?5GJ!~~~^^^^~~77^^^^^^^^^^^^^^^^^^^^
 ^^^^:::::::::::JGP~::::::::::::::^^YGJ77??JY?777?!^^^^^^^^^~~~::^^^^^^
@@ -88,7 +89,7 @@ JJ?Y@@@#?7!P@&&P777777JG#&B??75&#?77777Y5J?YB&#?!77?PP??@G75@@@@#777!!
 ?????????JJJJJJJJJJJJJJJJ???????????????????????7???777!7777??777777??
 JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ????????J????????7??77??????7??J
 )" << std::endl;
-
+    }
 	
     return 0;
 }
