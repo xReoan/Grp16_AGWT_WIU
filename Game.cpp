@@ -1678,6 +1678,7 @@ void Game::startBattle() {
                 std::cout
                     << "\nYou remember the code: '9473'"
                     << std::endl;
+                dialogueFunction.battle2diag();
             }
             else if (
                 room.getRoomNumber() == 2)
@@ -1685,6 +1686,17 @@ void Game::startBattle() {
                 std::cout
                     << "\nThe room falls silent, you remember the time: '10:15'"
                     << std::endl;
+                dialogueFunction.battle3diag();
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                dialogueFunction.battle4diag();
+            }
+            else if (
+                room.getRoomNumber() == 5)
+            {
+                dialogueFunction.battle5diag();
             }
             else if (
                 room.getRoomNumber() == 5)
@@ -1692,6 +1704,7 @@ void Game::startBattle() {
                 std::cout
                     << "\nThe room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
                     << std::endl;
+                dialogueFunction.bossdiag();
             }
         }
         _getch();
