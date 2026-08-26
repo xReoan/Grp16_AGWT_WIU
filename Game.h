@@ -11,6 +11,7 @@
 #include "inv.h"
 #include "revisedshop.h"
 #include "itemDatabase.h"
+#include "dialogue.h"
 #include <string>
 
 enum GameState
@@ -29,6 +30,7 @@ enum GameState
 class Game
 {
 private:
+    dialogue dialogueFunction;
     Room room;
     Player player;
     Map map;
