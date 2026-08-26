@@ -25,7 +25,7 @@ public:
 	void displaybattle(who turn, bool showboard);
 	void displayplayereffects();
 	void displayenemyeffects();
-	void displaycards(Card* cards[], int count);
+	void displaycards(Card* cards[], int count, bool hideenemytraps);
 	void displayboard();
 	void inspectplayedcards();
 	int displaylength(std::string text);
@@ -88,6 +88,8 @@ private:
 	bool enemyignoredefense;
 
 	bool enemyignoreshield;
+	bool enemydetermination;
+	bool enemygrievance;
 
 	bool playerhalfmelee;
 	bool playerhalfdamage;
@@ -109,6 +111,8 @@ private:
 	bool playerupclose;
 	int playerupcloseturns;
 	int playerupclosedamage;
+
+	int playerhalfmeleeturns;
 
 	bool playerreflectprojectile;
 	int enemyreflectprojectile;
@@ -140,5 +144,7 @@ private:
 	int playertauntedturns;
 	int playercannotattackturns;
 	int enemycannotattackturns;
+	bool survivorfinaltestused;
+	bool metalpiercerpaired;
 };
 
