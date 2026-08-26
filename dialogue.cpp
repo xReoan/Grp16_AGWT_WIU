@@ -107,6 +107,7 @@ appreciated. Maybe... I could help you too.
 
 )" << std::endl; // filler space = a way to signal diag is done :)
 std::cin.get();
+system("cls");
 }
 
 void dialogue::introafterbattlediag() {
@@ -185,6 +186,7 @@ std::cout << R"(-------------------------------------------------------------
 
 )" << std::endl;
 std::cin.get();
+system("cls");
 }
 
 void dialogue::battle2diag() {
@@ -219,6 +221,7 @@ You: "Ah..."
 
 )" << std::endl;
 	std::cin.get();
+system("cls");
 }
 
 void dialogue::battle3diag() {
@@ -277,7 +280,8 @@ He simply wanted justice."
 
 
 )" << std::endl;
-	std::cin.get();
+std::cin.get();
+system("cls");
 }
 
 void dialogue::battle4diag() {
@@ -332,7 +336,8 @@ std::cout << R"(-------------------------------------------------------------
 
 
 )" << std::endl;
-	std::cin.get();
+std::cin.get();
+system("cls");
 }
 
 void dialogue::battle5diag() {
@@ -397,7 +402,8 @@ You: "Oh.")" << std::endl;
 	std::cin.get();
 std::cout << R"(-------------------------------------------------------------
 74: "There, your question's answered. Leave.")" << std::endl;
-	std::cin.get();
+std::cin.get();
+system("cls");
 }
 
 void dialogue::bossdiag() {
@@ -434,4 +440,5 @@ std::cout << R"(-------------------------------------------------------------
 )" << std::endl;
 	std::cin.get();
 	}
+system("cls");
 }
