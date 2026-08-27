@@ -135,6 +135,7 @@ system("cls");
 }
 
 void dialogue::introafterbattlediag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "Okay then... I'll start by introducing ourselves. 
@@ -189,6 +190,7 @@ subject that arrived here, we refer to him as...")" << std::endl;
 }
 
 void dialogue::battle2diag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 You: "Why are there little to no files about this laboratory?")" << std::endl;
@@ -224,6 +226,7 @@ You: "Ah..."
 }
 
 void dialogue::battle3diag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 17 (Grim): "Hey here's a tip, take everything everyone says 
@@ -294,6 +297,7 @@ He simply wanted justice."
 }
 
 void dialogue::battle4diag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 45 (Trickster): "NOO! HOW DID YOU BEAT ME! DON'T LEAVE 
@@ -352,6 +356,7 @@ You: "Where is it then?")" << std::endl;
 }
 
 void dialogue::battle5diag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
               _..----.._    _
             .'  .--.    "-.(0)_
@@ -418,6 +423,7 @@ You: "Oh.")" << std::endl;
 }
 
 void dialogue::bossdiag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
