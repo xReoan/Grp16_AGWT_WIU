@@ -433,15 +433,10 @@ void dialogue::bossdiag() {
 		std::cout << "Yes (Y) or No (N)?" << std::endl;
 		std::cin >> yesdiag;
 	} while (yesdiag != 'Y' && yesdiag != 'y' && yesdiag != 'N' && yesdiag != 'n');
-
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
 01: "Please leave then. You don't have any business with us
-anymore."
-
-
-
-)" << std::endl;
+anymore.")" << std::endl;
 		std::cin.get();
 	}
 	else if (yesdiag == 'N' || yesdiag == 'n') {
