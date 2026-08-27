@@ -40,7 +40,7 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	playermirrortrap = false;
 	playerhalfmelee = false;
 	playerhalfdamage = false;
-
+	firstturn = true;
 	playercannotattack = false;
 	enemycannotattack = false;
 
@@ -132,6 +132,7 @@ void BattleManager::StartBattle()
 	// Reset the cheat whenever a new
 	// battle begins.
 	battleCheatActivated = false;
+	firstturn = true;
 	currentplayer->builddeck(database);
 	currentenemy->builddeck(database);
 	for (int i = 0; i < 4; i++) {
@@ -144,9 +145,9 @@ void BattleManager::StartBattle()
 
 	if (currentplayer->getequippedadvancedarmor() != nullptr && currentplayer->getequippedadvancedarmor()->getname() == "ooooo shiny armor") {
 		enemyskip = true;
-		synergymessages[synergymessagecount] = "Your Shiny Armor dazzled " + currentenemy->getname() + "Their first turn was skipped!";
+		synergymessages[synergymessagecount] = "Your Shiny Armor dazzled " + currentenemy->getname() + ". Their first turn was skipped!";
 		synergymessagecount++;
-	}
+	}	
 
 	while (currentplayer->isalive() && currentenemy->isalive()) {
 		// ============================
@@ -155,6 +156,7 @@ void BattleManager::StartBattle()
 
 		if (playerskip == false) {
 			PlayerTurn();
+			firstturn = false;
 		}
 		else
 		{
@@ -172,14 +174,15 @@ void BattleManager::StartBattle()
 			// special enemy phases.
 			currentenemy->sethp(0);
 			system("cls");
+			setcolour(13);
 			std::cout << "============================================" << std::endl;
 			std::cout << "          BATTLE SKIP ACTIVATED" << std::endl;
 			std::cout << "============================================" << std::endl;
-
 			std::cout << std::endl;
 			std::cout << currentenemy->getname() << " was defeated." << std::endl;
 			std::cout << std::endl;
 			std::cout << "Press any key to continue." << std::endl;
+			setcolour(7);
 			_getch();
 			// Return to the code that originally
 			// started the battle.
@@ -207,18 +210,38 @@ void BattleManager::StartBattle()
 		displaybattle(who::player, true);
 		hpbeforeturn = currentplayer->gethp();
 		enemyhpbeforeturn = currentenemy->gethp();
+		setcolour(6);
 		resolveturn();
 
 		inspectplayedcards();
+		setcolour(7);
 		trapmessagecount = 0;
 		combomessagecount = 0;
 		synergymessagecount = 0;
 		if (tutorialmode == true && tutorialstep == 2 && currentplayer->gethp() < hpbeforeturn) {
 			system("cls");
-			std::cout << "Ouch. That one hurt, didn't it?\n\n";
-			std::cout << "Enemy attacks are reduced by your corresponding defense.\n";
-			std::cout << "Melee attacks use melee defense, while projectile attacks use projectile defense. You... currently have none. Try visiting our local shops!\n\n";
-			std::cout << "Some cards can also protect you or weaken the enemy.\n\n";
+			std::cout << R"(43: "Ouch. That one hurt, didn't it?")" << std::endl;
+			std::cin.get();
+			std::cout << R"(15: "Of course it did. You think I'm an amateur?")" << std::endl;
+			std::cin.get();
+			std::cout << R"(15: "I've played these games before.")" << std::endl;
+			std::cin.get();
+			std::cout << R"(43: "I mean... You are the tutorial enemy.")" << std::endl;
+			std::cin.get();
+			std::cout << R"(15: "You little...")" << std::endl;
+			std::cout << std::endl;
+			std::cout << R"(43: "Enemy attacks can be reduced by defense. Currently, you have... 0.")" << std::endl;
+			std::cin.get();
+			std::cout << R"(43: "Dude, you seriously dealt )" << hpbeforeturn - currentplayer->gethp() << R"( damage against a zero defense enemy?")" << std::endl;
+			std::cin.get();
+			std::cout << R"(15: "Oh my 01. 43, you are done here. Stop helping the detective!!!")" << std::endl;
+			std::cin.get();
+			std::cout << "*43 gets dragged away to the next room.*" << std::endl;
+			std::cin.get();
+			std::cout << R"(43: "That tickles...!! Remember, detective! Melee attacks use melee defense, while projectile attacks use projectile defense. Visit our local shops to buy some...!!!")" << std::endl;
+			std::cin.get();
+			std::cout << R"(15: "Don't pay attention to him. There will be no more distractions from now on.")" << std::endl;
+			std::cin.get();
 			std::cout << "Press any key to continue. Don't keep them waiting.";
 			_getch();
 			tutorialstep++;
@@ -241,7 +264,7 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 		currentenemy->getsurvivorphase2() == false) {
 		enemyhp -= 100;
 	}
-
+	setcolour(14);
 	std::cout << "============================================" << std::endl;
 	const int battlewidth = 44;
 	std::string title = "vs. " + currentenemy->getname();
@@ -249,33 +272,78 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	for (int i = 0; i < padding; i++) {
 		std::cout << " ";
 	}
+	setcolour(5);
 	std::cout << title << std::endl;
+	setcolour(14);
 	std::cout << "============================================" << std::endl;
-
-	std::cout << currentenemy->getname() << " HP: " << enemyhp;
+	setcolour(5);
+	std::cout << currentenemy->getname() << "'s";
+	setcolour(2);
+	std::cout << " HP: " << enemyhp;
 	if (enemyshield > 0) {
-		std::cout << "(+" << enemyshield << ")";
+		setcolour(3);
+		std::cout << "(+" << enemyshield << "), ";
 	}
-	std::cout << "/" << currentenemy->getmaxhp();
-	std::cout << ", ATK (melee): ?";
+	std::cout << "/" << currentenemy->getmaxhp() << ", ";
+	setcolour(12);
+	std::cout << "ATK (melee): ?";
 	if (enemymeleeattackbonus > 0) {
-		std::cout << "(+" << enemymeleeattackbonus << ")";
+		setcolour(13);
+		std::cout << "(+" << enemymeleeattackbonus << "), ";
+		setcolour(12);
 	}
-	std::cout << ", ATK (projectile): ?";
+	else if (enemymeleeattackbonus < 0) {
+		setcolour(13);
+		std::cout << "(-" << -enemymeleeattackbonus << "), ";
+		setcolour(12);
+	}
+	else {
+		std::cout << ", ";
+	}
+	std::cout << "ATK (projectile): ?";
 	if (enemyprojectileattackbonus > 0) {
-		std::cout << "(+" << enemyprojectileattackbonus << ")";
+		setcolour(13);
+		std::cout << "(+" << enemyprojectileattackbonus << "), ";
+		setcolour(12);
 	}
-	std::cout << ", DEF (melee): ?";
+	else if (enemyprojectileattackbonus < 0) {
+		setcolour(13);
+		std::cout << "(-" << -enemyprojectileattackbonus << "), ";
+		setcolour(12);
+	}
+	else {
+		std::cout << ", ";
+	}
+	setcolour(9);
+	std::cout << "DEF (melee): ?";
 	if (enemymeleedefensebonus > 0) {
-		std::cout << "(+" << enemymeleedefensebonus << ")";
+		setcolour(11);
+		std::cout << "(+" << enemymeleedefensebonus << "), ";
+		setcolour(9);
 	}
-	std::cout << ", DEF (projectile): ?";
+	else if(enemymeleedefensebonus < 0) {
+		setcolour(11);
+		std::cout << "(-" << -enemymeleedefensebonus << "), ";
+		setcolour(9);
+	}
+	else {
+		std::cout << ", ";
+	}
+	std::cout << "DEF (projectile): ?";
 	if (enemyprojectiledefensebonus > 0) {
+		setcolour(11);
 		std::cout << "(+" << enemyprojectiledefensebonus << ")";
+		setcolour(9);
+	}
+	else if (enemyprojectiledefensebonus < 0) {
+		setcolour(11);
+		std::cout << "(-" << -enemyprojectiledefensebonus << ")";
+		setcolour(9);
 	}
 	std::cout << std::endl;
+	setcolour(10);
 	displayenemyeffects();
-
+	setcolour(7);
 	std::cout << std::endl;
 
 	if (showboard == true) {
@@ -283,46 +351,114 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 	}
 
 	std::cout << std::endl;
-
-	std::cout << "Your HP: " << currentplayer->gethp();
+	setcolour(8);
+	std::cout << "Your ";
+	setcolour(2);
+	std::cout << "HP: " << currentplayer->gethp();
 	if (playershield > 0) {
+		setcolour(3);
 		std::cout << "(+" << playershield << ")";
 	}
-	std::cout << "/100";
+	std::cout << "/100, ";
+	setcolour(12);
 	if (currentplayer->getProjectileAttack() == 0) {
-		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
+		std::cout << "ATK (melee): " << currentplayer->getMeleeAttack();
 		if (playermeleeattackbonus > 0) {
-			std::cout << "(+" << playermeleeattackbonus << ")";
+			setcolour(13);
+			std::cout << "(+" << playermeleeattackbonus << "), ";
+			setcolour(12);
+		}
+		else if (playermeleeattackbonus < 0) {
+			setcolour(13);
+			std::cout << "(-" << -playermeleeattackbonus << "), ";
+			setcolour(12);
+		}
+		else {
+			std::cout << ", ";
 		}
 	}
 	else if (currentplayer->getMeleeAttack() == 0) {
-		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
+		std::cout << "ATK (projectile): " << currentplayer->getProjectileAttack();
 		if (playerprojectileattackbonus > 0) {
-			std::cout << "(+" << playerprojectileattackbonus << ")";
+			setcolour(13);
+			std::cout << "(+" << playerprojectileattackbonus << "), ";
+			setcolour(12);
+		}
+		else if (playerprojectileattackbonus < 0) {
+			setcolour(13);
+			std::cout << "(-" << -playerprojectileattackbonus << "), ";
+			setcolour(12);
+		}
+		else {
+			std::cout << ", ";
 		}
 	}
 	else {
-		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
+		std::cout << "ATK (melee): " << currentplayer->getMeleeAttack();
 		if (playermeleeattackbonus > 0) {
-			std::cout << "(+" << playermeleeattackbonus << ")";
+			setcolour(13);
+			std::cout << "(+" << playermeleeattackbonus << "), ";
+			setcolour(12);
 		}
-		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
+		else if (playermeleeattackbonus < 0) {
+			setcolour(13);
+			std::cout << "(-" << -playermeleeattackbonus << "), ";
+			setcolour(12);
+		}
+		else {
+			std::cout << ", ";
+		}
+		std::cout << "ATK (projectile): " << currentplayer->getProjectileAttack();
 		if (playerprojectileattackbonus > 0) {
-			std::cout << "(+" << playerprojectileattackbonus << ")";
+			setcolour(13);
+			std::cout << "(+" << playerprojectileattackbonus << "), ";
+			setcolour(12);
+		}
+		else if (playerprojectileattackbonus < 0) {
+			setcolour(13);
+			std::cout << "(-" << -playerprojectileattackbonus << "), ";
+			setcolour(12);
+		}
+		else {
+			std::cout << ", ";
 		}
 	}
-	std::cout << ", DEF (melee): " << currentplayer->getMeleeDefense();
+	setcolour(9);
+	std::cout << "DEF (melee): " << currentplayer->getMeleeDefense();
 	if (playermeleedefensebonus > 0) {
-		std::cout << "(+" << playermeleedefensebonus << ")";
+		setcolour(11);
+		std::cout << "(+" << playermeleedefensebonus << "), ";
+		setcolour(9);
 	}
-	std::cout << ", DEF (projectile): " << currentplayer->getProjectileDefense();
+	else if (playermeleedefensebonus < 0) {
+		setcolour(11);
+		std::cout << "(-" << -playermeleedefensebonus << "), ";
+		setcolour(9);
+	}
+	else {
+		std::cout << ", ";
+	}
+	std::cout << "DEF (projectile): " << currentplayer->getProjectileDefense();
 	if (playerprojectiledefensebonus > 0) {
+		setcolour(11);
 		std::cout << "(+" << playerprojectiledefensebonus << ")";
+		setcolour(9);
+	}
+	else if (playerprojectiledefensebonus < 0) {
+		setcolour(11);
+		std::cout << "(-" << -playerprojectiledefensebonus << ")";
+		setcolour(9);
 	}
 	std::cout << std::endl;
+	setcolour(10);
 	displayplayereffects();
-
+	setcolour(14);
 	std::cout << "============================================" << std::endl;
+	std::cout << std::endl;
+	if (showboard == false) {
+		showenemyaction();
+	}
+	setcolour(7);
 }
 
 void BattleManager::displayplayereffects() {
@@ -474,7 +610,7 @@ void BattleManager::displaycards(Card* cards[], int count, bool hideenemytraps =
 		std::string name = cards[i]->getcardname();
 
 		if (hideenemytraps == true && cards[i]->gettype() == Card::cardtype::trap) {
-			name = "???";
+			name = "??? Trap";
 		}
 
 		if (name == "Nodevība" && playerillusioned == false) {
@@ -502,8 +638,9 @@ void BattleManager::displaycards(Card* cards[], int count, bool hideenemytraps =
 }
 
 void BattleManager::displayboard() {
+	setcolour(5);
 	std::cout << currentenemy->getname() << std::endl;
-
+	setcolour(6);
 	if (enemyselectedcount > 0) {
 		displaycards(enemyselectedcards, enemyselectedcount, true);
 	}
@@ -512,10 +649,12 @@ void BattleManager::displayboard() {
 	}
 
 	std::cout << std::endl;
+	setcolour(14);
 	std::cout << "--------------------------------------------" << std::endl;
 	std::cout << std::endl;
-
+	setcolour(8);
 	std::cout << "YOU" << std::endl;
+	setcolour(6);
 
 	if (selectedcount > 0) {
 		displaycards(selectedcards, selectedcount, false);
@@ -523,6 +662,7 @@ void BattleManager::displayboard() {
 	else {
 		std::cout << "(no cards selected)" << std::endl;
 	}
+	setcolour(7);
 }
 
 int BattleManager::findcardtype(Card::cardtype type, bool selected[]) {
@@ -550,11 +690,13 @@ void BattleManager::PlayerTurn() {
 	if (tutorialmode == true && tutorialstep == 0) {
 		system("cls");
 		displaybattle(who::player, false);
-		std::cout << "Your hand:\n\n";
+		setcolour(6);
+		std::cout << std::endl;
 		for (int i = 0; i < currentplayer->getdeck()->gethandcount(); i++) {
 			Card* card = currentplayer->getdeck()->getcardfromhand(i);
 			std::cout << i + 1 << ": " << card->getcardname() << std::endl;
 		}
+		setcolour(7);
 		std::cout << std::endl;
 		std::cout << std::endl;
 		std::cout << R"(43: "These are the cards in your hand. Neat, right?)" << std::endl;
@@ -566,21 +708,22 @@ void BattleManager::PlayerTurn() {
 		std::cout << R"(15: "...Are you just trying to promote your business?")" << std::endl;
 		std::cin.get();
 		std::cout << R"(43: "Support local businesses!!!!!")" << std::endl;
-		std::cout << std::endl;
 		std::cin.get();
+		setcolour(9);
 		std::cout << "Use W/S to move between cards in your hand.\n";
-		std::cout << "Press I to inspect the highlighted card.\n\n";
+		std::cout << "Press I to inspect the highlighted card.\n";
+		setcolour(7);
 		std::cin.get();
 		std::cout << "Press any key to continue. Don't keep them waiting.";
 		_getch();
 		tutorialstep++;
 	}
-	showenemyaction();
 	int cursor = 0;
 	bool selecting = true;
 	while (selecting) {
 		displaybattle(who::player, false);
 		std::cout << std::endl;
+		setcolour(6);
 		for (int i = 0; i < currentplayer->getdeck()->gethandcount(); i++) {
 			Card* card = currentplayer->getdeck()->getcardfromhand(i);
 			if (i == cursor) {
@@ -602,6 +745,8 @@ void BattleManager::PlayerTurn() {
 		}
 		std::cout << std::endl;
 		std::cout << "Selected: " << selectedcount << "/3" << std::endl;
+		std::cout << std::endl;
+		setcolour(7);
 		std::cout << "W/S: Up/Down  A/D: Deselect/Select  I: Card information  E: Open Inventory  Q: Skip Turn  Enter: Confirm Cards" << std::endl;
 		char input = _getch();
 		if (input == 'w' || input == 'W') {
@@ -628,9 +773,21 @@ void BattleManager::PlayerTurn() {
 				selectedcount++;
 				if (tutorialmode == true && tutorialstep == 1) {
 					system("cls");
-					std::cout << "You may play up to 3 cards each turn.\n";
+					std::cout << R"(43: "Hooray! Now that you've gotten your cards, you can play them! You can play up to 3 at one time.)" << std::endl;
+					std::cin.get();
+					std::cout << R"(15: "Do they really need to know this? They are a detective for crying out loud.")" << std::endl;
+					std::cin.get();
+					std::cout << R"(43: "Well... Maybe they didn't know you could combine different cards for different effects!")" << std::endl;
+					std::cin.get();
+					std::cout << R"(43: "And... Um... ")" << std::endl;
+					std::cin.get();
+					std::cout << R"(15: "Just play your card, detective.")" << std::endl;
+					std::cin.get();
+					setcolour(9);
 					std::cout << "Press D to select a card.\n";
-					std::cout << "Press A to deselect it.\n\n";
+					std::cout << "Press A to deselect it.\n";
+					setcolour(7);
+					std::cin.get();
 					std::cout << "Press any key to continue. Don't keep them waiting.";
 					_getch();
 					tutorialstep++;
@@ -654,7 +811,9 @@ void BattleManager::PlayerTurn() {
 		}
 		else if (input == 'q' || input == 'Q') {
 			char choice;
+			setcolour(6);
 			std::cout << "Are you sure you want to skip your turn? (Y/N)" << std::endl;
+			setcolour(7);
 			std::cin >> choice;
 			if (choice == 'y' || choice == 'Y') {
 				selecting = false;
@@ -665,10 +824,13 @@ void BattleManager::PlayerTurn() {
 			}
 		}
 		else if (input == 'i' || input == 'I') {
+			setcolour(6);
 			system("cls");
 			Card* card = currentplayer->getdeck()->getcardfromhand(cursor);
 			std::cout << card->getcardname() << ": " << std::endl;
 			std::cout << card->getcarddescription() << std::endl;
+			std::cout << std::endl;
+			setcolour(7);
 			std::cout << "Press any key to return. Don't keep them waiting." << std::endl;
 			_getch();
 		}
@@ -1154,21 +1316,24 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 			}
 			playerlastdamage = oldhp - currentenemy->gethp();
 
-			if (isProjectile == false && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Sword") {
+			if (playerlastdamage > 0 && isProjectile == false && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Sword") {
 				sworddotdamage = 1;
 				sworddotturns = 3;
 			}
 
-			if (isProjectile == true && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Shotgun" && shotgundeflowered < 5) {
+			if (playerlastdamage > 0 && isProjectile == true && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Shotgun" && shotgundeflowered < 5) {
 				enemyprojectiledefensebonus -= 1;
 				shotgundeflowered++;
 			}
 
-			if (magicringreflections == 1) {
-				trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected 1 hit of " + card->getcardname() + "!";
-			}
-			else {
-				trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected " + std::to_string(magicringreflections) + " hits of " + card->getcardname() + "!";
+			if (magicringreflections > 0) {
+				if (magicringreflections == 1) {
+					trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected 1 hit of " + card->getcardname() + "!";
+				}
+				else {
+					trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected " + std::to_string(magicringreflections) + " hits of " + card->getcardname() + "!";
+				}
+				trapmessagecount++;
 			}
 
 			if (playerillusioned == true && playerlastdamage >= 7) {
@@ -2254,7 +2419,6 @@ void BattleManager::displaymessage(std::string message) {
 
 void BattleManager::inspectplayedcards() {
 	bool inspecting = true;
-
 	while (inspecting) {
 		displayresolution();
 		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
@@ -2275,17 +2439,10 @@ void BattleManager::inspectplayedcards() {
 
 			if (index < selectedcount) {
 				system("cls");
-				Card* card = enemyselectedcards[index];
-				if (card->getcardname() == "Nodevība" && playerillusioned == false) {
-					std::cout << "Ferīre" << std::endl;
-					std::cout << std::endl;
-					std::cout << "They deal damage." << std::endl;
-				}
-				else {
-					std::cout << selectedcards[index]->getcardname() << std::endl;
-					std::cout << std::endl;
-					std::cout << selectedcards[index]->getcarddescription() << std::endl;
-				}
+				Card* card = selectedcards[index];
+				std::cout << card->getcardname() << std::endl;
+				std::cout << std::endl;
+				std::cout << card->getcarddescription() << std::endl;
 				std::cout << std::endl;
 				std::cout << "Press any key to return...";
 				_getch();
@@ -2309,11 +2466,11 @@ void BattleManager::inspectplayedcards() {
 					std::cout << std::endl;
 					std::cout << "They deal damage." << std::endl;
 				}
-
-				std::cout << enemyselectedcards[index]->getcardname() << std::endl;
-				std::cout << std::endl;
-				std::cout << enemyselectedcards[index]->getcarddescription() << std::endl;
-
+				else {
+					std::cout << enemyselectedcards[index]->getcardname() << std::endl;
+					std::cout << std::endl;
+					std::cout << enemyselectedcards[index]->getcarddescription() << std::endl;
+				}
 				std::cout << std::endl;
 				std::cout << "Press any key to return...";
 				_getch();
@@ -2341,6 +2498,7 @@ void BattleManager::displayresolution() {
 	displaybattle(who::player, true);
 
 	std::cout << std::endl;
+	setcolour(6);
 
 	for (int i = 0; i < selectedcount; i++) {
 		std::cout << "You used " << selectedcards[i]->getcardname() << "!\n" << std::endl;
@@ -2371,23 +2529,165 @@ void BattleManager::displayresolution() {
 	int enemydamagetaken = enemyhpbeforeturn - currentenemy->gethp();
 	if (playerdamagetaken > 0) {
 		std::cout << "You took " << playerdamagetaken << " damage!\n";
+		std::cout << std::endl;
 	}
 	if (enemydamagetaken > 0) {
 		std::cout << currentenemy->getname() << " took " << enemydamagetaken << " damage!\n";
+		std::cout << std::endl;
 	}
+	setcolour(7);
 }
 
 void BattleManager::showenemyaction() {
 	int choice = rand() % 3;
-
-	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::GUNMAN) {
-		if (choice == 0) std::cout << "Gunman takes aim.\n";
-		else if (choice == 1) std::cout << "Gunman steadies their weapon.\n";
-		else std::cout << "Gunman lines up a shot.\n";
-		if (choice == 0) std::cout << "Gunman shifts into cover.\n";
-		else if (choice == 1) std::cout << "Gunman adjusts their stance.\n";
-		else std::cout << "Gunman keeps their guard up.\n";
+	if (firstturn == true) {
+		choice = 0;
+	}
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::TUTORIAL) {
+		if (choice == 0) {
+			std::cout << "King Tut tidies up his appearance.\n";
+		}
+		else if (choice == 1) {
+			std::cout << "King Tut stares at the cards with intent.\n";
+		}
+		else {
+			std::cout << "King Tut tries to fend off Gunman from peeking at his cards.\n";
+		}
+		if (currentenemy->gethp() < currentenemy->getmaxhp() / 2) {
+			if (choice == 0) {
+				std::cout << "A disturbingly wide smile appears on their face..\n";
+			}
+			else if (choice == 1) {
+				std::cout << "King Tut stares at the cards with less intent.\n";
+			}
+			else {
+				std::cout << "King Tut gulps.\n";
+			}
+		}
 	}
 
-	// Grim / Trickster / Survivor
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::GUNMAN) {
+		if (choice == 0) {
+			std::cout << "Gunman smiles, they've never had a friend like you before.\n";
+		}
+		else if (choice == 1) {
+			std::cout << "Gunman steadies their stance.\n";
+		}
+		else {
+			std::cout << "Gunman places one hand on a card, eager to play it.\n";
+		}
+		if (currentenemy->gethp() < currentenemy->getmaxhp() / 2) {
+			if (choice == 0) {
+				std::cout << "Gunman yawns.\n";
+			}
+			else if (choice == 1) {
+				int easter = rand() % 101;
+				if (easter < 90) {
+					std::cout << "Gunman fires an imaginary shot towards you.\n";
+				}
+				else {
+					std::cout << "Gunman fires an imaginary shot towards you. Strangely... you see sparks emerge from their fingertips.\n";
+				}
+			}
+			else {
+				std::cout << "Gunman tries to hide his scars.\n";
+			}
+		}
+	}
+
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::GRIM) {
+		if (choice == 0) {
+			std::cout << "Grim gazes at you, scanning your expression.\n";
+		}
+		else if (choice == 1) {
+			std::cout << "Do you believe in nightmares? Grim doesn't.\n";
+		}
+		else {
+			std::cout << "Grim spreads his cards evenly on the table.\n";
+		}
+		if (currentenemy->gethp() < currentenemy->getmaxhp() / 2) {
+			if (choice == 0) {
+				std::cout << "Grim stares at you, not giving in for a long time.\n";
+			}
+			else if (choice == 1) {
+				int easter = rand() % 101;
+				if (easter < 90) {
+					std::cout << "Grim peeks from above his cards.\n";
+				}
+				else {
+					std::cout << "Maria... Are you there?\n";
+				}
+			}
+			else {
+				std::cout << "Grim avoids eye contact.\n";
+			}
+		}
+	}
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::TRICKSTER) {
+		if (choice == 0) {
+			std::cout << "Do you trust everything you see?\n";
+		}
+		else if (choice == 1) {
+			std::cout << "Trickster shows you one of his cards, then changes it immediately.\n";
+		}
+		else {
+			std::cout << "Trickster makes his cards disappear... And appear!\n";
+		}
+		if (currentenemy->gethp() < currentenemy->getmaxhp() / 2) {
+			if (choice == 0) {
+				std::cout << "Eyes. Eyes everywhere, all fixated on you.\n";
+			}
+			else if (choice == 1) {
+				std::cout << "Trickster hands you an apple. As you attempt to take a bite, it disappears.\n";
+			}
+			else {
+				std::cout << "Your cards... Starts to grow in size?\n";
+			}
+		}
+	}
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::SURVIVOR) {
+		if (choice == 0) {
+			std::cout << "Look at you, you've made it this far.\n";
+		}
+		else if (choice == 1) {
+			std::cout << "Survivor straightens his posture.\n";
+		}
+		else {
+			std::cout << "Survivor looks at you with tired eyes.\n";
+		}
+		if (currentenemy->gethp() < currentenemy->getmaxhp() / 2) {
+			if (choice == 0) {
+				std::cout << "Do you understand now? Why we exist?\n";
+			}
+			else if (choice == 1) {
+				std::cout << "Survivor catches you dozing off, snapping his fingers with a commanding presence.\n";
+			}
+			else {
+				std::cout << "Almost there.\n";
+			}
+		}
+	}
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::GAME_MASTER) {
+		if (choice == 0) {
+			std::cout << "Now is not the time to talk. The atmosphere was tense.\n";
+		}
+		else {
+			std::cout << "For some reason, you couldn't look into his eyes.";
+		}
+	}
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::HENCHMEN) {
+		if (choice == 0) {
+			std::cout << currentenemy->getname() << " looks at you with curiosity.\n";
+		}
+		else if (choice == 1) {
+			std::cout << currentenemy->getname() << " wonders if you could tell them apart with the rest.\n";
+		}
+		else {
+			std::cout << currentenemy->getname() << " wants to keep playing forever.\n";
+		}
+	}
+}
+
+void BattleManager::setcolour(int colour) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colour);
 }

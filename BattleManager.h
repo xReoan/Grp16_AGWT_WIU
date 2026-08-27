@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "CardDatabase.h"
 #include <string>
+#include <Windows.h>
 class BattleManager
 {
 public:
@@ -53,6 +54,8 @@ public:
 	void checksurvivorphase();
 	void showenemyaction();
 
+	void setcolour(int colour);
+
 private:
 	CardDatabase* database;
 	Player* currentplayer;
@@ -76,6 +79,7 @@ private:
 	int enemyprojectiledefensebonus;
 	int enemyshield;
 	int playerlastdamage;
+	int firstturn;
 
 	float playerdamagemultiplier;
 	float enemydamagemultiplier;
