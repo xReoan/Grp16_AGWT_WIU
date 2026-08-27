@@ -428,6 +428,7 @@ void dialogue::bossdiag() {
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
 	std::cin.get();
+	std::cout << "Yes (Y) or No (N)?" << std::endl;
 	char yesdiag = std::cin.get();
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
