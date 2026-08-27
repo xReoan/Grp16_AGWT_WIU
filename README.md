@@ -102,3 +102,59 @@ Q     - Stand Up
 | E    Try Combination                                     |
 | Q    Leave                                               |
 +----------------------------------------------------------+
+
+BATTLE SYSTEM: 
+
+============================================
+                 vs. Enemy
+============================================
+Enemy HP: 30/30, ATK (melee): ?, ATK (projectile): ?, DEF (melee): ?, DEF (projectile): ?
+Enemy's effects:
+
+
+Your HP: 100/100, ATK (melee): 10, DEF (melee): 0, DEF (projectile): 0
+Your effects:
+============================================
+
+> * 1: Card1
+    2: Card2
+    3: Card3
+    4: Card4
+    5: Card5
+    6: Card6
+
+Selected: 1/3
+
+W/S: Up/Down  A/D: Deselect/Select  I: Card information  E: Open Inventory  Q: Skip Turn  Enter: Confirm Cards
+
+
+AFTER SELECTING CARDS:
+
+============================================
+                 vs. Enemy
+============================================
+Enemy HP: 30/30, ATK (melee): ?, ATK (projectile): ?, DEF (melee): ?, DEF (projectile): ?
+Enemy's effects:
+
+King Tut
++----------------------+  +----------------------+
+| Card 1               |  | Card 2               |
++----------------------+  +----------------------+
+
+--------------------------------------------
+
+YOU
++----------------------+
+| Card 1               |
++----------------------+
+
+Your HP: 100/100, ATK (melee): 10, DEF (melee): 0, DEF (projectile): 0
+Your effects:
+============================================
+
+1-1: Inspect your cards
+
+4-5: Inspect enemy cards
+
+Enter: Continue
+
