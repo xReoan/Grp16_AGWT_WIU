@@ -435,8 +435,13 @@ void dialogue::bossdiag() {
 	} while (yesdiag != 'Y' && yesdiag != 'y' && yesdiag != 'N' && yesdiag != 'n');
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
-01: "Please leave then. You don't have any business with us
-anymore.")" << std::endl;
+01: "Please leave then.")" << std::endl;
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+01: "You don't have any business with us anymore.")" << std::endl;
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+43: VISIT US ANYTIME!!!!!!!!!!!!!!)" << std::endl;
 		std::cin.get();
 	}
 	else if (yesdiag == 'N' || yesdiag == 'n') {
