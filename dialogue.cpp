@@ -428,17 +428,28 @@ void dialogue::bossdiag() {
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
 	std::cin.get();
-	char yesdiag = std::cin.get();
+	char yesdiag;
+	do {
+		std::cout << "Yes (Y) or No (N)?" << std::endl;
+		std::cin >> yesdiag;
+	} while (yesdiag != 'Y' && yesdiag != 'y' && yesdiag != 'N' && yesdiag != 'n');
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
-01: "Please leave then. You don't have any business with us
-anymore.")" << std::endl;
+01: "Please leave then.")" << std::endl;
+		std::cin.get();
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+01: "You don't have any business with us anymore.")" << std::endl;
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+43: VISIT US ANYTIME!!!!!!!!!!!!!!)" << std::endl;
 		std::cin.get();
 	}
 	else if (yesdiag == 'N' || yesdiag == 'n') {
 		std::cout << R"(-------------------------------------------------------------
 01: "What other information would you need? You know what 
 happened. Leave us alone.")" << std::endl;
+		std::cin.get();
 		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
 You: "Isn't there something you need to tell me?")" << std::endl;
@@ -457,5 +468,4 @@ You: "Isn't there something you need to tell me?")" << std::endl;
 )" << std::endl;
 		std::cin.get();
 	}
-	system("cls");
 }
