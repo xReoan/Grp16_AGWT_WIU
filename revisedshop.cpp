@@ -33,7 +33,7 @@ revisedshop::revisedshop() : coins() // constructor   constructer declarator  me
 
 void revisedshop::ShopMenu()
 {
-    int slotChoice;
+    char slotChoice;
 
     while (true) {
         system("cls"); // c runtime library func call = executes a system command to clear the console screen.
@@ -79,15 +79,22 @@ void revisedshop::ShopMenu()
             OpenShop();
             std::cout << "\nEnter slot number to buy (1-9) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 9) {
-				BuyItem(slotChoice - 1); // do a "- 1" so that the user can input 1-10, but the array is 0-9
+
+            if (isdigit(slotChoice)) {
+                int SC = slotChoice - '0'; // subtracts the ASCII value of '0' from the ASCII value of slotChoice so subtracting '0' gives numeric value of the digit. 
+                if (SC > 0 && SC <= 9) {
+                    BuyItem(SC - 1); // do a "- 1" so that the user can input 1-10, but the array is 0-9
+                }
+                else if (SC == 0) {
+                    std::cout << "Purchase cancelled." << std::endl;
+                }
+                else {
+                    std::cout << "Invalid slot number." << std::endl;
+                }
             }
-			else if (slotChoice == 0) {
-				std::cout << "Purchase cancelled." << std::endl;
-			}
-			else {
-				std::cout << "Invalid slot number." << std::endl;
-			}
+            else {
+                std::cout << "Invalid! Please choose a number." << std::endl;
+            }
             std::cin.ignore();
             std::cin.get();
             break;
@@ -97,14 +104,21 @@ void revisedshop::ShopMenu()
             OpenWeaponShop();
             std::cout << "\nEnter slot number to buy (1-5) or 0 to cancel: ";
             std::cin >> slotChoice;
-            if (slotChoice > 0 && slotChoice <= 5) {
-                BuyWeapon(slotChoice - 1);
-            }
-            else if (slotChoice == 0) {
-                std::cout << "Purchase cancelled." << std::endl;
+
+            if (isdigit(slotChoice)) {
+                int SC = slotChoice - '0';
+                if (slotChoice > 0 && slotChoice <= 5) {
+                    BuyWeapon(slotChoice - 1);
+                }
+                else if (slotChoice == 0) {
+                    std::cout << "Purchase cancelled." << std::endl;
+                }
+                else {
+                    std::cout << "Invalid slot number." << std::endl;
+                }
             }
             else {
-                std::cout << "Invalid slot number." << std::endl;
+                std::cout << "Invalid! Please choose a number." << std::endl;
             }
             std::cin.ignore();
             std::cin.get();
@@ -256,7 +270,6 @@ void revisedshop::AddCoins(int amount)
     if (amount > 0) {
         coins += amount; // add amount added to coins
         std::cout << "Added " << amount << " coins. Total: " << coins << std::endl;
-		system("cls");
     }
 }
 
