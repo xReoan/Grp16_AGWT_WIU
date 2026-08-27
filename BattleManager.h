@@ -80,6 +80,7 @@ private:
 	int enemyshield;
 	int playerlastdamage;
 	int firstturn;
+	int enemyactionchoice;
 
 	float playerdamagemultiplier;
 	float enemydamagemultiplier;

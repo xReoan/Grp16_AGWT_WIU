@@ -43,6 +43,7 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	firstturn = true;
 	playercannotattack = false;
 	enemycannotattack = false;
+	enemyactionchoice = 0;
 
 	for (int i = 0; i < 5; i++) {
 		trapmessages[i] = "";
@@ -725,6 +726,10 @@ void BattleManager::PlayerTurn() {
 	}
 	int cursor = 0;
 	bool selecting = true;
+	enemyactionchoice = rand() % 3;
+	if (firstturn == true) {
+		enemyactionchoice = 0;
+	}
 	while (selecting) {
 		displaybattle(who::player, false);
 		std::cout << std::endl;
@@ -2544,7 +2549,7 @@ void BattleManager::displayresolution() {
 }
 
 void BattleManager::showenemyaction() {
-	int choice = rand() % 3;
+	int choice = enemyactionchoice;
 	if (firstturn == true) {
 		choice = 0;
 	}
