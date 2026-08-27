@@ -33,7 +33,7 @@ revisedshop::revisedshop() : coins() // constructor   constructer declarator  me
 
 void revisedshop::ShopMenu()
 {
-    char slotChoice;
+    unsigned char slotChoice;
 
     while (true) {
         system("cls"); // c runtime library func call = executes a system command to clear the console screen.
