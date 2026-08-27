@@ -1116,14 +1116,8 @@ void Game::handleBackpackInput(
         // Choice 3 is always 5 Coins.
         if (selectedBackpackItem == 3)
         {
-            std::cout
-                << "You find a small pouch containing "
-                << "5 coins."
-                << std::endl;
-
-            std::cout << std::endl;
-
             shopkeeper.AddCoins(5);
+            std::cout << "you feel richer by 5 coins..." << std::endl;
         }
         else
         {
@@ -1686,21 +1680,22 @@ void Game::startBattle() {
             }
         }
         if (enemy->getEnemyType() == Enemy::ENEMY_TYPE::HENCHMEN) {
-            shopkeeper.AddCoins(2);
+            int randomcoin = rand() % 4 + 5;
+            shopkeeper.AddCoins(randomcoin);
             int easter = rand() % 101;
             if (easter <= 95) {
-                std::cout << "you feel $2 richer..." << std::endl;
+                std::cout << "you feel richer by " << randomcoin << " coins..." << std::endl;
             }
             else {
-                std::cout << "you feel $100 richer... but in reality you got $2." << std::endl;
+                std::cout << "you feel 100 coins richer... but in reality you got " << randomcoin << " coins." << std::endl;
             }
         }
         else {
-            shopkeeper.AddCoins(10);
-            std::cout << "you feel $10 richer..." << std::endl;
+            shopkeeper.AddCoins(15);
+            std::cout << "you feel richer by 15 coins..." << std::endl;
         }
         std::cout << "Piggybank: " << shopkeeper.GetCoins() << std::endl;
-        std::cout << "Alright, enough drooling over your money. Press any key to continue...";
+        std::cout << "Alright, enough drooling over your money. Press any key to continue..." << std::endl;
         if (map.isAtFinalNode()
             == true) {
             if (room.getRoomNumber() == 1)

@@ -132,6 +132,11 @@ void BattleManager::StartBattle()
 	// Reset the cheat whenever a new
 	// battle begins.
 	battleCheatActivated = false;
+	int newhp = currentplayer->gethp() + 5;
+	if (newhp > 100) {
+		newhp = 100;
+	}
+	currentplayer->sethp(newhp);
 	currentplayer->builddeck(database);
 	currentenemy->builddeck(database);
 	for (int i = 0; i < 4; i++) {
