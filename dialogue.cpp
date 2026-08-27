@@ -83,7 +83,7 @@ ALL be like that... Can't we take this chance to make a new
 friend?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-15 (Survivor): "Are you serious? This isn't a game, 43. How 
+15 (King Tut): "Are you serious? This isn't a game, 43. How 
 could you ever trust one of their kind, when you know just 
 as much as me what they did to us? They also threatened me 
 with this thing!" *Holds up your pistol.*)" << std::endl;
@@ -175,9 +175,6 @@ subject that arrived here, we refer to him as...")" << std::endl;
 15: "...")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-"*You, in mind:* "Ok... so I'll just call him '01'.")" << std::endl;
-	std::cin.get();
-	std::cout << R"(-------------------------------------------------------------
 43: "Bro, WHO are you talking about, 15?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
@@ -205,16 +202,15 @@ it turned us into these creatures you see now.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 You: "If that's the case, not to offend you, but why are you 
-all so passive?")" << std::endl;
+all so... chill?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-43: "We used to be aggressive, but 01 failed in guiding
-us regarding our "revenge" plan. There was a time where we 
-too felt rage. However, we were quick to realise that we were
-not gonna be able to find the same scientists that 
-experimented on us. And if anything, we might've been too late
-to do so as we learnt that it's been years since the incident
-happened. We woke up too late, you see.)" << std::endl;
+43: "We used to... let's say... hate your kind, but... 01 failed in leading
+us to carry out our "revenge" plan. There was a time where we 
+too felt rage. However, we realised that... we weren't gonna
+find the same scientists that experimented on us. And if anything, we 
+might've been too late. It's been years since the experiments happened.
+We woke up too late.)" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 You: "Ah..."
@@ -239,12 +235,12 @@ you... I won't question it.")" << std::endl;
 You: "...")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-17: "What? It's been a long time since any truth was spoken
-about so I might as well tell you some. It's not like he 
-would let you in on any more secrets.")" << std::endl;
+17: "What? It's been a long time since truth was spoken here.
+So I might as well tell you some. It's not like he 
+would let you in on any more secrets. I think.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-You: "You're right. So... why exactly did 01 want revenge? 
+You: "Right... So... why exactly did 01 want revenge? 
 I heard a little bit about it from Gunman, but there has to
 be more information, right?")" << std::endl;
 	std::cin.get();
@@ -304,7 +300,7 @@ void dialogue::battle4diag() {
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 45 (Trickster): "NOO! HOW DID YOU BEAT ME! DON'T LEAVE 
-YET!!!")" << std::endl;
+YET!!! COME BACK!!! I NEED A REMATCH!!!")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 You: "Woah, calm down. I'm not going to leave so soon. I 
@@ -314,7 +310,7 @@ wanted to ask you something. Do you know how old you are?")" << std::endl;
 45: "Me? 14!")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-You: "14? That means you were 7 when this lab was 
+You: "14? That means you were... 7 when this lab was 
 abandoned.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
@@ -324,7 +320,7 @@ abandoned.")" << std::endl;
 You: "All of you must be really young...")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-45: "Yeah, after all, we were taken when we were very young
+45: "Yeah, after all, we were taken without our parents' will
 for scientists to conduct studies on us. We were treated 
 like lab rats! No, we were treated far worse! 
 
@@ -343,13 +339,13 @@ can read your mind!")" << std::endl;
 You: "Really? What am I thinking of now?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-45: "You're thinking of... the... the door!")" << std::endl;
+45: "You're thinking of... a... a rematch!")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-You: "Where is it then?")" << std::endl;
+You: "Nice try.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-45: "I'm no navigator! Find it yourself, human!"
+45: "Ugh. Just go already!!"
 
 
 
@@ -380,14 +376,14 @@ realise? 72, can you believe this guy?")" << std::endl;
 72: "I can't either, 71. You cannot be that dense!")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-You: "You're... literal talking rats, did you expect me
-to know that you're fluent?")" << std::endl;
+You: "You're... literal rats, did you expect me
+to know that you were fluent?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 74: "Stupid human.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-72: "Be nice, 74. What if he stops playing with us?")" << std::endl;
+72: "Hey. Be nice, 74. Watch your language. What if he stops playing with us?")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 You: "Enough! Tell me what I want to know.")" << std::endl;
@@ -401,7 +397,7 @@ about this place.")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 71: "You seriously can't believe some of us don't 
-care about what has been happening?" We just want
+care about what has been happening? We just want
 games!")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
@@ -418,7 +414,10 @@ where's 73?")" << std::endl;
 71, 72, 74: "...")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
-You: "Oh.")" << std::endl;
+You: "...")" << std::endl;
+	std::cin.get();
+	std::cout << R"(-------------------------------------------------------------
+71, 72, 74: "...")" << std::endl;
 	std::cin.get();
 	std::cout << R"(-------------------------------------------------------------
 74: "There, your question's answered. Leave.")" << std::endl;
@@ -457,7 +456,7 @@ happened. Leave us alone.")" << std::endl;
 		std::cin.get();
 		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
-You: "Isn't there something you need to tell me?")" << std::endl;
+You: "Isn't there something... else you need to tell me?")" << std::endl;
 		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
 01: "What?")" << std::endl;
