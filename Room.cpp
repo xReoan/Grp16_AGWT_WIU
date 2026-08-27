@@ -153,8 +153,13 @@ void Room::createRoomObjects()
                 9,
                 1,
                 "Cabinet",
-                "Placeholder: The cabinet is locked. "
-                "Something may be hidden inside later."));
+                "|--------------------\n"
+                "|   SECURITY ACCESS  \n"
+                "|                    \n"
+                "|       CODE: 9 4    \n"
+                "|                    \n"
+                "|--------------------\n"
+                "Part of the code is missing"));
 
         // CHAIR
         addInteractable(
@@ -164,8 +169,7 @@ void Room::createRoomObjects()
                 7,
                 1,
                 "Chair",
-                "Placeholder: An old chair. "
-                "It may become important later."));
+                "Resting"));
 
         exitDoor->setUnlocked(false);
 

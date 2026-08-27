@@ -1700,18 +1700,40 @@ void Game::startBattle() {
             == true) {
             if (room.getRoomNumber() == 1)
             {
-                std::cout
-                    << "\nYou remember the code: '9473'"
-                    << std::endl;
+
                 dialogueFunction.battle2diag();
+                std::cout << "Something falls from Gunman's pocket." << std::endl;
+                std::cout << "It's a torn piece of paper." << std::endl;
+                std::cout << "It looks like the missing half of a note." << std::endl;
+                std::cout << "----------|" << std::endl;
+                std::cout << "          |" << std::endl;
+                std::cout << " 7  3     |" << std::endl;
+                std::cout << "          |" << std::endl;
+                std::cout << "----------|" << std::endl;
             }
             else if (
                 room.getRoomNumber() == 2)
             {
-                std::cout
-                    << "\nThe room falls silent, you remember the time: '10:15'"
-                    << std::endl;
                 dialogueFunction.battle3diag();
+                std::cout << "You took the watch from Grim" << std::endl;
+                std::cout << "...it doesn't seem to work anymore" << std::endl;
+                std::cout << "            -------------" << std::endl;
+                std::cout << "           |             |" << std::endl;
+                std::cout << "          |               |" << std::endl;
+                std::cout << "       ------------------------" << std::endl;
+                std::cout << "     /                          \\" << std::endl;
+                std::cout << "    /                            \\" << std::endl;
+                std::cout << "   /    ---------------------     \\" << std::endl;
+                std::cout << "  /     |                   |      \\" << std::endl;
+                std::cout << " |      |    10   :    15   |       |" << std::endl;
+                std::cout << "  \\     |                   |      /" << std::endl;
+                std::cout << "   \\    ---------------------     /" << std::endl;
+                std::cout << "    \\                            /" << std::endl;
+                std::cout << "     \\                          /" << std::endl;
+                std::cout << "       -------------------------" << std::endl;
+                std::cout << "           |               |" << std::endl;
+                std::cout << "            |             |" << std::endl;
+                std::cout << "             -------------" << std::endl;
             }
             else if (
                 room.getRoomNumber() == 3)
