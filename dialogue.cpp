@@ -437,6 +437,7 @@ void dialogue::bossdiag() {
 		std::cout << R"(-------------------------------------------------------------
 01: "Please leave then.")" << std::endl;
 		std::cin.get();
+		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
 01: "You don't have any business with us anymore.")" << std::endl;
 		std::cin.get();
@@ -448,6 +449,7 @@ void dialogue::bossdiag() {
 		std::cout << R"(-------------------------------------------------------------
 01: "What other information would you need? You know what 
 happened. Leave us alone.")" << std::endl;
+		std::cin.get();
 		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
 You: "Isn't there something you need to tell me?")" << std::endl;
