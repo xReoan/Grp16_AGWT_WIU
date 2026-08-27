@@ -209,7 +209,7 @@ void Room::createRoomObjects()
                 11,
                 1,
                 "Bookshelf",
-                "Placeholder: Most of the books "
+                "Most of the books "
                 "are too damaged to read."));
 
         // BROKEN LAMP
@@ -220,8 +220,8 @@ void Room::createRoomObjects()
                 13,
                 1,
                 "Broken Lamp",
-                "Placeholder: The lamp no longer works. "
-                "Its bulb has turned completely black."));
+                "The lamp no longer works. "
+                "Its outer shell has burst."));
 
         // CARD TABLE
         cardTable =
@@ -293,6 +293,15 @@ void Room::createRoomObjects()
         exitDoor->setUnlocked(false);
 
         addInteractable(exitDoor);
+
+        addInteractable(
+            new InspectableObject(
+                5,
+                15,
+                10,
+                1,
+                "Lost Notebook",
+                "You notice an old, tattered notebook on the floor."));
 
         // CARD TABLE
         cardTable =
@@ -885,6 +894,13 @@ void Room::drawFurniture()
         {
             roomLayout[15][37 + i] =
                 crate[i];
+        }
+    }
+
+    else if (roomNumber == 4) {
+        const char notebook[] = "[NOTEBOOK]";
+        for (int i = 0; notebook[i] != '\0'; i++) {
+            roomLayout[15][5 + i] = notebook[i];
         }
     }
 

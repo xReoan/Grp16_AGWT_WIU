@@ -789,6 +789,121 @@ void Game::handleRoomInput(
 
                     screenNeedsClear =
                         true;
+
+
+                    if (inspectedObject->getName() == "Lost Notebook") {
+                        bool reading = true;
+                        while (reading) {
+                            clearScreen();
+                            std::cout << "========== OLD NOTEBOOK ==========\n\n";
+                            std::cout << "1. Page 1\n";
+                            std::cout << "2. Page 2\n";
+                            std::cout << "3. Page 3\n";
+                            std::cout << "4. Page 4\n";
+                            std::cout << "5. Page 5\n";
+                            std::cout << "0. Close diary\n\n";
+                            char page;
+                            std::cout << "Choose a page: ";
+                            page = readKey();
+                            clearScreen();
+                            if (page == '1') {
+                                std::cout << "========== PAGE 1 ==========\n\n";
+                                std::cout << "2 August, 2008:\n";
+                                std::cout << "Dear Diary,\n";
+                                readKey();
+                                std::cout << "             My daddy and mommy told me I was a good for nothing daughter today. i hope they dont mean it. :(\n\n";
+                                readKey();
+                                std::cout << "Mommy was pretty mean. She said she was gonna give me away. That they would come pick me up and fix me.\n";
+                                readKey();
+                                std::cout << "i cried last night. i didnt want to go. but mommy packed my things and threw them away. all i have is you now, diary.\n";
+                                readKey();
+                                std::cout << "Press any key to return.";
+                                readKey();
+                            }
+                            else if (page == '2') {
+                                std::cout << "========== PAGE 2 ==========\n\n";
+                                std::cout << "11 November, 2008:\n";
+                                std::cout << "Dear Diary,\n";
+                                readKey();
+                                std::cout << "            Its been a few months in the lab... im starting to like things here! im officially 10 as well!!\neveryone wished me today. It made me very happy.\n\n";
+                                readKey();
+                                std::cout << "i met some friends here too. Jacob, Alex, Vanesa (i forgot how to spell) and we all share stories together. We all were sent away by our parents.\n";
+                                readKey();
+                                std::cout << "i hope i can go back to daddy and mommy again. Im sure they are waiting for me at home, finally ready for the fixed me!!\n";
+                                readKey();
+                                std::cout << "the director said that next year, we would start some tests... i dont really like doing tests.\nbut i guess whatever he says is right!\n";
+                                readKey();
+                                std::cout << "Press any key to return.";
+                                readKey();
+                            }
+                            else if (page == '3') {
+                                std::cout << "========== PAGE 3 ==========\n\n";
+                                std::cout << "25 December, 2009:\n";
+                                std::cout << "Dear Diary,\n";
+                                readKey();
+                                std::cout << "            Merry christmas, diary! it's been two christmases now since Ive been here... time really flies, doesnt it?\n\n";
+                                readKey();
+                                std::cout << "Vanessa told me yesterday about some *juicy* tea!!! apparently the first of our batch to get tested with the new system ran away... or at least, we dont see him anymore.\n";
+                                readKey();
+                                std::cout << "Im so excited for my turn!! they promised cool gifts for us, like ice cream and barbie dolls!\nmom always told me she would buy me one. back in the garage, where she called me her star...\n";
+                                readKey();
+                                std::cout << "i was assigned the number 16!! thats like my 13th favourite number so im pretty happy.\napparently like Alex and Jacob both got similar numbers. so we'll get to play together after our test :)\n";
+                                readKey();
+                                std::cout << "Press any key to return.";
+                                readKey();
+                            }
+                            else if (page == '4') {
+                                std::cout << "========== PAGE 4 ==========\n\n";
+                                std::cout << "3 March, 2010:\n";
+                                std::cout << "Dear Diary,\n";
+                                readKey();
+                                std::cout << "             Tests postponed once again... Guess we have to wait even more to get fixed.\nLucky Alex... He got to go first even though he was number 17.\n\n";
+                                readKey();
+                                std::cout << "But... before he went in... he... AHHHH diary!!!! he totally just like held my hand!!! I can't believe it!!!!\nI was like so shocked too!!\n";
+                                readKey();
+                                std::cout << "I can't wait when he comes out. I've been thinking about him a lot lately... I'm happy that he got to go though.\nHe could move on...! At least thats what Van called it.\n";
+                                readKey();
+                                std::cout << "No one from the previous tests came back, so maybe they moved on to the next tests.\nWell... Hopefully they don't pull another Alex! MY TURN!!!\n";
+                                readKey();
+                                std::cout << "Press any key to return.";
+                                readKey();
+                            }
+                            else if (page == '5') {
+                                std::cout << "========== PAGE 5 ==========\n\n";
+                                std::cout << "1 April, 2010:\n";
+                                std::cout << "dear diary,\n";
+                                readKey();
+                                std::cout << "            diary... I can't do this anymore...\n\n";
+                                readKey();
+                                std::cout << "Tomorrow's my test. I went to go explore this place one last time. Before I 'move on', right?\n";
+                                readKey();
+                                std::cout << "I found Alex. And everyone else.\n";
+                                readKey();
+                                std::cout << "He... They looked. Awful. Like things out of nightmares... I... this is what the tests do...\nthey try to make superhumans... and I'm just a guinea pig for it all.\n";
+                                readKey();
+                                std::cout << "Alex told me what happened. Mommy... Daddy... They didn't let me go... They...\n";
+                                readKey();
+                                std::cout << "I don't want to be a lab rat. Diary.\n";
+                                readKey();
+                                std::cout << "I'm going to escape. Tonight.\n";
+                                readKey();
+                                std::cout << "If I fail, I don't know what they will do to me. I don't want to... become a monster.\n";
+                                readKey();
+                                std::cout << "Goodbye diary, its now or never. Isn't it? Remember my name... Ma_i_\n";
+                                readKey();
+                                std::cout << "I DONT WANT TO BECOME A MONSTER.I DONT WANT TO BECOME A MONSTER.I DONT WANT TO BECOME A MONSTER.I DONT WANT TO BECOME A MONSTER.I DONT WANT TO BECOME A MONSTER.I DONT WANT TO BECOME A MONSTER.I WILL NOT BECOME A MONSTER.I WILL NOT BECOME A MONSTER.I WILL NOT BECOME A MONSTER.I WILL NOT BECOME A MONSTER.I WILL NOT BECOME A MONSTER.I AM A MONSTER.\n\n";
+                                std::cout << "Press any key to return.";
+                                readKey();
+                            }
+                            else if (page == '0')
+                            {
+                                std::cout << "Good choice. It's not yours anyway...";
+                                std::cin.get();
+                                reading = false;
+                            }
+                        }
+                        screenNeedsClear = true;
+                    }
                 }
             }
         }

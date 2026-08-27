@@ -2616,7 +2616,7 @@ void BattleManager::showenemyaction() {
 			}
 			else if (choice == 1) {
 				int easter = rand() % 101;
-				if (easter < 90) {
+				if (easter < 50) {
 					std::cout << "Grim peeks from above his cards.\n";
 				}
 				else {
