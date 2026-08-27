@@ -103,8 +103,8 @@ investigate what happened here and go. You guys probably know
 about this place way more than me. If it's not too much to 
 ask, could you tell me what happened? It would be much 
 appreciated. Maybe... I could help you too.")" << std::endl;
-	std::cin.get();
-	std::cout << R"(-------------------------------------------------------------
+std::cin.get();
+std::cout << R"(-------------------------------------------------------------
 15: "First of all, who gave you permission to call us by our 
 names? And second, I'm not obliged to tell you anything. I 
 plead the fourth.")" << std::endl;
@@ -130,8 +130,8 @@ You: "That's fine with me."
 
 
 )" << std::endl; // filler space = a way to signal diag is done :)
-	std::cin.get();
-	system("cls");
+std::cin.get();
+system("cls");
 }
 
 void dialogue::introafterbattlediag() {
