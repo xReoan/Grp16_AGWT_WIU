@@ -135,7 +135,6 @@ system("cls");
 }
 
 void dialogue::introafterbattlediag() {
-	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "Okay then... I'll start by introducing ourselves. 
