@@ -135,6 +135,7 @@ system("cls");
 }
 
 void dialogue::introafterbattlediag() {
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 15: "Okay then... I'll start by introducing ourselves. 
@@ -186,6 +187,8 @@ subject that arrived here, we refer to him as...")" << std::endl;
 }
 
 void dialogue::battle2diag() {
+	std::cin.get();
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 You: "Why are there little to no files about this laboratory?")" << std::endl;
@@ -220,6 +223,8 @@ You: "Ah..."
 }
 
 void dialogue::battle3diag() {
+	std::cin.get();
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 17 (Grim): "Hey here's a tip, take everything everyone says 
@@ -290,6 +295,8 @@ He simply wanted justice."
 }
 
 void dialogue::battle4diag() {
+	std::cin.get();
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 45 (Trickster): "NOO! HOW DID YOU BEAT ME! DON'T LEAVE 
@@ -348,6 +355,8 @@ You: "Nice try.")" << std::endl;
 }
 
 void dialogue::battle5diag() {
+	std::cin.get();
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
               _..----.._    _
             .'  .--.    "-.(0)_
@@ -417,21 +426,34 @@ You: "...")" << std::endl;
 }
 
 void dialogue::bossdiag() {
+	std::cin.get();
+	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
 	std::cin.get();
-	char yesdiag = std::cin.get();
+	char yesdiag;
+	do {
+		std::cout << "Yes (Y) or No (N)?" << std::endl;
+		std::cin >> yesdiag;
+	} while (yesdiag != 'Y' && yesdiag != 'y' && yesdiag != 'N' && yesdiag != 'n');
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
-01: "Please leave then. You don't have any business with us
-anymore.")" << std::endl;
+01: "Please leave then.")" << std::endl;
+		std::cin.get();
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+01: "You don't have any business with us anymore.")" << std::endl;
+		std::cin.get();
+		std::cout << R"(-------------------------------------------------------------
+43: VISIT US ANYTIME!!!!!!!!!!!!!!)" << std::endl;
 		std::cin.get();
 	}
 	else if (yesdiag == 'N' || yesdiag == 'n') {
 		std::cout << R"(-------------------------------------------------------------
 01: "What other information would you need? You know what 
 happened. Leave us alone.")" << std::endl;
+		std::cin.get();
 		std::cin.get();
 		std::cout << R"(-------------------------------------------------------------
 You: "Isn't there something... else you need to tell me?")" << std::endl;
@@ -450,5 +472,4 @@ You: "Isn't there something... else you need to tell me?")" << std::endl;
 )" << std::endl;
 		std::cin.get();
 	}
-	system("cls");
 }

@@ -133,6 +133,11 @@ void BattleManager::StartBattle()
 	// battle begins.
 	battleCheatActivated = false;
 	firstturn = true;
+	int newhp = currentplayer->gethp() + 5;
+	if (newhp > 100) {
+		newhp = 100;
+	}
+	currentplayer->sethp(newhp);
 	currentplayer->builddeck(database);
 	currentenemy->builddeck(database);
 	for (int i = 0; i < 4; i++) {

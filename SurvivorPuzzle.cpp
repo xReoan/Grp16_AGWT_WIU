@@ -193,6 +193,7 @@ void SurvivorPuzzle::draw() {
         std::cout << "| I survived when the others couldn't.                     |" << std::endl;
         std::cout << "| I will never let them take me again.                     |" << std::endl;
         std::cout << "|                                                          |" << std::endl;
+        std::cout << "| press E to continue                                      |" << std::endl;
     }
 
     if (stage < 4) {

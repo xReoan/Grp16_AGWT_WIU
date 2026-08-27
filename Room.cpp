@@ -153,8 +153,13 @@ void Room::createRoomObjects()
                 9,
                 1,
                 "Cabinet",
-                "Placeholder: The cabinet is locked. "
-                "Something may be hidden inside later."));
+                "|--------------------\n"
+                "|   SECURITY ACCESS  \n"
+                "|                    \n"
+                "|       CODE: 9 4    \n"
+                "|                    \n"
+                "|--------------------\n"
+                "Part of the code is missing"));
 
         // CHAIR
         addInteractable(
@@ -164,8 +169,7 @@ void Room::createRoomObjects()
                 7,
                 1,
                 "Chair",
-                "Placeholder: An old chair. "
-                "It may become important later."));
+                "Resting"));
 
         exitDoor->setUnlocked(false);
 
@@ -334,6 +338,19 @@ void Room::createRoomObjects()
                 5);
 
         addInteractable(cardTable);
+
+        addInteractable(
+            new InspectableObject(
+                6,
+                14,
+                9,
+                1,
+                "Cabinet",
+                "You found a note\n"
+                "|-------------------------------------|\n"
+                "|  The beast watches beneath the moon.|\n"
+                "|-------------------------------------|\n"
+                "What does it mean?"));
     }
 }
 
@@ -868,6 +885,20 @@ void Room::drawFurniture()
         {
             roomLayout[15][37 + i] =
                 crate[i];
+        }
+    }
+
+    else if (roomNumber == 5)
+    {
+        const char cabinet[] =
+            "[CABINET]";
+
+        for (int i = 0;
+            cabinet[i] != '\0';
+            i++)
+        {
+            roomLayout[14][6 + i] =
+                cabinet[i];
         }
     }
 }
