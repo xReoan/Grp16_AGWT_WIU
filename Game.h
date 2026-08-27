@@ -72,7 +72,6 @@ private:
     bool running;
 
     // Console.
-    char readKey();
     void moveCursorToTop();
     void clearScreen();
 
@@ -109,6 +108,7 @@ private:
 public:
     Game();
     bool getGameWon();
+    char readKey();
 
     void run();
 };
