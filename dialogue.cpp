@@ -428,8 +428,11 @@ void dialogue::bossdiag() {
 -------------------------------------------------------------
 01: "Are you satisfied with all that you've found out...?")" << std::endl;
 	std::cin.get();
-	std::cout << "Yes (Y) or No (N)?" << std::endl;
-	char yesdiag = std::cin.get();
+	char yesdiag;
+	do {
+		std::cout << "Yes (Y) or No (N)?" << std::endl;
+		std::cin >> yesdiag;
+	} while (yesdiag != 'Y' && yesdiag != 'y' && yesdiag != 'N' && yesdiag != 'n');
 	if (yesdiag == 'Y' || yesdiag == 'y') {
 		std::cout << R"(-------------------------------------------------------------
 01: "Please leave then. You don't have any business with us
