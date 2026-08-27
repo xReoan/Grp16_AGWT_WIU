@@ -1748,10 +1748,14 @@ void Game::startBattle() {
             else if (
                 room.getRoomNumber() == 5)
             {
-                std::cout
-                    << "\nThe room falls silent, you remember the sequence: 'Crow, Moon, Wolf, Eye.'"
-                    << std::endl;
                 dialogueFunction.bossdiag();
+                std::cout << "You found a note in his pocket" << std::endl;
+                std::cout << std::endl;
+                std::cout << "|---------------------------------|" << std::endl;
+                std::cout << "| To my little crow,              |"<< std::endl; 
+                std::cout << "| Even when I can't be there,     |"<< std::endl; 
+                std::cout << "| I'll always have an eye on you. |" << std::endl;
+                std::cout << "|---------------------------------|" << std::endl;
             }
         }
         _getch();
