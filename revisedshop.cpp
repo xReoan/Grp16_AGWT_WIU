@@ -107,10 +107,10 @@ void revisedshop::ShopMenu()
 
             if (isdigit(slotChoice)) {
                 int SC = slotChoice - '0';
-                if (slotChoice > 0 && slotChoice <= 5) {
-                    BuyWeapon(slotChoice - 1);
+                if (SC > 0 && SC <= 5) {
+                    BuyWeapon(SC - 1);
                 }
-                else if (slotChoice == 0) {
+                else if (SC == 0) {
                     std::cout << "Purchase cancelled." << std::endl;
                 }
                 else {
