@@ -1,11 +1,12 @@
 ﻿#include "BattleManager.h"
 #include <iostream>
 #include <conio.h>
-BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* database) {
+BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* database, bool tutorial) {
 	battleCheatActivated = false;
 	currentenemy = enemy;
 	currentplayer = player;
 	this->database = database;
+	tutorialmode = tutorial;
 
 	for (int i = 0; i < 20; i++) {
 		timedstats[i].stat = nullptr;
@@ -13,7 +14,7 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 		timedstats[i].turns = 0;
 		timedstats[i].active = false;
 	}
-
+	tutorialstep = 0;
 	playermeleeattackbonus = 0;
 	playerprojectileattackbonus = 0;
 	playermeleedefensebonus = 0;
@@ -29,7 +30,7 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 	enemydamagemultiplier = 1.0f;
 
 	playernegateattacktrap = 0;
-	playernegatedefensetrap= 0;
+	playernegatedefensetrap = 0;
 	enemynegateattacktrap = 0;
 
 	playerignoredefense = false;
@@ -42,6 +43,21 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 
 	playercannotattack = false;
 	enemycannotattack = false;
+
+	for (int i = 0; i < 5; i++) {
+		trapmessages[i] = "";
+	}
+	trapmessagecount = 0;
+
+	combomessagecount = 0;
+	for (int i = 0; i < 5; i++) {
+		combomessages[i] = "";
+	}
+
+	synergymessagecount = 0;
+	for (int i = 0; i < 5; i++) {
+		synergymessages[i] = "";
+	}
 
 	playerillusioned = false;
 	enemyreflectdamagemultiplier = 1.0f;
@@ -103,6 +119,12 @@ BattleManager::BattleManager(Player* player, Enemy* enemy, CardDatabase* databas
 		selected[i] = false;
 		enemyselected[i] = false;
 	}
+
+	sworddotturns = 0;
+	sworddotdamage = 0;
+	shotgundeflowered = 0;
+	jellyprojectilesabsorbed = 0;
+	jellyturncounter = 0;
 }
 
 void BattleManager::StartBattle()
@@ -110,36 +132,33 @@ void BattleManager::StartBattle()
 	// Reset the cheat whenever a new
 	// battle begins.
 	battleCheatActivated = false;
-
-	currentplayer->builddeck(
-		database);
-
-	currentenemy->builddeck(
-		database);
-
-	for (int i = 0; i < 4; i++)
-	{
-		currentplayer->
-			getdeck()->
-			drawcard();
+	int newhp = currentplayer->gethp() + 5;
+	if (newhp > 100) {
+		newhp = 100;
+	}
+	currentplayer->sethp(newhp);
+	currentplayer->builddeck(database);
+	currentenemy->builddeck(database);
+	for (int i = 0; i < 4; i++) {
+		currentplayer->getdeck()->drawcard();
 	}
 
-	for (int i = 0; i < 4; i++)
-	{
-		currentenemy->
-			getdeck()->
-			drawcard();
+	for (int i = 0; i < 4; i++) {
+		currentenemy->getdeck()->drawcard();
 	}
 
-	while (currentplayer->isalive() &&
-		currentenemy->isalive())
-	{
+	if (currentplayer->getequippedadvancedarmor() != nullptr && currentplayer->getequippedadvancedarmor()->getname() == "ooooo shiny armor") {
+		enemyskip = true;
+		synergymessages[synergymessagecount] = "Your Shiny Armor dazzled " + currentenemy->getname() + "Their first turn was skipped!";
+		synergymessagecount++;
+	}
+
+	while (currentplayer->isalive() && currentenemy->isalive()) {
 		// ============================
 		// PLAYER TURN
 		// ============================
 
-		if (playerskip == false)
-		{
+		if (playerskip == false) {
 			PlayerTurn();
 		}
 		else
@@ -147,50 +166,26 @@ void BattleManager::StartBattle()
 			playerskip = false;
 			selectedcount = 0;
 
-			for (int i = 0; i < 3; i++)
-			{
-				selectedcards[i] =
-					nullptr;
+			for (int i = 0; i < 3; i++) {
+				selectedcards[i] = nullptr;
 			}
 		}
-
 		// P was pressed during PlayerTurn.
-		if (battleCheatActivated == true)
-		{
+		if (battleCheatActivated == true) {
 			// Directly set HP to zero instead of
 			// using damageenemy(). This also skips
 			// special enemy phases.
 			currentenemy->sethp(0);
-
 			system("cls");
-
-			std::cout
-				<< "============================================"
-				<< std::endl;
-
-			std::cout
-				<< "          BATTLE SKIP ACTIVATED"
-				<< std::endl;
-
-			std::cout
-				<< "============================================"
-				<< std::endl;
+			std::cout << "============================================" << std::endl;
+			std::cout << "          BATTLE SKIP ACTIVATED" << std::endl;
+			std::cout << "============================================" << std::endl;
 
 			std::cout << std::endl;
-
-			std::cout
-				<< currentenemy->getname()
-				<< " was defeated."
-				<< std::endl;
-
+			std::cout << currentenemy->getname() << " was defeated." << std::endl;
 			std::cout << std::endl;
-
-			std::cout
-				<< "Press any key to continue."
-				<< std::endl;
-
+			std::cout << "Press any key to continue." << std::endl;
 			_getch();
-
 			// Return to the code that originally
 			// started the battle.
 			return;
@@ -200,8 +195,7 @@ void BattleManager::StartBattle()
 		// ENEMY TURN
 		// ============================
 
-		if (enemyskip == false)
-		{
+		if (enemyskip == false) {
 			EnemyTurn();
 		}
 		else
@@ -215,14 +209,25 @@ void BattleManager::StartBattle()
 					nullptr;
 			}
 		}
-
-		displaybattle(
-			who::player,
-			true);
-
+		displaybattle(who::player, true);
+		hpbeforeturn = currentplayer->gethp();
+		enemyhpbeforeturn = currentenemy->gethp();
 		resolveturn();
 
 		inspectplayedcards();
+		trapmessagecount = 0;
+		combomessagecount = 0;
+		synergymessagecount = 0;
+		if (tutorialmode == true && tutorialstep == 2 && currentplayer->gethp() < hpbeforeturn) {
+			system("cls");
+			std::cout << "Ouch. That one hurt, didn't it?\n\n";
+			std::cout << "Enemy attacks are reduced by your corresponding defense.\n";
+			std::cout << "Melee attacks use melee defense, while projectile attacks use projectile defense. You... currently have none. Try visiting our local shops!\n\n";
+			std::cout << "Some cards can also protect you or weaken the enemy.\n\n";
+			std::cout << "Press any key to continue. Don't keep them waiting.";
+			_getch();
+			tutorialstep++;
+		}
 
 		discardplayedcards();
 
@@ -289,13 +294,23 @@ void BattleManager::displaybattle(who turn, bool showboard) {
 		std::cout << "(+" << playershield << ")";
 	}
 	std::cout << "/100";
-	if (currentplayer->getMeleeAttack() >= currentplayer->getProjectileAttack()) {
+	if (currentplayer->getProjectileAttack() == 0) {
 		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
 		if (playermeleeattackbonus > 0) {
 			std::cout << "(+" << playermeleeattackbonus << ")";
 		}
 	}
+	else if (currentplayer->getMeleeAttack() == 0) {
+		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
+		if (playerprojectileattackbonus > 0) {
+			std::cout << "(+" << playerprojectileattackbonus << ")";
+		}
+	}
 	else {
+		std::cout << ", ATK (melee): " << currentplayer->getMeleeAttack();
+		if (playermeleeattackbonus > 0) {
+			std::cout << "(+" << playermeleeattackbonus << ")";
+		}
 		std::cout << ", ATK (projectile): " << currentplayer->getProjectileAttack();
 		if (playerprojectileattackbonus > 0) {
 			std::cout << "(+" << playerprojectileattackbonus << ")";
@@ -339,7 +354,7 @@ void BattleManager::displayplayereffects() {
 	}
 
 	if (playerpoisonturns > 0) {
-		std::cout << "[Poisoned: " << playerpoisonturns<< " turns] ";
+		std::cout << "[Poisoned: " << playerpoisonturns << " turns] ";
 	}
 
 	if (playerhypnotismturns > 0) {
@@ -365,7 +380,7 @@ void BattleManager::displayplayereffects() {
 			std::cout << "[Phalanx Boosted: " << playerphalanxturns << " turns] ";
 		}
 	}
-	
+
 	if (playerprojectiletomelee == true) {
 		std::cout << "[Projectile to Melee] ";
 	}
@@ -438,6 +453,11 @@ void BattleManager::displayenemyeffects() {
 
 	if (enemycannotattack == true) {
 		std::cout << "[Cannot Attack] ";
+		haseffects = true;
+	}
+
+	if (sworddotturns > 0) {
+		std::cout << "[Sword Wound: " << sworddotturns << " turns]";
 		haseffects = true;
 	}
 	std::cout << std::endl;
@@ -532,6 +552,35 @@ void BattleManager::PlayerTurn() {
 	for (int i = 0; i < 12; i++) {
 		selected[i] = false;
 	}
+	if (tutorialmode == true && tutorialstep == 0) {
+		system("cls");
+		displaybattle(who::player, false);
+		std::cout << "Your hand:\n\n";
+		for (int i = 0; i < currentplayer->getdeck()->gethandcount(); i++) {
+			Card* card = currentplayer->getdeck()->getcardfromhand(i);
+			std::cout << i + 1 << ": " << card->getcardname() << std::endl;
+		}
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << R"(43: "These are the cards in your hand. Neat, right?)" << std::endl;
+		std::cin.get();
+		std::cout << R"(15: "Not really.")" << std::endl;
+		std::cin.get();
+		std::cout << R"(43: "Ugh. Fine. If you really want more available cards, weapons and items may be just the thing for you!")" << std::endl;
+		std::cin.get();
+		std::cout << R"(15: "...Are you just trying to promote your business?")" << std::endl;
+		std::cin.get();
+		std::cout << R"(43: "Support local businesses!!!!!")" << std::endl;
+		std::cout << std::endl;
+		std::cin.get();
+		std::cout << "Use W/S to move between cards in your hand.\n";
+		std::cout << "Press I to inspect the highlighted card.\n\n";
+		std::cin.get();
+		std::cout << "Press any key to continue. Don't keep them waiting.";
+		_getch();
+		tutorialstep++;
+	}
+	showenemyaction();
 	int cursor = 0;
 	bool selecting = true;
 	while (selecting) {
@@ -582,6 +631,15 @@ void BattleManager::PlayerTurn() {
 				selected[cursor] = true;
 				selectedcards[selectedcount] = currentplayer->getdeck()->getcardfromhand(cursor);
 				selectedcount++;
+				if (tutorialmode == true && tutorialstep == 1) {
+					system("cls");
+					std::cout << "You may play up to 3 cards each turn.\n";
+					std::cout << "Press D to select a card.\n";
+					std::cout << "Press A to deselect it.\n\n";
+					std::cout << "Press any key to continue. Don't keep them waiting.";
+					_getch();
+					tutorialstep++;
+				}
 			}
 		}
 		else if (input == 'a' || input == 'A') {
@@ -665,24 +723,25 @@ void BattleManager::PlayerTurn() {
 		// =====================================
 		// P = SKIP BATTLE CHEAT
 		// =====================================
-
-		else if (input == 'p' ||
-			input == 'P')
-			{
-				battleCheatActivated = true;
-
-				// Exit the card-selection loop.
-				selecting = false;
-
-				selectedcount = 0;
-
-				for (int i = 0; i < 3; i++)
-				{
-					selectedcards[i] =
-						nullptr;
+		if (input == 'B' || input == 'b') {
+			Game game;
+			char second = game.readKey();
+			char third = game.readKey();
+			char fourth = game.readKey();
+			if (second == 'E' || second == 'e') {
+				if (third == 'a') {
+					if (fourth == 't') {
+						battleCheatActivated = true;
+						// Exit the card-selection loop.
+						selecting = false;
+						selectedcount = 0;
+						for (int i = 0; i < 3; i++) {
+							selectedcards[i] = nullptr;
+						}
+					}
 				}
-				}
-
+			}
+		}
 		else if (input == 13) {
 			if (selectedcount > 0) {
 				selecting = false;
@@ -699,7 +758,7 @@ void BattleManager::EnemyTurn() {
 				enemyselectedcards[i] = nullptr;
 			}
 			return;
-		}	
+		}
 		if (currentenemy->gethp() < 5) {
 			enemyselectedcount = 1;
 			enemyselectedcards[0] = database->getcard(47);
@@ -911,21 +970,45 @@ void BattleManager::resolveturn() {
 	bool hasattackcard = false;
 	checktraps(selectedcards, selectedcount, playernegated, who::enemy);
 	checktraps(enemyselectedcards, enemyselectedcount, enemynegated, who::player);
+	std::string attacknames = "";
+	for (int i = 0; i < selectedcount; i++) {
+		if (!playernegated[i] && selectedcards[i]->gettype() == Card::cardtype::attack) {
+			if (attacknames != "") {
+				attacknames += " + ";
+			}
+			attacknames += selectedcards[i]->getcardname();
+		}
+	}
+	std::string enemyattacknames = "";
+	for (int i = 0; i < enemyselectedcount; i++) {
+		if (!enemynegated[i] && enemyselectedcards[i]->gettype() == Card::cardtype::attack) {
+			if (enemyattacknames != "") {
+				enemyattacknames += " + ";
+			}
+			enemyattacknames += enemyselectedcards[i]->getcardname();
+		}
+	}
+	bool hasenemyattack = false;
+	for (int i = 0; i < enemyselectedcount; i++) {
+		if (!enemynegated[i] &&
+			enemyselectedcards[i]->gettype() == Card::cardtype::attack) {
+			hasenemyattack = true;
+		}
+	}
 	metalpiercerpaired = false;
 	for (int i = 0; i < selectedcount; i++) {
-		if (!playernegated[i] &&
-			selectedcards[i]->getcardname() == "Metal Piercer") {
+		if (!playernegated[i] && selectedcards[i]->getcardname() == "Metal Piercer") {
 			hasmetalpiercer = true;
 		}
-		if (!playernegated[i] &&
-			selectedcards[i]->gettype() == Card::cardtype::attack) {
-
+		if (!playernegated[i] && selectedcards[i]->gettype() == Card::cardtype::attack) {
 			hasattackcard = true;
 		}
 	}
 	if (hasmetalpiercer && hasattackcard) {
 		metalpiercerpaired = true;
 		playerignoredefense = true;
+		combomessages[combomessagecount] = "COMBO! Metal Piercer + " + attacknames + ": Defense ignored!";
+		combomessagecount++;
 	}
 
 	bool hasnonnegatedattack = false;
@@ -940,18 +1023,30 @@ void BattleManager::resolveturn() {
 		if (!playernegated[i] && selectedcards[i]->getcardname() == "Poison-Tipped Bullets" && hasnonnegatedattack == true) {
 			enemypoisonturns = selectedcards[i]->getduration();
 			enemypoisonjustapplied = true;
+			if (hasnonnegatedattack == true) {
+				combomessages[combomessagecount] = "COMBO! Poison-Tipped Bullets + " + attacknames + ": Poison inflicted!";
+				combomessagecount++;
+			}
 		}
 	}
 	for (int i = 0; i < selectedcount; i++) {
 		if (!playernegated[i] && selectedcards[i]->getcardname() == "Chemical Boost") {
 			playerdamagemultiplier *= selectedcards[i]->getmultiplier();
 			playerdamagemultiplierturns = selectedcards[i]->getduration();
+			if (hasnonnegatedattack == true) {
+				combomessages[combomessagecount] = "COMBO! Chemical Boost + " + attacknames + ": Damage increased!";
+				combomessagecount++;
+			}
 		}
 	}
 	for (int i = 0; i < enemyselectedcount; i++) {
 		if (!enemynegated[i] && enemyselectedcards[i]->getcardname() == "Enhance") {
 			enemydamagemultiplier *= enemyselectedcards[i]->getmultiplier();
 			enemydamagemultiplierturns = enemyselectedcards[i]->getduration();
+			if (hasenemyattack == true) {
+				combomessages[combomessagecount] = "ENEMY COMBO! Enhance + " + enemyattacknames + ": Damage increased!";
+				combomessagecount++;
+			}
 		}
 	}
 	for (int i = 0; i < selectedcount; i++) {
@@ -1036,12 +1131,14 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				hits = 1;
 			}
 			int oldhp = currentenemy->gethp();
+			int magicringreflections = 0;
 			for (int i = 0; i < hits; i++) {
 				if (isProjectile && enemyreflectprojectile > 0) {
 					int chance = rand() % 100;
 
 					if (chance < 25) {
 						damageplayer(finaldamage);
+						magicringreflections++;
 					}
 					else {
 						damageenemy(finaldamage);
@@ -1050,6 +1147,8 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				else if (enemyreflectdamage == true) {
 					int reflecteddamage = finaldamage * enemyreflectdamagemultiplier;
 					damageplayer(reflecteddamage);
+					trapmessages[trapmessagecount] = "REFLECTED! " + std::to_string(reflecteddamage) + " damage was reflected back at you!";
+					trapmessagecount++;
 					if (enemyreflectdamagemultiplier < 1.0f) {
 						damageenemy(finaldamage);
 					}
@@ -1058,8 +1157,24 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 					damageenemy(finaldamage);
 				}
 			}
-
 			playerlastdamage = oldhp - currentenemy->gethp();
+
+			if (isProjectile == false && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Sword") {
+				sworddotdamage = 1;
+				sworddotturns = 3;
+			}
+
+			if (isProjectile == true && currentplayer->getequippedadvancedweapon() != nullptr && currentplayer->getequippedadvancedweapon()->getname() == "Shotgun" && shotgundeflowered < 5) {
+				enemyprojectiledefensebonus -= 1;
+				shotgundeflowered++;
+			}
+
+			if (magicringreflections == 1) {
+				trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected 1 hit of " + card->getcardname() + "!";
+			}
+			else {
+				trapmessages[trapmessagecount] = "REFLECTED! Magic Ring reflected " + std::to_string(magicringreflections) + " hits of " + card->getcardname() + "!";
+			}
 
 			if (playerillusioned == true && playerlastdamage >= 7) {
 				playerillusioned = false;
@@ -1089,7 +1204,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 			else if (card->getcombatcategory() == item::combattype::flexible) {
 				if (currentenemy->getMeleeAttack() >= currentenemy->getProjectileAttack()) {
 					damagedealt = currentenemy->getMeleeAttack();
-					rawdamage = (damagedealt + enemymeleeattackbonus) *multiplier * enemydamagemultiplier;
+					rawdamage = (damagedealt + enemymeleeattackbonus) * multiplier * enemydamagemultiplier;
 				}
 				else {
 					damagedealt = currentenemy->getProjectileAttack();
@@ -1133,10 +1248,15 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 				}
 				if (isProjectile && playerreflectprojectile == true) {
 					damageenemy(finaldamage);
+					trapmessages[trapmessagecount] = "REFLECTED! Jello Trampoline reflected " + card->getcardname() + "!";
+					trapmessagecount++;
 					playerreflectprojectile = false;
 				}
 				else {
 					damageplayer(finaldamage);
+					if (isProjectile == true && currentplayer->getequippedadvancedarmor() != nullptr && currentplayer->getequippedadvancedarmor()->getname() == "leftover jelly") {
+						jellyprojectilesabsorbed++;
+					}
 				}
 				if (card->getcardname() == "Nodevība" && playerillusioned == true) {
 					playerillusioned = false;
@@ -1183,7 +1303,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 			enemyprojectiledefensebonus = 0 - currentenemy->getProjectileDefense();
 		}
 	}
-	
+
 	if (effect == Card::effecttype::lower_defense) {
 		if (card->getcardname() == "Metal Piercer") {
 			if (metalpiercerpaired == false) {
@@ -1232,7 +1352,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 			addtimedstat(&playerprojectiledefensebonus, -card->getvalue(), card->getduration());
 		}
 	}
-	
+
 	if (effect == Card::effecttype::increase_defense) {
 		if (card->getcardname() != "Grievance") {
 			if (user == who::player) {
@@ -1410,6 +1530,8 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		else if (card->getcardname() == "Nodevība") {
 			if (playerillusioned == true) {
 				enemyignoredefense = true;
+				synergymessages[synergymessagecount] = "SYNERGY! Ilūzija + Nodevība: Defense ignored, attack increased!";
+				synergymessagecount++;
 			}
 		}
 		else {
@@ -1615,15 +1737,10 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 		playercannotattackturns = 1;
 		playerhypnotismturns = card->getduration();
 		playerhypnotismjustapplied = true;
-		int attack = 0;
-		if (currentenemy->getMeleeAttack() >= currentenemy->getProjectileAttack()) {
-
-			attack = currentenemy->getMeleeAttack() + enemymeleeattackbonus;
-		}
-		else {
-			attack = currentenemy->getProjectileAttack() + enemyprojectileattackbonus;
-		}
-		playerhypnotismdamage = attack * card->getmultiplier();
+		int attack = currentenemy->getProjectileAttack() + enemyprojectileattackbonus;
+		int rawdamage = attack * card->getmultiplier();
+		int defense = currentplayer->getProjectileDefense() + playerprojectiledefensebonus;
+		playerhypnotismdamage = calculateDamage(rawdamage, defense);
 	}
 
 	if (effect == Card::effecttype::illusioned) {
@@ -1651,7 +1768,7 @@ void BattleManager::applyeffect(Card* card, Card::effecttype effect, who user) {
 			}
 		}
 		else {
-			currentenemy->sethp(currentenemy->gethp() +healamount);
+			currentenemy->sethp(currentenemy->gethp() + healamount);
 			if (currentenemy->gethp() > currentenemy->getmaxhp()) {
 				currentenemy->sethp(currentenemy->getmaxhp());
 			}
@@ -1724,6 +1841,8 @@ void BattleManager::updateeffects() {
 					else {
 						playermeleeattackbonus += playerphalanxbonus;
 						playermeleedefensebonus += playerphalanxbonus;
+						synergymessages[synergymessagecount] = "SYNERGY! Phalanx Empowered! You endured enough damage to strengthen the formation!";
+						synergymessagecount++;
 					}
 
 					playerphalanxboosted = true;
@@ -1757,7 +1876,7 @@ void BattleManager::updateeffects() {
 			playerphalanxdamage = 0;
 		}
 	}
-	
+
 	//donation
 	if (playerdonation == true) {
 		if (playerdonationturns > 0) {
@@ -1866,6 +1985,28 @@ void BattleManager::updateeffects() {
 		}
 		playerbandageturns--;
 	}
+
+	if (sworddotturns > 0) {
+		damageenemy(sworddotdamage);
+		sworddotturns--;
+		synergymessages[synergymessagecount] = "Sword's wound dealt 1 damage!";
+		synergymessagecount++;
+	}
+
+	if (currentplayer->getequippedadvancedarmor() != nullptr && currentplayer->getequippedadvancedarmor()->getname() == "leftover jelly") {
+		jellyturncounter++;
+		if (jellyturncounter >= 2) {
+			if (jellyprojectilesabsorbed > 0) {
+				int oldhp = currentplayer->gethp();
+				currentplayer->sethp(currentplayer->gethp() + jellyprojectilesabsorbed);
+				if (currentplayer->gethp() > currentplayer->getmaxhp()) {
+					currentplayer->sethp(currentplayer->getmaxhp());
+				}
+			}
+			jellyprojectilesabsorbed = 0;
+			jellyturncounter = 0;
+		}
+	}
 }
 
 void BattleManager::discardplayedcards() {
@@ -1913,6 +2054,16 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 			if (index != -1) {
 				negated[index] = true;
 				trapaffected = true;
+				if (defender == who::enemy) {
+					if (enemydetermination == true) {
+						trapmessages[trapmessagecount] = "NEGATED! " + attackercard[index]->getcardname() + " was stopped by Determination!";
+						trapmessagecount++;
+					}
+				}
+				else {
+					trapmessages[trapmessagecount] = "NEGATED! " + attackercard[index]->getcardname() + " was stopped by Stay Alert!";;
+					trapmessagecount++;
+				}
 			}
 		}
 		if (defender == who::enemy &&
@@ -1935,6 +2086,8 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 			if (index != -1) {
 				negated[index] = true;
 				trapaffected = true;
+				trapmessages[trapmessagecount] = "NEGATED! " + attackercard[index]->getcardname() + " was stopped by Watch!";;
+				trapmessagecount++;
 			}
 		}
 	}
@@ -1972,6 +2125,8 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 
 			damageenemy(finaldamage);
 			trapaffected = true;
+			trapmessages[trapmessagecount] = "Rat trap triggered! " + currentenemy->getname() + " took " + std::to_string(finaldamage) + " damage!";
+			trapmessagecount++;
 		}
 		meleecountertrap = false;
 	}
@@ -1979,6 +2134,10 @@ void BattleManager::checktraps(Card* attackercard[], int attackercount, bool neg
 	if (defender == who::player) {
 		if (trapaffected == true && playermirrortrap == true) {
 			enemyskip = true;
+			if (trapmessagecount < 5) {
+				trapmessages[trapmessagecount] = "Double Whammy trap triggered! " + currentenemy->getname() + "'s next turn will be skipped!";
+				trapmessagecount++;
+			}
 		}
 		playermirrortrap = false;
 	}
@@ -2012,6 +2171,9 @@ int BattleManager::findrandomcardtype(Card* cards[], int count, Card::cardtype t
 }
 
 int BattleManager::calculateDamage(int rawdamage, int defense) {
+	if (defense < 0) {
+		defense = 0;
+	}
 	int finaldamage = rawdamage / (1 + defense / 10.0f);
 	return finaldamage;
 }
@@ -2100,10 +2262,7 @@ void BattleManager::inspectplayedcards() {
 
 	while (inspecting) {
 		displayresolution();
-
-		std::cout << std::endl;
 		std::cout << "1-" << selectedcount << ": Inspect your cards" << std::endl;
-
 		if (enemyselectedcount > 0) {
 			std::cout << "4-" << 3 + enemyselectedcount
 				<< ": Inspect enemy cards\n" << std::endl;
@@ -2166,6 +2325,7 @@ void BattleManager::inspectplayedcards() {
 			}
 		}
 	}
+	trapmessagecount = 0;
 }
 
 int BattleManager::displaylength(std::string text) {
@@ -2203,4 +2363,36 @@ void BattleManager::displayresolution() {
 			std::cout << currentenemy->getname() << " used " << name << "!\n" << std::endl;
 		}
 	}
+	for (int i = 0; i < trapmessagecount; i++) {
+		std::cout << trapmessages[i] << "\n" << std::endl;
+	}
+	for (int i = 0; i < combomessagecount; i++) {
+		std::cout << combomessages[i] << "\n" << std::endl;
+	}
+	for (int i = 0; i < synergymessagecount; i++) {
+		std::cout << synergymessages[i] << "\n" << std::endl;
+	}
+	int playerdamagetaken = hpbeforeturn - currentplayer->gethp();
+	int enemydamagetaken = enemyhpbeforeturn - currentenemy->gethp();
+	if (playerdamagetaken > 0) {
+		std::cout << "You took " << playerdamagetaken << " damage!\n";
+	}
+	if (enemydamagetaken > 0) {
+		std::cout << currentenemy->getname() << " took " << enemydamagetaken << " damage!\n";
+	}
+}
+
+void BattleManager::showenemyaction() {
+	int choice = rand() % 3;
+
+	if (currentenemy->getEnemyType() == Enemy::ENEMY_TYPE::GUNMAN) {
+		if (choice == 0) std::cout << "Gunman takes aim.\n";
+		else if (choice == 1) std::cout << "Gunman steadies their weapon.\n";
+		else std::cout << "Gunman lines up a shot.\n";
+		if (choice == 0) std::cout << "Gunman shifts into cover.\n";
+		else if (choice == 1) std::cout << "Gunman adjusts their stance.\n";
+		else std::cout << "Gunman keeps their guard up.\n";
+	}
+
+	// Grim / Trickster / Survivor
 }

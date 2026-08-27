@@ -72,7 +72,6 @@ private:
     bool running;
 
     // Console.
-    char readKey();
     void moveCursorToTop();
     void clearScreen();
 
@@ -103,9 +102,13 @@ private:
     //check if iwn game 
     bool gameWon;
 
+    //teleport
+    void teleport(int roomnumber);
+
 public:
     Game();
     bool getGameWon();
+    char readKey();
 
     void run();
 };

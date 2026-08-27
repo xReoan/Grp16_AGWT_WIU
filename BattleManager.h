@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Card.h"
+#include "Game.h"
 #include "CardDatabase.h"
 #include <string>
 class BattleManager
@@ -21,7 +22,7 @@ public:
 
 	timedstatchange timedstats[20];
 	void addtimedstat(int* stat, int amount, int duration);
-	BattleManager(Player* player, Enemy* enemy, CardDatabase* database);
+	BattleManager(Player* player, Enemy* enemy, CardDatabase* database, bool tutorial = false);
 	void displaybattle(who turn, bool showboard);
 	void displayplayereffects();
 	void displayenemyeffects();
@@ -41,7 +42,7 @@ public:
 	void applyeffect(Card* card, Card::effecttype effect, who user);
 	void updateeffects();
 	void discardplayedcards();
-	
+
 	int calculateDamage(int rawdamage, int defense);
 	void damageplayer(int damage);
 	void damageenemy(int damage);
@@ -50,11 +51,14 @@ public:
 	bool haseffect(Card* card, Card::effecttype effect);
 	int findcardtype(Card::cardtype type, bool selected[]);
 	void checksurvivorphase();
+	void showenemyaction();
 
 private:
 	CardDatabase* database;
 	Player* currentplayer;
 	Enemy* currentenemy;
+	bool tutorialmode;
+	int tutorialstep;
 	Card* selectedcards[3] = { nullptr, nullptr, nullptr };
 	bool selected[12];
 	int selectedcount;
@@ -84,6 +88,15 @@ private:
 	//mirror trap
 	bool playermirrortrap;
 
+	std::string trapmessages[20];
+	int trapmessagecount;
+
+	std::string combomessages[20];
+	int combomessagecount;
+
+	std::string synergymessages[20];
+	int synergymessagecount;
+
 	bool playerignoredefense;
 	bool enemyignoredefense;
 
@@ -107,6 +120,9 @@ private:
 	int enemyreflectdamageturns;
 
 	bool playertaunted;
+
+	int hpbeforeturn;
+	int enemyhpbeforeturn;
 
 	bool playerupclose;
 	int playerupcloseturns;
@@ -148,8 +164,14 @@ private:
 	bool survivorfinaltestused;
 	bool metalpiercerpaired;
 
+	//item passives
+	int sworddotturns;
+	int sworddotdamage;
+	int shotgundeflowered;
+	int jellyprojectilesabsorbed;
+	int jellyturncounter;
+
 	// Testing cheat.
 	// Becomes true when P is pressed.
 	bool battleCheatActivated;
 };
-
