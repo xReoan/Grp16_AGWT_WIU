@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Card.h"
+#include "Game.h"
 #include "CardDatabase.h"
 #include <string>
 class BattleManager

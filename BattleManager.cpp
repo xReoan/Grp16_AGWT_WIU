@@ -132,6 +132,11 @@ void BattleManager::StartBattle()
 	// Reset the cheat whenever a new
 	// battle begins.
 	battleCheatActivated = false;
+	int newhp = currentplayer->gethp() + 5;
+	if (newhp > 100) {
+		newhp = 100;
+	}
+	currentplayer->sethp(newhp);
 	currentplayer->builddeck(database);
 	currentenemy->builddeck(database);
 	for (int i = 0; i < 4; i++) {
@@ -718,24 +723,25 @@ void BattleManager::PlayerTurn() {
 		// =====================================
 		// P = SKIP BATTLE CHEAT
 		// =====================================
-
-		else if (input == 'p' ||
-			input == 'P')
-		{
-			battleCheatActivated = true;
-
-			// Exit the card-selection loop.
-			selecting = false;
-
-			selectedcount = 0;
-
-			for (int i = 0; i < 3; i++)
-			{
-				selectedcards[i] =
-					nullptr;
+		if (input == 'B' || input == 'b') {
+			Game game;
+			char second = game.readKey();
+			char third = game.readKey();
+			char fourth = game.readKey();
+			if (second == 'E' || second == 'e') {
+				if (third == 'a') {
+					if (fourth == 't') {
+						battleCheatActivated = true;
+						// Exit the card-selection loop.
+						selecting = false;
+						selectedcount = 0;
+						for (int i = 0; i < 3; i++) {
+							selectedcards[i] = nullptr;
+						}
+					}
+				}
 			}
 		}
-
 		else if (input == 13) {
 			if (selectedcount > 0) {
 				selecting = false;
