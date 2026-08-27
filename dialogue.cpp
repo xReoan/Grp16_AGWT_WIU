@@ -190,6 +190,7 @@ subject that arrived here, we refer to him as...")" << std::endl;
 }
 
 void dialogue::battle2diag() {
+	std::cin.get();
 	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
@@ -226,6 +227,7 @@ You: "Ah..."
 }
 
 void dialogue::battle3diag() {
+	std::cin.get();
 	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
@@ -297,6 +299,7 @@ He simply wanted justice."
 }
 
 void dialogue::battle4diag() {
+	std::cin.get();
 	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
@@ -356,6 +359,7 @@ You: "Where is it then?")" << std::endl;
 }
 
 void dialogue::battle5diag() {
+	std::cin.get();
 	system("cls");
 	std::cout << R"(Press Enter to continue . . .
               _..----.._    _
@@ -423,6 +427,7 @@ You: "Oh.")" << std::endl;
 }
 
 void dialogue::bossdiag() {
+	std::cin.get();
 	system("cls");
 	std::cout << R"(Press Enter to continue . . .
 -------------------------------------------------------------
